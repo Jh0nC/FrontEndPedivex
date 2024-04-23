@@ -132,7 +132,7 @@ a {
 
 /* Landing */
 .prom-panel {
-  background: linear-gradient(to right, #fff 30%, transparent), url(./assets/bg/custom-bg-brnw.jpg);
+  background: linear-gradient(to right, #fff 10%, transparent), url(./assets/bg/custom-bg-brnw.jpg);
   background-size: 100%;
   background-position: top;
   background-attachment: fixed;
@@ -148,6 +148,8 @@ a {
   font-size: 20px;
   text-shadow: 01px 0px 8px #b9b9b9;
 }
+
+/* cards */
 
 .carousel-container {
   overflow-y: hidden;
