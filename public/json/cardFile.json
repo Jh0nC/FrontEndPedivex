@@ -1,5 +1,86 @@
-{
-  "header" : {
-    "titel" : "Productos"
+[
+  {
+    "id": 1,
+    "img": "",
+    "name": "nombre",
+    "description": "esta es una descripcion chevere",
+    "list": {
+      "list-item-1": 1,
+      "list-item-2": 1
+    },
+    "footer": {
+      "text": "",
+      "btn": ""
+    }
+  },
+  {
+    "id": 2,
+    "img": "",
+    "name": "nombre",
+    "description": "esta es una descripcion chevere",
+    "list": {
+      "list-item-1": 1,
+      "list-item-2": 2
+    },
+    "footer": {
+      "text": "",
+      "btn": ""
+    }
+  },
+  {
+    "id": 3,
+    "img": "",
+    "name": "nombre",
+    "description": "esta es una descripcion chevere",
+    "list": {
+      "list-item-1": 1,
+      "list-item-2": 1
+    },
+    "footer": {
+      "text": "",
+      "btn": ""
+    }
+  },
+  {
+    "id": 4,
+    "img": "",
+    "name": "nombre",
+    "description": "esta es una descripcion chevere",
+    "list": {
+      "list-item-1": 1,
+      "list-item-2": 2
+    },
+    "footer": {
+      "text": "",
+      "btn": ""
+    }
+  },
+  {
+    "id": 5,
+    "img": "",
+    "name": "nombre",
+    "description": "esta es una descripcion chevere",
+    "list": {
+      "list-item-1": 1,
+      "list-item-2": 1
+    },
+    "footer": {
+      "text": "",
+      "btn": ""
+    }
+  },
+  {
+    "id": 6,
+    "img": "",
+    "name": "nombre",
+    "description": "esta es una descripcion chevere",
+    "list": {
+      "list-item-1": 1,
+      "list-item-2": 2
+    },
+    "footer": {
+      "text": "",
+      "btn": ""
+    }
   }
-}
+]
