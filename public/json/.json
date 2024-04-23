@@ -1,0 +1,684 @@
+{
+    "purchases": {
+        "supplies": [
+            {
+                "id": 1,
+                "name": "Harina",
+                "stock": 30,
+                "unit": "lb",
+                "state": 1
+            },
+            {
+                "id": 2,
+                "name": "Azucar",
+                "stock": 16,
+                "unit": "lb",
+                "state": 1
+            },
+            {
+                "id": 3,
+                "name": "Sal",
+                "stock": 3,
+                "unit": "lb",
+                "state": 1
+            },
+            {
+                "id": 4,
+                "name": "Hojaldre",
+                "stock": 30,
+                "unit": "lb",
+                "state": 1
+            },
+            {
+                "id": 5,
+                "name": "Levadura seca",
+                "stock": 2,
+                "unit": "lb",
+                "state": 1
+            },
+            {
+                "id": 6,
+                "name": "Levadura seca",
+                "stock": 1.7,
+                "unit": "lb",
+                "state": 0
+            },
+            {
+                "id": 7,
+                "name": "Piña",
+                "stock": 7,
+                "unit": "und",
+                "state": 1
+            },
+            {
+                "id": 8,
+                "name": "Queso",
+                "stock": 40,
+                "unit": "lb",
+                "state": 1
+            },
+            {
+                "id": 9,
+                "name": "Jamón",
+                "stock": 12,
+                "unit": "lb",
+                "state": 1
+            },
+            {
+                "id": 10,
+                "name": "Salchicha ranchera",
+                "stock": 3,
+                "unit": "lb",
+                "state": 1
+            },
+            {
+                "id": 11,
+                "name": "Cuajada",
+                "stock": 6,
+                "unit": "lb",
+                "state": 1
+            },
+            {
+                "id": 12,
+                "name": "Bocadillo",
+                "stock": 2,
+                "unit": "und",
+                "state": 1
+            }
+        ],
+        "boughts": [
+            {
+                "id": 1,
+                "boughtBill": "#0#1#H",
+                "provider": "Mundo Harinas",
+                "date": {
+                    "day": 2,
+                    "month": 4,
+                    "year": 2024
+                },
+                "detailsBought": [
+                    {
+                        "id": 1,
+                        "amount": 30,
+                        "unit": "lb"
+                    },
+                    {
+                        "id": 2,
+                        "amount": 16,
+                        "unit": "lb"
+                    },
+                    {
+                        "id": 3,
+                        "amount": 3,
+                        "unit": "lb"
+                    },
+                    {
+                        "id": 4,
+                        "amount": 30,
+                        "unit": "lb"
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "boughtBill": "n/a",
+                "provider": "Fruver",
+                "date": {
+                    "day": 2,
+                    "month": 4,
+                    "year": 2024
+                },
+                "detailsBought": [
+                    {
+                        "id": 7,
+                        "amount": 7,
+                        "unit": "und"
+                    },
+                    {
+                        "id": 11,
+                        "amount": 6,
+                        "unit": "lb"
+                    }
+                ]
+            }
+        ]
+    },
+    "production": {
+        "products": [
+            {
+                "id": 1,
+                "type": "Panzerotti",
+                "flavor": "Hawaiano",
+                "stock": 47,
+                "price": 2500,
+                "state": 1,
+                "productDetail": {
+                    "dought": {
+                        "id": 1,
+                        "amount": 90,
+                        "unit": "gr"
+                    },
+                    "ingredients": [
+                        {
+                            "id": 8,
+                            "amount": 25,
+                            "unit": "gr"
+                        },
+                        {
+                            "id": 7,
+                            "amount": 12,
+                            "unit": "gr"
+                        },
+                        {
+                            "id": 9,
+                            "amount": 12,
+                            "unit": "gr"
+                        }
+                    ]
+                },
+                "img": ""
+            },
+            {
+                "id": 2,
+                "type": "Panzerotti",
+                "flavor": "Ranchero",
+                "stock": 24,
+                "price": 2500,
+                "state": 1,
+                "productDetail": {
+                    "dought": {
+                        "id": 1,
+                        "amount": 90,
+                        "unit": "gr"
+                    },
+                    "ingredients": [
+                        {
+                            "id": 8,
+                            "amount": 25,
+                            "unit": "gr"
+                        },
+                        {
+                            "id": 10,
+                            "amount": 20,
+                            "unit": "gr"
+                        }
+                    ]
+                },
+                "img": ""
+            },
+            {
+                "id": 3,
+                "type": "Palito",
+                "flavor": "Queso y bocadillo",
+                "stock": 75,
+                "price": 1500,
+                "state": 1,
+                "productDetail": {
+                    "dought": {
+                        "id": 2,
+                        "amount": 100,
+                        "unit": "gr"
+                    },
+                    "ingredients": [
+                        {
+                            "id": 11,
+                            "amount": 10,
+                            "unit": "gr"
+                        },
+                        {
+                            "id": 12,
+                            "amount": 10,
+                            "unit": "gr"
+                        }
+                    ]
+                },
+                "img": ""
+            }
+        ],
+        "doughts": [
+            {
+                "id": 1,
+                "name": "Hojaldre seco",
+                "ingredients": [
+                    {
+                        "id": 1,
+                        "amount": 1,
+                        "unit": "lb"
+                    },
+                    {
+                        "id": 3,
+                        "amount": 10,
+                        "unit": "gr"
+                    },
+                    {
+                        "id": 2,
+                        "amount": 14,
+                        "unit": "gr"
+                    },
+                    {
+                        "id": 4,
+                        "amount": 12.5,
+                        "unit": "gr"
+                    }
+                ],
+                "amountPerIngredient": {
+                    "amount": 2,
+                    "unit": "lb"
+                }
+            },
+            {
+                "id": 2,
+                "name": "Levadura humeda",
+                "ingredients": [
+                    {
+                        "id": 1,
+                        "amount": 1,
+                        "unit": "lb"
+                    },
+                    {
+                        "id": 3,
+                        "amount": 10,
+                        "unit": "gr"
+                    },
+                    {
+                        "id": 2,
+                        "amount": 14,
+                        "unit": "gr"
+                    },
+                    {
+                        "id": 4,
+                        "amount": 12.5,
+                        "unit": "gr"
+                    }
+                ],
+                "amountPerIngredient": {
+                    "amount": 2,
+                    "unit": "lb"
+                }
+            }
+        ],
+        "productionOrders": [
+            {
+                "id": 1,
+                "date": {
+                    "day": 2,
+                    "month": 4,
+                    "year": 2024
+                },
+                "notes": "Sin niguna novedad, hacer con normalidad.",
+                "employeeID": 1,
+                "state": 2,
+                "productOrderDetail": [
+                    {
+                        "productId": 1,
+                        "amount": 21
+                    },
+                    {
+                        "productId": 3,
+                        "amount": 12
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "date": {
+                    "day": 2,
+                    "month": 4,
+                    "year": 2024
+                },
+                "notes": "Sin niguna novedad, hacer con normalidad.",
+                "employeeID": 1,
+                "state": 4,
+                "productOrderDetail": [
+                    {
+                        "productId": 1,
+                        "amount": 89
+                    },
+                    {
+                        "productId": 3,
+                        "amount": 45
+                    }
+                ]
+            },
+            {
+                "id": 3,
+                "date": {
+                    "day": 2,
+                    "month": 4,
+                    "year": 2024
+                },
+                "notes": "Panzerottiz repollados, sin marca de molde.",
+                "employeeID": 1,
+                "state": 3,
+                "productOrderDetail": [
+                    {
+                        "productId": 2,
+                        "amount": 34
+                    }
+                ]
+            }
+        ]
+    },
+    "sales": {
+        "solds": [
+            {
+                "id": 1,
+                "clientId": 1,
+                "date": {
+                    "day": 2,
+                    "month": 4,
+                    "year": 2024
+                },
+                "deadline": {
+                    "day": 2,
+                    "month": 4,
+                    "year": 2024
+                },
+                "saleDetail": [
+                    {
+                        "productId": 1,
+                        "amount": 45,
+                        "subtotal": 112500
+                    },
+                    {
+                        "productId": 3,
+                        "amount": 20,
+                        "subtotal": 30000
+                    }
+                ],
+                "total": 142500
+            },
+            {
+                "id": 2,
+                "clientId": 3,
+                "date": {
+                    "day": 2,
+                    "month": 4,
+                    "year": 2024
+                },
+                "deadline": {
+                    "day": 2,
+                    "month": 4,
+                    "year": 2024
+                },
+                "saleDetail": [
+                    {
+                        "productId": 2,
+                        "amount": 40,
+                        "subtotal": 100000
+                    }
+                ],
+                "total": 100000
+            }
+        ],
+        "returns": [
+            {
+                "id": 1,
+                "clientId": "",
+                "date": {
+                    "day": "",
+                    "month": "",
+                    "year": ""
+                },
+                "returnDetail": [
+                    {
+                        "id": 1
+                        
+                    }
+                ],
+                "state": 4
+            },
+            {
+                "id": 1,
+                "clientId": "",
+                "date": {
+                    "day": "",
+                    "month": "",
+                    "year": ""
+                },
+                "returnDetail": [],
+                "state": 3
+            }
+        ],
+        "orders": [
+            {
+                "id": 1,
+                "clientId": "",
+                "date": {
+                    "day": "",
+                    "month": "",
+                    "year":""
+                },
+                "deadline": {
+                    "day": "",
+                    "month": "",
+                    "year":""
+                },
+                "sorderDetail": {
+                    "productId": "",
+                    "amount": "",
+                    "price": "",
+                    "subtotal":""
+                },
+                "total": 5
+            }
+        ]
+    },
+    "admin": {
+        "users": [
+            {
+                "id": 1,
+                "rolId": 2,
+                "document": "1230000",
+                "name": "Juanda",
+                "lastName": "Alvarez",
+                "phone": "300 123456",
+                "mail": "juan@gmail.com",
+                "password": "juan001"
+            },
+            {
+                "id": 2,
+                "rolId": 2,
+                "document": "1230000",
+                "name": "Damian",
+                "lastName": "Muñoz",
+                "phone": "300 123456",
+                "mail": "damian@gmail.com",
+                "password": "damian001"
+            },
+            {
+                "id": 3,
+                "rolId": 2,
+                "document": "1230000",
+                "name": "Json",
+                "lastName": "Barrios",
+                "phone": "300 123456",
+                "mail": "json@gmail.com",
+                "password": "json001"
+            },
+            {
+                "id": 4,
+                "rolId": 1,
+                "document": "1230000",
+                "name": "Magnolia",
+                "lastName": "Barajas",
+                "phone": "300 123456",
+                "mail": "magno@gmail.com",
+                "password": "magno001"
+            },
+            {
+                "id": 5,
+                "rolId": 3,
+                "document": "1230000",
+                "name": "Juan Pablo",
+                "lastName": "Cañas",
+                "phone": "300 123456",
+                "mail": "jp@gmail.com",
+                "password": "jp001"
+            },
+            {
+                "id": 6,
+                "rolId": 4,
+                "document": "1230000",
+                "name": "Miguel",
+                "lastName": "Tabares",
+                "phone": "300 123456",
+                "mail": "miguel@gmail.com",
+                "password": "miguel001"
+            }
+        ],
+        "roles": [
+            {
+                "id": 1,
+                "name": "admin",
+                "permission": [
+                    {
+                        "id": 1,
+                        "module": "users"
+                    },
+                    {
+                        "id": 2,
+                        "module": "acces"
+                    },
+                    {
+                        "id": 3,
+                        "module": "supplies"
+                    },
+                    {
+                        "id": 4,
+                        "module": "boughts"
+                    },
+                    {
+                        "id": 5,
+                        "module": "products"
+                    },
+                    {
+                        "id": 6,
+                        "module": "purchases"
+                    },
+                    {
+                        "id": 7,
+                        "module": "productionOrders"
+                    },
+                    {
+                        "id": 8,
+                        "module": "orders"
+                    },
+                    {
+                        "id": 9,
+                        "module": "sales"
+                    },
+                    {
+                        "id": 10,
+                        "module": "returs"
+                    },
+                    {
+                        "id": 11,
+                        "module": "clients"
+                    },
+                    {
+                        "id": 12,
+                        "module": "catalogue"
+                    },
+                    {
+                        "id": 13,
+                        "module": "dashboard"
+                    },
+                    {
+                        "id": 14,
+                        "module": "doughts"
+                    },
+                    {
+                        "id": 15,
+                        "module": "roles"
+                    },
+                    {
+                        "id": 16,
+                        "module": "shoppingCart"
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "name": "client",
+                "permission": [
+                    {
+                        "id": 16,
+                        "module": "shoppingCart"
+                    },
+                    {
+                        "id": 12,
+                        "module": "catalogue"
+                    },
+                    {
+                        "id": 2,
+                        "module": "acces"
+                    }
+                ]
+            },
+            {
+                "id": 3,
+                "name": "employee",
+                "permission": [
+                    {
+                        "id": 2,
+                        "module": "acces"
+                    },
+                    {
+                        "id": 3,
+                        "module": "supplies"
+                    },
+                    {
+                        "id": 5,
+                        "module": "products"
+                    },
+                    {
+                        "id": 14,
+                        "module": "doughts"
+                    },
+                    {
+                        "id": 16,
+                        "module": "shoppingCart"
+                    },
+                    {
+                        "id": 12,
+                        "module": "catalogue"
+                    },
+                    {
+                        "id": 2,
+                        "module": "acces"
+                    },
+                    {
+                        "id": 7,
+                        "module": "productionOrders"
+                    }
+                ]
+            },
+            {
+                "id": 4,
+                "name": "deliver",
+                "permission": [
+                    {
+                        "id": 16,
+                        "module": "shoppingCart"
+                    },
+                    {
+                        "id": 12,
+                        "module": "catalogue"
+                    },
+                    {
+                        "id": 2,
+                        "module": "acces"
+                    },
+                    {
+                        "id": 8,
+                        "module": "orders"
+                    }
+                ]
+            }
+        ],
+        "charts": [
+            {}
+        ]
+    }
+}

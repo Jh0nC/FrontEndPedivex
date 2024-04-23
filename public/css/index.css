@@ -1,0 +1,185 @@
+/* GLOBAL */
+
+:root {
+  /* color pallete */
+  --own-color-1: #FEB81C;
+  --own-color-2: #FEC649;
+  --own-color-3: #D3971E;
+  --own-color-4: #FED477;
+  --own-color-5: #4C2B07;
+  --own-color-6: #e28117;
+}
+
+.test {
+  border: 1px solid #000 !important;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+/* FONTS */
+.title-styled-1 {
+  font-family: "Permanent Marker", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* custom border */
+
+.border-type-top {
+  border-bottom: 4px solid var(--own-color-2);
+  border-left: 2px solid var(--own-color-2);
+  border-right: 2px solid var(--own-color-2);
+}
+
+.border-type-mid {
+  border-bottom: 4px solid var(--own-color-2);
+  border-left: 2px solid var(--own-color-2);
+  border-right: 2px solid var(--own-color-2);
+  border-top: 4px solid var(--own-color-2);
+}
+
+.border-type-bottom {
+  border-top: 4px solid var(--own-color-2);
+  border-left: 2px solid var(--own-color-2);
+  border-right: 2px solid var(--own-color-2);
+}
+
+/* custom colors */
+.color-1 {
+  color: var(--own-color-1);
+}
+
+.color-2 {
+  color: var(--own-color-2);
+}
+
+/* body */
+#admin-body {
+  background: url(../assets/bg/custom-bg-brnw.jpg);
+  background-attachment: fixed;
+  backdrop-filter: blur(3px) brightness(94%);
+}
+
+/* nav */
+.nav-custom {
+  height: auto;
+}
+
+
+.logo {
+  height: 89px;
+}
+
+.nav-link-custom li {
+  border-bottom: 3px solid #ffffff00;
+  transition-duration: .1s;
+}
+
+.nav-link-custom li:hover {
+  border-bottom: 3px solid var(--own-color-1);
+}
+
+.navbar-space {
+  height: 100px;
+}
+
+/* sidenav */
+.custom-sidenav {
+  width: 20%;
+  height: fit-content;
+}
+
+.submenu-sidenav {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+
+.submenu-sidenav a {
+  width: 95%;
+  padding: 1vh;
+  display: flex;
+  justify-content: start;
+  border-radius: 15px;
+  transition-duration: .2s;
+}
+
+.submenu-sidenav a:hover {
+  background: #e6e6e6;
+  transform: scale(1.015, 1.015);
+}
+
+/* content */
+.content {
+  height: fit-content;
+}
+
+.dashboard-img div img {
+  display: flex;
+  margin: auto;
+  transition-duration: .2s; 
+}
+
+.dashboard-img div img:hover{
+  transform: scale(1.02,1.02);
+}
+
+
+/* CLient Pages stiles */
+
+/* Landing */
+.prom-panel {
+  background: linear-gradient(to right, #fff 30%, transparent), url(./assets/bg/custom-bg-brnw.jpg);
+  background-size: 100%;
+  background-position: top;
+  background-attachment: fixed;
+  background-repeat: repeat;
+  height: 75vh;
+}
+
+.prom-panel h1 {
+  text-shadow: 0px 0px 8px #b9b9b9;
+}
+
+.prom-panel p {
+  font-size: 20px;
+  text-shadow: 01px 0px 8px #b9b9b9;
+}
+
+.carousel-container {
+  overflow-y: hidden;
+}
+
+.landing-card {
+  transition: .3s;
+}
+
+.landing-card:hover {
+  transform: scale(1.03, 1.03);
+}
+
+.landing-card-icon {
+  color: var(--own-color-1);
+  height: 120px;
+}
+
+/* footer */
+
+.img-footer {
+  height: 20vh;
+}
+
+.contact-icons-footer a {
+  transition-duration: .2s;
+  width: 90%;
+  height: fit-content;
+  display: flex;
+  justify-content: space-between;
+}
+
+.contact-icons-footer a:hover {
+  color: var(--own-color-1);
+}
