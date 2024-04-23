@@ -1,86 +1,94 @@
 [
   {
     "id": 1,
-    "img": "",
-    "name": "nombre",
-    "description": "esta es una descripcion chevere",
-    "list": {
-      "list-item-1": 1,
-      "list-item-2": 1
+    "type": "Panzerotti",
+    "flavor": "Hawaiano",
+    "stock": 47,
+    "price": 2500,
+    "state": 1,
+    "productDetail": {
+      "dought": {
+        "id": 1,
+        "amount": 90,
+        "unit": "gr"
+      },
+      "ingredients": [
+        {
+          "id": 8,
+          "amount": 25,
+          "unit": "gr"
+        },
+        {
+          "id": 7,
+          "amount": 12,
+          "unit": "gr"
+        },
+        {
+          "id": 9,
+          "amount": 12,
+          "unit": "gr"
+        }
+      ]
     },
-    "footer": {
-      "text": "",
-      "btn": ""
-    }
+    "img": "",
+    "productDescription": "Esta es una descripcion muy chevere y totalmente funcional y la Magnolia Barajas que diga lo contrario la mandamos a estallar"
   },
   {
     "id": 2,
-    "img": "",
-    "name": "nombre",
-    "description": "esta es una descripcion chevere",
-    "list": {
-      "list-item-1": 1,
-      "list-item-2": 2
+    "type": "Panzerotti",
+    "flavor": "Ranchero",
+    "stock": 24,
+    "price": 2500,
+    "state": 1,
+    "productDetail": {
+      "dought": {
+        "id": 1,
+        "amount": 90,
+        "unit": "gr"
+      },
+      "ingredients": [
+        {
+          "id": 8,
+          "amount": 25,
+          "unit": "gr"
+        },
+        {
+          "id": 10,
+          "amount": 20,
+          "unit": "gr"
+        }
+      ]
     },
-    "footer": {
-      "text": "",
-      "btn": ""
-    }
+    "img": "",
+    "productDescription": "Esta es una descripcion muy chevere y totalmente funcional y la Magnolia Barajas que diga lo contrario la mandamos a estallar"
   },
   {
     "id": 3,
-    "img": "",
-    "name": "nombre",
-    "description": "esta es una descripcion chevere",
-    "list": {
-      "list-item-1": 1,
-      "list-item-2": 1
+    "type": "Palito",
+    "flavor": "Queso y bocadillo",
+    "stock": 75,
+    "price": 1500,
+    "state": 1,
+    "productDetail": {
+      "dought": {
+        "id": 2,
+        "amount": 100,
+        "unit": "gr"
+      },
+      "ingredients": [
+        {
+          "id": 11,
+          "amount": 10,
+          "unit": "gr"
+        },
+        {
+          "id": 12,
+          "amount": 10,
+          "unit": "gr"
+        }
+      ]
     },
-    "footer": {
-      "text": "",
-      "btn": ""
-    }
-  },
-  {
-    "id": 4,
     "img": "",
-    "name": "nombre",
-    "description": "esta es una descripcion chevere",
-    "list": {
-      "list-item-1": 1,
-      "list-item-2": 2
-    },
-    "footer": {
-      "text": "",
-      "btn": ""
-    }
-  },
-  {
-    "id": 5,
-    "img": "",
-    "name": "nombre",
-    "description": "esta es una descripcion chevere",
-    "list": {
-      "list-item-1": 1,
-      "list-item-2": 1
-    },
-    "footer": {
-      "text": "",
-      "btn": ""
-    }
-  },
-  {
-    "id": 6,
-    "img": "",
-    "name": "nombre",
-    "description": "esta es una descripcion chevere",
-    "list": {
-      "list-item-1": 1,
-      "list-item-2": 2
-    },
-    "footer": {
-      "text": "",
-      "btn": ""
-    }
+    "productDescription": "Esta es una descripcion muy chevere y totalmente funcional y la Magnolia Barajas que diga lo contrario la mandamos a estallar"
   }
 ]

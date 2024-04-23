@@ -185,3 +185,29 @@ a {
 .contact-icons-footer a:hover {
   color: var(--own-color-1);
 }
+
+/* admin */
+.admin-card {
+
+  .card-head {
+    overflow: hidden;
+
+    img {
+      transition-duration: .3s;
+    }
+
+    img:hover {
+      transform: scale(1.06,1.06) rotate(1.5deg);
+    }
+
+  }
+
+  .card-body {
+
+  }
+
+  .card-footer {
+
+  }
+
+}

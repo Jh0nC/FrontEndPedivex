@@ -1,5 +1,6 @@
 /* style */
 import "../public/css/index.css"
+import "../public/css/datatableStyles.css"
 /* React utils */
 import React from "react"
 import ReactDOM from 'react-dom/client'
