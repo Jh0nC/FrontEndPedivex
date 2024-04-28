@@ -68,7 +68,7 @@
     "flavor": "Queso y bocadillo",
     "stock": 75,
     "price": 1500,
-    "state": 1,
+    "state": 2,
     "productDetail": {
       "dought": {
         "id": 2,
