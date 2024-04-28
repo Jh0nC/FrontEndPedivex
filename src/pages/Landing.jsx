@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
-import imgCarousel from "../../public/assets/1140x696.jpg"
+import imgCarousel1 from "../../public/assets/products/palito_panzerotti.jpg"
+import imgCarousel2 from "../../public/assets/products/palito_bocadillo.jpg"
+import imgCarousel3 from "../../public/assets/products/panzerotti_arequipe.jpg"
 
 function Landing() {
   return (
@@ -20,30 +22,53 @@ function Landing() {
 
         {/* product carousel */}
 
-        <div id="" className="carousel slide" data-bs-ride="carousel">
+        <div className="carousel slide mt-5 d-flex justify-content-center" data-bs-ride="carousel">
+
+          <div className="carousel-mask"></div>
 
           <div className="carousel-inner">
-            <div data-bs-interval="3000" className="carousel-item active">
-              <img src={imgCarousel} className="d-block w-100" alt="..." />
+
+            <div data-bs-interval="500" className="carousel-item active">
+
+              <div className="carousel-img">
+                <img src={imgCarousel1} className="d-block w-100" alt="..." />
+              </div>
+
               <div className="carousel-caption d-none d-md-block">
                 <h5>First slide label</h5>
                 <p>Some representative placeholder content for the first slide.</p>
               </div>
+
             </div>
-            <div data-bs-interval="3000" className="carousel-item">
-              <img src={imgCarousel} className="d-block w-100" alt="..." />
-              <div className="carousel-caption d-none d-md-block">
-                <h5>First slide label</h5>
-                <p>Some representative placeholder content for the first slide.</p>
+
+            <div data-bs-interval="500" className="carousel-item">
+
+              <div className="carousel-img">
+                <img src={imgCarousel2} className="d-block w-100" alt="..." />
               </div>
-            </div>
-            <div data-bs-interval="3000" className="carousel-item">
-              <img src={imgCarousel} className="d-block w-100" alt="..." />
+
+
               <div className="carousel-caption d-none d-md-block">
-                <h5>First slide label</h5>
-                <p>Some representative placeholder content for the first slide.</p>
+                <h5>Second slide label</h5>
+                <p>Some representative placeholder content for the Second slide.</p>
               </div>
+
             </div>
+
+            <div data-bs-interval="500" className="carousel-item">
+
+              <div className="carousel-img">
+                <img src={imgCarousel3} className="d-block w-100" alt="..." />
+              </div>
+
+
+              <div className="carousel-caption d-none d-md-block">
+                <h5>Thirth slide label</h5>
+                <p>Some representative placeholder content for the Thrirth slide.</p>
+              </div>
+
+            </div>
+
           </div>
 
         </div>
