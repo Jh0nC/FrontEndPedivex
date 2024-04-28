@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 function Sidenav() {
   return (
     <>
-      <aside className="border-type-mid list-group list-group-flush rounded-4 shadow custom-sidenav">
+      <aside className="border-type-mid list-group list-group-flush shadow custom-sidenav">
         <li className="list-group-item list-group-item-action">
           <Link to={'/admin/dashboard'} className="d-block">
             Rendimiento

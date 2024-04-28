@@ -5,7 +5,7 @@ function Navbar() {
   return (
     <>
       <div className="container-fluid px-2 position-fixed z-3 top-0" id="">
-        <div className="container-fluid border-type-top rounded-bottom-4 shadow own-navbar">
+        <div className="container-fluid border-type-top  shadow own-navbar">
           <a className="navbar-logo" href="#">
             <img src={logo} alt="" />
           </a>

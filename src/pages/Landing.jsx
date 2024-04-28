@@ -34,11 +34,6 @@ function Landing() {
                 <img src={imgCarousel1} className="d-block w-100" alt="..." />
               </div>
 
-              <div className="carousel-caption d-none d-md-block">
-                <h5>First slide label</h5>
-                <p>Some representative placeholder content for the first slide.</p>
-              </div>
-
             </div>
 
             <div data-bs-interval="500" className="carousel-item">
@@ -48,11 +43,6 @@ function Landing() {
               </div>
 
 
-              <div className="carousel-caption d-none d-md-block">
-                <h5>Second slide label</h5>
-                <p>Some representative placeholder content for the Second slide.</p>
-              </div>
-
             </div>
 
             <div data-bs-interval="500" className="carousel-item">
@@ -61,11 +51,6 @@ function Landing() {
                 <img src={imgCarousel3} className="d-block w-100" alt="..." />
               </div>
 
-
-              <div className="carousel-caption d-none d-md-block">
-                <h5>Thirth slide label</h5>
-                <p>Some representative placeholder content for the Thrirth slide.</p>
-              </div>
 
             </div>
 
