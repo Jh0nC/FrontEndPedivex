@@ -19,11 +19,11 @@ a {
   color: #000;
 }
 
-body {
+/* body {
   background: url(../assets/bg/custom-bg-brnw.jpg);
   background-attachment: fixed;
   backdrop-filter: blur(2px) sepia(20%);
-}
+} */
 
 /* FONTS */
 .title-styled-1 {
@@ -62,35 +62,50 @@ body {
   color: var(--own-color-2);
 }
 
-/* body */
-#admin-body {
-  background: url(../assets/bg/custom-bg-brnw.jpg);
-  background-attachment: fixed;
-  backdrop-filter: blur(3px) brightness(94%);
-}
-
 /* nav */
-.nav-custom {
-  height: auto;
+.own-navbar {
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 15vh;
+  padding: 0 6vh;
 }
 
-
-.logo {
-  height: 89px;
+.navbar-logo {
+  height: 100%;
+  max-height: 15vh;
 }
 
-.nav-link-custom li {
-  border-bottom: 3px solid #ffffff00;
-  transition-duration: .1s;
+.navbar-logo img {
+  height: 100%;
+  width: auto;
 }
 
-.nav-link-custom li:hover {
-  border-bottom: 3px solid var(--own-color-1);
+.navbar-list {
+  display: flex;
 }
 
-.navbar-space {
-  height: 100px;
+.navbar-list li {
+  list-style: none;
+  width: 8vw;
+  display: flex;
+  justify-content: center;
+  transition-duration: .3s;
 }
+
+.navbar-list li::after {
+  content: "";
+  position: absolute;
+  background: #000;
+  height: 3px !important;
+}
+
+.navbar-list li:hover {
+  transform: scale(.9, .9);
+}
+
+.navbar-auth {}
 
 /* sidenav */
 .custom-sidenav {
@@ -126,11 +141,11 @@ body {
 .dashboard-img div {
   display: flex;
   margin: auto;
-  transition-duration: .2s; 
+  transition-duration: .2s;
 }
 
-.dashboard-img div:hover{
-  transform: scale(1.02,1.02);
+.dashboard-img div:hover {
+  transform: scale(1.02, 1.02);
 }
 
 
@@ -143,7 +158,7 @@ body {
   background-position: top;
   background-attachment: fixed;
   background-repeat: repeat;
-  height: 75vh;
+  height: 94vh;
 }
 
 .prom-panel h1 {
@@ -156,11 +171,6 @@ body {
 }
 
 /* cards */
-
-.carousel-container {
-  overflow-y: hidden;
-}
-
 .landing-card {
   transition: .3s;
 }
@@ -171,7 +181,12 @@ body {
 
 .landing-card-icon {
   color: var(--own-color-1);
-  height: 120px;
+  height: 10vh;
+}
+
+/* carrousel */
+.carrousel {
+  background: #fff;
 }
 
 /* footer */
@@ -203,17 +218,13 @@ body {
     }
 
     img:hover {
-      transform: scale(1.06,1.06) rotate(1.5deg);
+      transform: scale(1.06, 1.06) rotate(1.5deg);
     }
 
   }
 
-  .card-body {
+  .card-body {}
 
-  }
-
-  .card-footer {
-
-  }
+  .card-footer {}
 
 }

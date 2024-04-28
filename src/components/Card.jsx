@@ -5,29 +5,28 @@ function Card(data) {
   console.log(productDetail);
   return (
     <>
-
-      <div className="card rounded-3 admin-card">
+      <div className="card rounded admin-card">
         <div className="card-head rounded-top-3">
-          <img src={dummyImg} alt="" className="img-fluid" />
+          <img src={dummyImg} alt="" className="img-fluid border-bottom" />
           <h5 className="text-center mt-2">{data.data['type'] + ' - ' + data.data['flavor']}</h5>
         </div>
         <div className="card-body d-flex justify-content-between">
           <p>
             <b>Stock: </b>
             {data.data['stock'] >= 50 ? (
-              <span className="badge text-bg-success">{data.data['stock']}</span>
+              <span className="badge opacity-50 text-bg-success">{data.data['stock']}</span>
             ) : data.data['stock'] >= 30 ? (
-              <span className="badge text-bg-warning">{data.data['stock']}</span>
+              <span className="badge opacity-50 text-bg-warning">{data.data['stock']}</span>
             ) : (
-              <span className="badge text-bg-danger">{data.data['stock']}</span>
+              <span className="badge opacity-50 text-bg-danger">{data.data['stock']}</span>
             )}
           </p>
           <p>
             <b>Estado: </b>
             {data.data['state'] == 1 ? (
-              <span className="badge text-bg-success text-uppercase">activo</span>
+              <span className="badge opacity-50 text-bg-success text-uppercase">activo</span>
             ) : (
-              <span className="badge text-bg-danger text-uppercase">inactivo</span>
+              <span className="badge opacity-50 text-bg-danger text-uppercase">inactivo</span>
             )}
           </p>
         </div>

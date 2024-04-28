@@ -6,7 +6,7 @@ function Footer() {
     <>
       <div className="container-fluid px-2 mt-3">
         <div className="container-fluid border-type-bottom rounded-top-4 shadow py-3 bg-light d-flex justify-content-center gap-5">
-          <a href="#top0">
+          <a href="#">
             <img src={logo} alt="logo" className="img-footer" />
           </a>
           <div className="col-sm-1 d-flex flex-column justify-content-around contact-icons-footer">
