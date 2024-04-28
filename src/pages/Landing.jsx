@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
+import imgCarousel from "../../public/assets/1140x696.jpg"
 
 function Landing() {
   return (
     <>
 
       {/* prom panel */}
-      <div className="container-fluid prom-panel d-flex flex-column justify-content-around align-items-start p-5 my-5">
+      <div className="container-fluid prom-panel d-flex flex-column justify-content-around align-items-start p-5">
         <div className="w-75 ps-5 ms-5">
           <h1 className="">Parcerottis</h1>
           <p className="w-50">
@@ -17,10 +18,36 @@ function Landing() {
       {/* landing page content */}
       <div className="container-fluid">
 
-        {/* product carrousel */}
-        <div className="carrousel">
-          
+        {/* product carousel */}
+
+        <div id="" className="carousel slide" data-bs-ride="carousel">
+
+          <div className="carousel-inner">
+            <div data-bs-interval="3000" className="carousel-item active">
+              <img src={imgCarousel} className="d-block w-100" alt="..." />
+              <div className="carousel-caption d-none d-md-block">
+                <h5>First slide label</h5>
+                <p>Some representative placeholder content for the first slide.</p>
+              </div>
+            </div>
+            <div data-bs-interval="3000" className="carousel-item">
+              <img src={imgCarousel} className="d-block w-100" alt="..." />
+              <div className="carousel-caption d-none d-md-block">
+                <h5>First slide label</h5>
+                <p>Some representative placeholder content for the first slide.</p>
+              </div>
+            </div>
+            <div data-bs-interval="3000" className="carousel-item">
+              <img src={imgCarousel} className="d-block w-100" alt="..." />
+              <div className="carousel-caption d-none d-md-block">
+                <h5>First slide label</h5>
+                <p>Some representative placeholder content for the first slide.</p>
+              </div>
+            </div>
+          </div>
+
         </div>
+
 
         {/* explore */}
         <div className="container my-5 px-5">

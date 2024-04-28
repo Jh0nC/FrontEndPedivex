@@ -11,16 +11,19 @@ function Navbar() {
           </a>
           <div className="navbar-list">
             <li><Link to={"/"} >{"Inicio"}</Link></li>
-            <li><Link to={"/aboutUs"} >{"Parcerottis"}</Link></li>
             <li><Link to={"/catalogue"} >{"Catálogo"}</Link></li>
+            <li><Link to={"/aboutUs"} >{"Parcerottis"}</Link></li>
             <li><Link to={"/admin"} >{"Administrador"}</Link></li>
           </div>
-          <Link to={"/login"} className="navbar-auth">
-            User
-            <i class="bi bi-person-circle"></i>
-          </Link>
+          <div className="navbar-auth">
+            <Link to={"/login"}>
+              Iniciar sesión
+              <i className="bi bi-person-circle"></i>
+            </Link>
+          </div>
         </div>
       </div>
+      <div className="navbar-place"></div>
 
     </>
   )

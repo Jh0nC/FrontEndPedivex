@@ -9,21 +9,21 @@ function Dashboard() {
             <img src={chartImg} alt="grafica" className="img-fluid"/>
             <button className="btn btn-outline-success">
               Generar excel
-              <i class="bi bi-filetype-xlsx ms-2"></i>
+              <i className="bi bi-filetype-xlsx ms-2"></i>
             </button>
           </div>
           <div className="col-sm-6 d-flex flex-column align-items-center">
             <img src={chartImg} alt="grafica" className="img-fluid"/>
             <button className="btn btn-outline-success">
               Generar excel
-              <i class="bi bi-filetype-xlsx ms-2"></i>
+              <i className="bi bi-filetype-xlsx ms-2"></i>
             </button>
           </div>
           <div className="col-sm-6 d-flex flex-column align-items-center">
             <img src={chartImg} alt="grafica" className="img-fluid"/>
             <button className="btn btn-outline-success">
               Generar excel
-              <i class="bi bi-filetype-xlsx ms-2"></i>
+              <i className="bi bi-filetype-xlsx ms-2"></i>
             </button>
           </div>
         </div>
