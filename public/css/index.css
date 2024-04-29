@@ -7,8 +7,10 @@
   --own-color-3: #D3971E;
   --own-color-4: #FED477;
   --own-color-5: #4C2B07;
-  --own-color-6: #e28117;
+  --own-color-6: #e28117 ;
+  
 }
+
 
 .test {
   border: 1px solid #000 !important;

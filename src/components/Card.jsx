@@ -156,8 +156,86 @@ function Card(data) {
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
-              {/* formulario de edicion */}
+              {/* add product modal */}
               <h1>Editar</h1>
+              <div className="modal-body container-fluid">
+                <form action="">
+                  <div className="row d-flex justify-content-around">
+                    <div className="input-group mb-3">
+                      <button className="btn btn-outline-secondary dropdown-toggle"
+                        type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">{data.data['type']}</button>
+                      <input type="text"
+                        className="form-control"
+                        placeholder={data.data['type'] + " " + data.data['flavor']}
+                        disabled/>
+                    </div>
+                    <div className="row d-flex justify-content-around">
+                      <label htmlFor="" className="form-label col-5">
+                        Sabor
+                        <input type="text" className="form-control" placeholder={data.data['flavor']}/>
+                      </label>
+                      <label htmlFor="" className="form-label col-7">
+                        Moje
+                        <select className="form-select" aria-label="Default select example" disabled>
+                          <option >Selecciona un moje</option>
+                          <option value="1" selected>Hojaldre seco</option>
+                          <option value="2">Levandura humeda</option>
+                        </select>
+                      </label>
+                    </div>
+                    <div className="row d-flex justify-content-around">
+                      <label htmlFor="" className="form-label col-9">
+                        Descripción del producto
+                        <input type="text" className="form-control" placeholder="Esta es la descripción del producto" disabled/>
+                      </label>
+                      <label htmlFor="" className="form-label col-3">
+                        Precio
+                        <input type="number" className="form-control" placeholder="$ 2500"/>
+                      </label>
+                    </div>
+                    <hr />
+                    <h5>Insumos</h5>
+                    <div className="mb-2 row d-flex justify-content-around align-items-center">
+                      <label htmlFor="" className="form-label col-6 mb-0">
+                        <select className="form-select" aria-label="Default select example" disabled>
+                          <option selected>Insumo</option>
+                        </select>
+                      </label>
+                      <div className="col-3">
+                        <div className="input-group">
+                          <button className="btn btn-outline-secondary dropdown-toggle"
+                            type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">Unidad</button>
+                          <ul className="dropdown-menu">
+                            <li><a className="dropdown-item" href="#">Gramos</a></li>
+                            <li><a className="dropdown-item" href="#">Libras</a></li>
+                            <li><a className="dropdown-item" href="#">Mililitros</a></li>
+                            <li><a className="dropdown-item" href="#">Litros</a></li>
+                          </ul>
+                          <input type="number" className="form-control"
+                            aria-label="Text input with dropdown button" disabled/>
+                        </div>
+                      </div>
+                      <div className="col-3 d-flex justify-content-around">
+                        <button className="btn btn-outline-secondary">
+                          <i className="bi bi-dash"></i>
+                        </button>
+                        <button className="btn btn-outline-info">
+                          <i className="bi bi-plus-lg"></i>
+                        </button>
+                      </div>
+                    </div>
+
+                    <hr />
+                    <div className="row d-flex justify-content-around">
+                      <label for="formFile"
+                        className="form-label">Selecciona una imagen</label>
+                      <input className="form-control" type="file" id="formFile" disabled />
+                    </div>
+                  </div>
+                </form>
+              </div>
             </div>
             <div className="modal-footer">
               <button type="button"
@@ -169,7 +247,7 @@ function Card(data) {
             </div>
           </div>
         </div>
-      </div>
+      </div >
 
     </>
   )
