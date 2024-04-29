@@ -251,6 +251,7 @@ a {
   padding: 0 2vh;
   display: flex;
   align-items: center;
+  box-shadow: 1px 1px 15px #00000070;
 }
 
 .catalogue-card-body {
@@ -285,6 +286,7 @@ a {
   display: flex;
   justify-content: center;
   border: none;
+  box-shadow: 1px 1px 15px #00000070;
 }
 
 .catalogue-img img {

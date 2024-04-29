@@ -38,7 +38,10 @@ function Card(data) {
             Ver detalle
             <i className="bi bi-eye"></i>
           </button>
-          <button className="btn rounded-4 btn-outline-warning d-flex gap-2">
+          <button type="button"
+            className="btn rounded-4 btn-outline-warning d-flex gap-2"
+            data-bs-toggle="modal"
+            data-bs-target={"#modal3Card" + data.data['id']}>
             Editar
             <i className="bi bi-pencil-square"></i>
           </button>
@@ -89,7 +92,14 @@ function Card(data) {
               <button type="button"
                 className="btn rounded-4 btn-outline-warning d-flex gap-2"
                 data-bs-toggle="modal"
-                data-bs-target={"#modalSecondCard" + data.data['id']}>
+                data-bs-target={"#modal3Card" + data.data['id']}>
+                Editar
+                <i className="bi bi-pencil-square"></i>
+              </button>
+              <button type="button"
+                className="btn rounded-4 btn-outline-warning d-flex gap-2"
+                data-bs-toggle="modal"
+                data-bs-target={"#modal2Card" + data.data['id']}>
                 Ficha técnica
               </button>
               <button type="button" className="btn rounded-4 btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -99,7 +109,7 @@ function Card(data) {
       </div>
 
       <div className="modal fade"
-        id={"modalSecondCard" + data.data['id']}
+        id={"modal2Card" + data.data['id']}
         data-bs-backdrop="static"
         data-bs-keyboard="false"
         tabIndex="-1"
@@ -117,8 +127,43 @@ function Card(data) {
               <button type="button"
                 className="btn rounded-4 btn-outline-warning d-flex gap-2"
                 data-bs-toggle="modal"
+                data-bs-target={"#modal3Card" + data.data['id']}>
+                Editar
+                <i className="bi bi-pencil-square"></i>
+              </button>
+              <button type="button"
+                className="btn rounded-4 btn-outline-warning d-flex gap-2"
+                data-bs-toggle="modal"
                 data-bs-target={"#modalCard" + data.data['id']}>
                 Volver
+              </button>
+              <button type="button" className="btn rounded-4 btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="modal fade"
+        id={"modal3Card" + data.data['id']}
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabIndex="-1"
+        aria-hidden="true">
+        <div className="modal-dialog modal-lg modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel"> {data.data['type'] + ' - ' + data.data['flavor']}</h1>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              {/* formulario de edicion */}
+              <h1>Editar</h1>
+            </div>
+            <div className="modal-footer">
+              <button type="button"
+                onClick={ConfirmEdit}
+                className="btn rounded-4 btn-outline-warning d-flex gap-2" >
+                Guardar
               </button>
               <button type="button" className="btn rounded-4 btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
@@ -131,3 +176,24 @@ function Card(data) {
 }
 
 export default Card;
+
+
+
+export function ConfirmEdit() {
+  Swal.fire({
+    title: "Guardar cambios",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#FEB81C",
+    cancelButtonColor: "rgb(219, 81, 81)",
+    confirmButtonText: "Si, editar"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "Producto editado",
+        text: "El producto se ha editado correctamente",
+        icon: "success"
+      });
+    }
+  });
+}

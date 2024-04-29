@@ -1,9 +1,9 @@
 import productImg from "../../../public/assets/products/panzerotti_arequipe.jpg";
-import Br from "../Br";
 
 function Catalogue() {
   return (
     <>
+      <br /><br /><br />
       <div className="d-flex justify-content-center mt-3">
         <div className="catalogue-card border-type-mid px-4">
           <div className="catalogue-card-title border-type-mid">
@@ -20,9 +20,9 @@ function Catalogue() {
                 <button type="button" className="btn btn-outline-secondary rounded-4" data-bs-toggle="modal" data-bs-target="#add-shopcard">
                   Agregar al carrito
                 </button>
-                <button className="btn btn-outline-secondary rounded-4">
+                {/* <button className="btn btn-outline-secondary rounded-4">
                   Saber más
-                </button>
+                </button> */}
               </div>
             </div>
             <button type="button" className="catalogue-img rounded-4">
@@ -31,6 +31,7 @@ function Catalogue() {
           </div>
         </div>
       </div>
+      <br /><br /><br /><br /><br />
 
       <div className="modal fade"
         data-bs-backdrop="static"
