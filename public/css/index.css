@@ -136,6 +136,7 @@ a {
 .custom-sidenav {
   width: 20vw;
   height: fit-content;
+  transition-duration: .2s;
 }
 
 .submenu-sidenav {
