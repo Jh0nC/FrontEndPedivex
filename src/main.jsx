@@ -8,6 +8,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 /* partials */
 import Navbar from "./partials/Navbar";
 import Footer from "./partials/Footer";
+import ShopCart from "./partials/ShopCart"
+import Config from "./partials/Config"
 /* pages */
 import Landing from "./pages/Landing";
 import NotFound from "./pages/NotFound";
@@ -29,6 +31,9 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
 
       <Navbar />
 
+      <ShopCart />
+      {/* <Config /> */}
+
       <Routes>
 
         <Route path='*' element={<NotFound />} />
@@ -36,7 +41,7 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
         <Route path='/register' element={<Register />} />
 
         <Route path='/'>
-
+ 
           <Route path='' element={<Landing />} />
           <Route path='aboutUs' element={<About />} />
           <Route path='catalogue' element={<Catalogue />} />

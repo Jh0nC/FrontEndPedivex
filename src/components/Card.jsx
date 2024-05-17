@@ -121,7 +121,94 @@ function Card(data) {
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
-              <h1>Ficha técnica</h1>
+              <h1>Ficha Tecnica</h1>
+              <div className="row">
+                <div className="col-sm">
+                  <div className="input-group mb-3">
+                    <button className="btn btn-outline-secondary dropdown-toggle">
+                      {data.data['type']}
+                    </button>
+                    <input type="text"
+                      className="form-control"
+                      placeholder={data.data['flavor']}
+                      disabled />
+                  </div>
+                </div>
+                <div className="col-sm">
+                  <div className="mb-3">
+                    <label htmlFor="" className="form-label d-flex align-items-center gap-4">
+                      Moje
+                      <input className="form-control" type="text" disabled name="" id="" placeholder="Moje del producto" />
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div className="row">
+                <h5>Insumos</h5>
+                <div className="mb-2 row d-flex justify-content-around align-items-center">
+                  <label htmlFor="" className="form-label col-6 mb-0">
+                    <select className="form-select" aria-label="Default select example">
+                      <option selected>Selecciona un insumo</option>
+                      <option>Piña</option>
+                      <option>Jamon</option>
+                      <option>Salchicha ranchera</option>
+                      <option>Arequipen</option>
+                    </select>
+                  </label>
+                  <div className="col-3">
+                    <div className="input-group">
+                      <button className="btn btn-outline-secondary dropdown-toggle"
+                        type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">Gr</button>
+                      <input type="number" className="form-control"
+                        aria-label="Text input with dropdown button" 
+                        disabled placholder="Insumo"/>
+                    </div>
+                  </div>
+                </div>
+                <div className="mb-2 row d-flex justify-content-around align-items-center">
+                  <label htmlFor="" className="form-label col-6 mb-0">
+                    <select className="form-select" aria-label="Default select example">
+                      <option selected>Selecciona un insumo</option>
+                      <option>Piña</option>
+                      <option>Jamon</option>
+                      <option>Salchicha ranchera</option>
+                      <option>Arequipen</option>
+                    </select>
+                  </label>
+                  <div className="col-3">
+                    <div className="input-group">
+                      <button className="btn btn-outline-secondary dropdown-toggle"
+                        type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">Gr</button>
+                      <input type="number" className="form-control"
+                        aria-label="Text input with dropdown button" 
+                        disabled placholder="Insumo"/>
+                    </div>
+                  </div>
+                </div>
+                <div className="mb-2 row d-flex justify-content-around align-items-center">
+                  <label htmlFor="" className="form-label col-6 mb-0">
+                    <select className="form-select" aria-label="Default select example">
+                      <option selected>Selecciona un insumo</option>
+                      <option>Piña</option>
+                      <option>Jamon</option>
+                      <option>Salchicha ranchera</option>
+                      <option>Arequipen</option>
+                    </select>
+                  </label>
+                  <div className="col-3">
+                    <div className="input-group">
+                      <button className="btn btn-outline-secondary dropdown-toggle"
+                        type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">Gr</button>
+                      <input type="number" className="form-control"
+                        aria-label="Text input with dropdown button" 
+                        disabled placholder="Insumo"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="modal-footer">
               <button type="button"
@@ -156,7 +243,7 @@ function Card(data) {
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
-              {/* add product modal */}
+              {/* edit product modal */}
               <h1>Editar</h1>
               <div className="modal-body container-fluid">
                 <form action="">
@@ -168,12 +255,12 @@ function Card(data) {
                       <input type="text"
                         className="form-control"
                         placeholder={data.data['type'] + " " + data.data['flavor']}
-                        disabled/>
+                        disabled />
                     </div>
                     <div className="row d-flex justify-content-around">
                       <label htmlFor="" className="form-label col-5">
                         Sabor
-                        <input type="text" className="form-control" placeholder={data.data['flavor']}/>
+                        <input type="text" className="form-control" placeholder={data.data['flavor']} />
                       </label>
                       <label htmlFor="" className="form-label col-7">
                         Moje
@@ -187,11 +274,11 @@ function Card(data) {
                     <div className="row d-flex justify-content-around">
                       <label htmlFor="" className="form-label col-9">
                         Descripción del producto
-                        <input type="text" className="form-control" placeholder="Esta es la descripción del producto" disabled/>
+                        <input type="text" className="form-control" placeholder="Esta es la descripción del producto" disabled />
                       </label>
                       <label htmlFor="" className="form-label col-3">
                         Precio
-                        <input type="number" className="form-control" placeholder="$ 2500"/>
+                        <input type="number" className="form-control" placeholder="$ 2500" />
                       </label>
                     </div>
                     <hr />
@@ -214,7 +301,7 @@ function Card(data) {
                             <li><a className="dropdown-item" href="#">Litros</a></li>
                           </ul>
                           <input type="number" className="form-control"
-                            aria-label="Text input with dropdown button" disabled/>
+                            aria-label="Text input with dropdown button" disabled />
                         </div>
                       </div>
                       <div className="col-3 d-flex justify-content-around">

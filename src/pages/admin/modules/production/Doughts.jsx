@@ -1,7 +1,11 @@
+import Datatable from "../../../../components/Datatable";
+
 function Doughts() {
   return (
     <>
-      <h1>Doughts</h1>
+      <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
+        <Datatable />
+      </div>
     </>
   )
 };

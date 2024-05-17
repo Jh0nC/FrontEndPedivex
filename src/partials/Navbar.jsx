@@ -24,7 +24,6 @@ function Navbar() {
         </div>
       </div>
       <div className="navbar-place"></div>
-
     </>
   )
 }
