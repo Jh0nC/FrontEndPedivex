@@ -1,4 +1,5 @@
 import productImg from "../../../public/assets/products/panzerotti_arequipe.jpg";
+import Footer from "../../partials/Footer";
 
 function Catalogue() {
   return (
@@ -61,6 +62,7 @@ function Catalogue() {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   )
 };

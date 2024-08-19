@@ -1,13 +1,12 @@
 /* style */
-import "../public/css/index.css"
-import "../public/css/datatableStyles.css"
+import "../public/css/index.css";
+import "../public/css/datatableStyles.css";
 /* React utils */
-import React from "react"
-import ReactDOM from 'react-dom/client'
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import React from "react";
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 /* partials */
 import Navbar from "./partials/Navbar";
-import Footer from "./partials/Footer";
 import ShopCart from "./partials/ShopCart"
 import Config from "./partials/Config"
 /* pages */
@@ -21,7 +20,7 @@ import AdminPage from "./pages/admin/AdminPage";
 import Dashboard from "./pages/admin/modules/Dashboard";
 import Products from "./pages/admin/modules/production/Products";
 import Doughts from "./pages/admin/modules/production/Doughts";
-import Br from "./pages/Br"
+import Br from "./pages/Br";
 
 ReactDOM.createRoot(document.querySelector('#root')).render(
 
@@ -41,7 +40,7 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
         <Route path='/register' element={<Register />} />
 
         <Route path='/'>
- 
+
           <Route path='' element={<Landing />} />
           <Route path='aboutUs' element={<About />} />
           <Route path='catalogue' element={<Catalogue />} />
@@ -58,8 +57,6 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
         </Route>
 
       </Routes>
-
-      <Footer />
 
     </Router>
 

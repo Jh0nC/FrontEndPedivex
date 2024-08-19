@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import imgCarousel1 from "../../public/assets/products/palito_panzerotti.jpg"
 import imgCarousel2 from "../../public/assets/products/palito_bocadillo.jpg"
 import imgCarousel3 from "../../public/assets/products/panzerotti_arequipe.jpg"
+import Footer from "../partials/Footer.jsx";
 
 function Landing() {
   return (
@@ -85,6 +86,8 @@ function Landing() {
         </div>
 
       </div>
+
+      <Footer />
 
     </>
   )
