@@ -1,4 +1,4 @@
-import Datatable from "../../../../components/DatatableBoughts";
+import Datatable from "../../../../components/DatatableRole";
 import React, { useState, useEffect } from 'react';
 
 function Boughts() {
@@ -7,7 +7,7 @@ function Boughts() {
   useEffect(() => {
     const fetchDatos = async () => {
       try {
-        const response = await fetch("http://localhost:3000/bought");
+        const response = await fetch("http://localhost:3000/role");
         if (!response.ok) {
           throw new Error("Network response was not ok " + response.statusText);
         }
@@ -22,12 +22,11 @@ function Boughts() {
   }, []);
 
   const data = {
-    module: "Compras",
-    title: "Compras",
-    colNames: ["Id", "nroRecibo", "Fecha", "Total", "Estado", "Acciones"],
+    module: "Roles",
+    title: "Roles",
+    colNames: ["Id", "rol", "Acciones"],
     content: datos.map(item => ({
-      ...item,
-      date: item.date.split('T')[0]
+      ...item
     }))
   };
 

@@ -20,6 +20,9 @@ import AdminPage from "./pages/admin/AdminPage";
 import Dashboard from "./pages/admin/modules/Dashboard";
 import Products from "./pages/admin/modules/production/Products";
 import Supplies from "./pages/admin/modules/production/Supplies";
+import Boughts from "./pages/admin/modules/boughts/Boughts";
+import Roles from "./pages/admin/modules/users/Roles"
+import Users from "./pages/admin/modules/users/Users"
 import Br from "./pages/Br";
 
 ReactDOM.createRoot(document.querySelector('#root')).render(
@@ -50,6 +53,9 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
             <Route path='dashboard' element={<Dashboard />} />
             <Route path='products' element={<Products />} />
             <Route path='supplies' element={<Supplies />} />
+            <Route path='boughts' element={<Boughts />} />
+            <Route path='roles' element={<Roles />} />
+            <Route path='users' element={<Users />} />
             <Route path='*' element={<NotFound />} />
 
           </Route>
