@@ -19,7 +19,7 @@ import Catalogue from "./pages/client/Catalogue";
 import AdminPage from "./pages/admin/AdminPage";
 import Dashboard from "./pages/admin/modules/Dashboard";
 import Products from "./pages/admin/modules/production/Products";
-import Masses from "./pages/admin/modules/production/Masses";
+import Supplies from "./pages/admin/modules/production/Supplies";
 import Br from "./pages/Br";
 
 ReactDOM.createRoot(document.querySelector('#root')).render(
@@ -49,7 +49,7 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
 
             <Route path='dashboard' element={<Dashboard />} />
             <Route path='products' element={<Products />} />
-            <Route path='masses' element={<Masses />} />
+            <Route path='supplies' element={<Supplies />} />
             <Route path='*' element={<NotFound />} />
 
           </Route>
