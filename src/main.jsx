@@ -19,7 +19,7 @@ import Catalogue from "./pages/client/Catalogue";
 import AdminPage from "./pages/admin/AdminPage";
 import Dashboard from "./pages/admin/modules/Dashboard";
 import Products from "./pages/admin/modules/production/Products";
-import Doughts from "./pages/admin/modules/production/Doughts";
+import Masses from "./pages/admin/modules/production/Masses";
 import Br from "./pages/Br";
 
 ReactDOM.createRoot(document.querySelector('#root')).render(
@@ -49,8 +49,8 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
 
             <Route path='dashboard' element={<Dashboard />} />
             <Route path='products' element={<Products />} />
-            <Route path='doughts' element={<Doughts />} />
-            <Route path='*' element={<Br />} />
+            <Route path='masses' element={<Masses />} />
+            <Route path='*' element={<NotFound />} />
 
           </Route>
 

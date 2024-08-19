@@ -5,7 +5,7 @@ function Card(data) {
   console.log(productDetail);
   return (
     <>
-      <div className="card rounded admin-card">
+      <div className="card rounded-4 overflow-hidden admin-card">
         <div className="card-head rounded-top-3">
           <img src={dummyImg} alt="" className="img-fluid border-bottom" />
           <h5 className="text-center mt-2">{data.data['type'] + ' - ' + data.data['flavor']}</h5>
