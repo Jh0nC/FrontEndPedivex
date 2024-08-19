@@ -171,7 +171,7 @@ a {
 
 /* sidenav */
 .custom-sidenav {
-  width: 20vw;
+  width: 20%;
   height: fit-content;
   transition-duration: .2s;
 }
