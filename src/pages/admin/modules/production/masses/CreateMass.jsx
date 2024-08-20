@@ -10,7 +10,7 @@ function CreateMass({ onCancel, initialData = {} }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:2145/supplie")
+    fetch("http://localhost:3000/supplie")
       .then((response) => response.json())
       .then((data) => setSupplies(data));
   }, []);
@@ -39,7 +39,7 @@ function CreateMass({ onCancel, initialData = {} }) {
       details,
     };
 
-    fetch("http://localhost:2145/masses", {
+    fetch("http://localhost:3000/masses", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

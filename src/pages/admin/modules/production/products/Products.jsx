@@ -6,7 +6,7 @@ function Products() {
   const [cardsData, setCardsData] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:2145/product')
+    fetch('http://localhost:3000/product')
       .then(response => response.json())
       .then(data => setCardsData(data))
       .catch(error => console.error("Error fetching products:", error));
@@ -19,7 +19,7 @@ function Products() {
       <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
         <div className="datatable_header mb-4">
           <h2>Productos</h2>
-          <Link to={'create'} className="btn btn-primary">
+          <Link to={'create'} className="btn btn-warning rounded-5">
             Crear producto
           </Link>
           <div className="input_search">

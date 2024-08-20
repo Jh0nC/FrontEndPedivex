@@ -9,15 +9,15 @@ function CreateProducts() {
   ]);
 
   useEffect(() => {
-    fetch("http://localhost:2145/productCategories")
+    fetch("http://localhost:3000/productCategories")
       .then((response) => response.json())
       .then((data) => setCategories(data));
 
-    fetch("http://localhost:2145/masses")
+    fetch("http://localhost:3000/masses")
       .then((response) => response.json())
       .then((data) => setMasses(data));
 
-    fetch("http://localhost:2145/supplie")
+    fetch("http://localhost:3000/supplie")
       .then((response) => response.json())
       .then((data) => setSupplies(data));
   }, []);

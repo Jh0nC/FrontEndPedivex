@@ -6,7 +6,7 @@ function Masses() {
 
   useEffect(() => {
     // Simula una llamada API para obtener las masas
-    fetch('http://localhost:2145/masses')
+    fetch('http://localhost:3000/masses')
       .then(response => response.json())
       .then(data => setData(data))
       .catch(error => console.error('Error fetching masses:', error));
