@@ -1,4 +1,5 @@
 import '../../public/css/datatableStyles.css';
+import { Link } from 'react-router-dom';
 
 function Datatables({ data, onAddClick }) {
   return (
@@ -33,18 +34,17 @@ function Datatables({ data, onAddClick }) {
               <td>{item.targetDate}</td>
               <td>
                 <button className='btn btn-warning me-2'>Detalles</button>
-
-                <button className='btn btn-secondary me-2'>Editar</button>
-                
+                <Link to={`/admin/production-order-update/${item.id}`}>
+                  <button className='btn btn-secondary me-2'>Editar</button>
+                </Link>
                 <button className='btn btn-secondary me-2'>Estado</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <div className="datatable_fotter d-flex justify-content-between align-items-center">
-        <p>Total de filas : 05</p>
-
+      <div className="datatable_footer d-flex justify-content-between align-items-center">
+        <p>Total de filas: {data.content ? data.content.length : 0}</p>
         <button className="btn btn-outline-success rounded-5">
           <svg
             xmlns="http://www.w3.org/2000/svg"

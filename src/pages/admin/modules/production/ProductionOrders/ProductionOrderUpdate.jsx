@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-function ProductionOrderUpdate({ onSave, onClose }) {
+function ProductionOrderUpdate({ id, onSave, onClose }) {
   const [formData, setFormData] = useState({
     date: '',
     notes: '',
@@ -15,6 +15,25 @@ function ProductionOrderUpdate({ onSave, onClose }) {
 
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+
+  useEffect(() => {
+    // Fetch existing data if id is provided
+    if (id) {
+      const fetchData = async () => {
+        try {
+          const response = await fetch(`http://localhost:2145/productionOrder/${id}`);
+          if (!response.ok) {
+            throw new Error('Error fetching data');
+          }
+          const result = await response.json();
+          setFormData(result);
+        } catch (err) {
+          setError(err.message);
+        }
+      };
+      fetchData();
+    }
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,8 +73,8 @@ function ProductionOrderUpdate({ onSave, onClose }) {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:2145/productionOrder', {
-        method: 'POST',
+      const response = await fetch(`http://localhost:2145/productionOrder/${id || ''}`, {
+        method: id ? 'PUT' : 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -67,7 +86,7 @@ function ProductionOrderUpdate({ onSave, onClose }) {
       }
 
       const result = await response.json();
-      setSuccess('Orden de producción creada con éxito');
+      setSuccess(id ? 'Orden de producción actualizada con éxito' : 'Orden de producción creada con éxito');
       setError(null);
       setFormData({
         date: '',
@@ -89,7 +108,7 @@ function ProductionOrderUpdate({ onSave, onClose }) {
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <h2 className="mx-3">Crear Nueva Orden de Producción</h2>
+      <h2 className="mx-3">{id ? 'Actualizar Orden de Producción' : 'Editar Orden de Producción'}</h2>
       <form onSubmit={handleSubmit}>
         <div className="m-3">
           <label htmlFor="date" className="form-label">Fecha:</label>
