@@ -24,7 +24,7 @@ function Users() {
   const data = {
     module: "Usuarios",
     title: "Usuarios",
-    colNames: ["Id", "correo", "contraseña", "nombre", "documento", "direccion", "telefono", "rol", "Acciones"],
+    colNames: ["Id", "correo", "nombre", "documento", "direccion", "telefono", "rol", "Acciones"],
     content: datos.map(item => ({
       ...item
     }))

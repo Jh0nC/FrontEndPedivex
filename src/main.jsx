@@ -25,7 +25,9 @@ import Supplies from "./pages/admin/modules/boughts/supplies/Supplies";
 import Boughts from "./pages/admin/modules/boughts/Boughts";
 import Roles from "./pages/admin/modules/users/Roles/Roles"
 import RoleCreate from './pages/admin/modules/users/Roles/RoleCreate';
+import RoleEdit from './pages/admin/modules/users/Roles/RoleEdit';
 import Users from "./pages/admin/modules/users/Users/Users"
+import UsersCreate from "./pages/admin/modules/users/Users/UserCreate"
 
 
 import Devolutions from "./pages/admin/modules/sales/Devolutions";
@@ -66,6 +68,11 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
             <Route path='boughts' element={<Boughts />} />
             <Route path='roles' element={<Roles />} />
             <Route path='role-create' element={<RoleCreate />} />
+<<<<<<< HEAD
+            <Route path='role-edit' element={<RoleEdit />} />
+            <Route path='users' element={<Users />} />
+            <Route path='user-create' element={<UsersCreate />} />
+=======
 
             <Route path='supplies-create' element={<SuppliesCreate />} />
             <Route path='supplies' element={<Supplies />} />
@@ -86,6 +93,7 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
   
 
 
+>>>>>>> 472fb45018c04d094a53cc51e0daa6f5e26b5050
             <Route path='*' element={<NotFound />} />
 
           </Route>
