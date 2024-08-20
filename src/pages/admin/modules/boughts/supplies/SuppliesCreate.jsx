@@ -1,8 +1,9 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 
 function SupplieCreate() {
+  const navigate = useNavigate(); // Hook para redireccionar
   const [formData, setFormData] = useState({
     name: '',
     stock: '',
@@ -56,12 +57,14 @@ function SupplieCreate() {
       const result = await response.json();
       setSuccess('Insumo creado con éxito');
       setError(null);
-      setFormData({ name: '', stock: '', unit: 'gr', state: '' }); // Limpiar formulario
+      setFormData({ name: '', stock: '', unit: 'gr', state: '1' }); // Limpiar formulario
 
       Swal.fire({
         icon: 'success',
         title: 'Éxito',
         text: 'Insumo creado con éxito.',
+      }).then(() => {
+        navigate('/admin/supplies'); // Redireccionar después de hacer clic en "OK"
       });
 
       console.log('Response:', result);

@@ -1,9 +1,10 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 
 function SupplieUpdate() {
   const { id } = useParams(); // Obtener el id del URL
+  const navigate = useNavigate(); // Hook para redireccionar
   const [formData, setFormData] = useState({
     name: '',
     stock: '',
@@ -85,6 +86,8 @@ function SupplieUpdate() {
         icon: 'success',
         title: 'Éxito',
         text: 'Insumo editado con éxito.',
+      }).then(() => {
+        navigate('/admin/supplies'); // Redireccionar después de hacer clic en "OK"
       });
 
       console.log('Response:', result);
@@ -142,6 +145,18 @@ function SupplieUpdate() {
             <option value="ml">Mililitros</option>
             <option value="unit">Unidades</option>
           </select>
+        </div>
+        <div className='m-3'>
+          <label htmlFor="state" className="form-label">Estado:</label>
+          <input
+            id="state"
+            className='form-control'
+            type="text"
+            name="state"
+            value={formData.state}
+            onChange={handleChange}
+            required
+          />
         </div>
         <button type="submit" className='btn btn-warning m-3'>Editar</button>
         <Link to={"/admin/supplies"} className='btn btn-danger m-3'>Regresar</Link>
