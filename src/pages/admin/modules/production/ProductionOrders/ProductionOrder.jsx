@@ -9,7 +9,7 @@ function ProductionOrder() {
   useEffect(() => {
     const fetchDatos = async () => {
       try {
-        const response = await fetch("http://localhost:2145/productionOrder");
+        const response = await fetch("http://localhost:3000/productionOrder");
         if (!response.ok) {
           throw new Error("Network response was not ok " + response.statusText);
         }
@@ -25,7 +25,7 @@ function ProductionOrder() {
 
   const refreshData = async () => {
     try {
-      const response = await fetch("http://localhost:2145/productionOrder");
+      const response = await fetch("http://localhost:3000/productionOrder");
       if (!response.ok) {
         throw new Error("Network response was not ok " + response.statusText);
       }

@@ -32,7 +32,7 @@ function Datatables({ data }) {
               <td>{item.stock}</td>
               <td>{item.unit}</td>
               <td>{item.state}</td>
-              <td>
+              <td className='d-flex gap-2'>
                 <Link to={`/admin/supplies-update/${item.id}`}>
                   <button className='btn btn-warning'>Editar</button>
                 </Link>

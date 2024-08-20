@@ -22,12 +22,13 @@ import Products from "./pages/admin/modules/production/Products";
 import SuppliesCreate from "./pages/admin/modules/boughts/supplies/SuppliesCreate";
 import SuppliesUpdate from "./pages/admin/modules/boughts/supplies/SuppliesUpdate";
 import Supplies from "./pages/admin/modules/boughts/supplies/Supplies";
-
-
 import Boughts from "./pages/admin/modules/boughts/Boughts";
 import Roles from "./pages/admin/modules/users/Roles/Roles"
 import RoleCreate from './pages/admin/modules/users/Roles/RoleCreate';
 import Users from "./pages/admin/modules/users/Users/Users"
+
+
+import Devolutions from "./pages/admin/modules/sales/Devolutions";
 
 import ProductionOrder from "./pages/admin/modules/production/ProductionOrders/ProductionOrder"
 import ProductionOrderUpdate from "./pages/admin/modules/production/ProductionOrders/ProductionOrderUpdate";
@@ -77,6 +78,9 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
 
             <Route path='production-order' element={<ProductionOrder />} />
             <Route path='production-order-Update/:id' element={<ProductionOrderUpdate />} />
+
+
+            <Route path='devolutions' element={<Devolutions />} />
 
             
   
