@@ -1,13 +1,13 @@
-import Datatable from "../../../../components/DatatableRole";
+import Datatable from "../../../../../components/DatatableUser";
 import React, { useState, useEffect } from 'react';
 
-function Boughts() {
+function Users() {
   const [datos, setDatos] = useState([]);
 
   useEffect(() => {
     const fetchDatos = async () => {
       try {
-        const response = await fetch("http://localhost:3000/role");
+        const response = await fetch("http://localhost:3000/user");
         if (!response.ok) {
           throw new Error("Network response was not ok " + response.statusText);
         }
@@ -22,9 +22,9 @@ function Boughts() {
   }, []);
 
   const data = {
-    module: "Roles",
-    title: "Roles",
-    colNames: ["Id", "rol", "Acciones"],
+    module: "Usuarios",
+    title: "Usuarios",
+    colNames: ["Id", "correo", "contraseña", "nombre", "documento", "direccion", "telefono", "rol", "Acciones"],
     content: datos.map(item => ({
       ...item
     }))
@@ -37,4 +37,4 @@ function Boughts() {
   );
 }
 
-export default Boughts;
+export default Users;

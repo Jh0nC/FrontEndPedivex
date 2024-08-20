@@ -11,7 +11,7 @@ function Sidenav() {
         </li>
         <li className="list-group-item list-group-item-action">
           <a data-bs-toggle="collapse"
-            href="#submenu-boughts"
+            href="#submenu-users"
             role="button"
             aria-expanded="false"
             aria-controls="collapseExample"
@@ -20,7 +20,7 @@ function Sidenav() {
             Usuarios
             <i className="bi bi-chevron-down"></i>
           </a>
-          <div className="collapse submenu-sidenav" id="submenu-boughts">
+          <div className="collapse submenu-sidenav" id="submenu-users">
             <Link to={'/admin/roles'} >
               Roles
             </Link>
