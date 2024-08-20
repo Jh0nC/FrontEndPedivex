@@ -1,11 +1,14 @@
 import '../../public/css/datatableStyles.css';
+import { Link } from 'react-router-dom';
 
 function Datatables({ data }) {
   return (
     <div className="datatable-container border rounded-4 mx-auto my-3">
       <div className="datatable_header">
         <h2>{data.title}</h2>
-        <button>Agregar {data.module}</button>
+        <Link to="/admin/user-create">
+          <button>Agregar {data.module}</button>
+        </Link>
 
         <div className="input_search">
           <input type="search" placeholder="Buscar" />
@@ -27,12 +30,11 @@ function Datatables({ data }) {
             <tr key={index}>
               <td>{item.id}</td>
               <td>{item.mail}</td>
-              <td>{item.password}</td>
               <td>{item.firstName + ' ' + item.lastName}</td>
               <td>{item.document}</td>
               <td>{item.address}</td>
               <td>{item.phoneNumber}</td>
-              <td>{item.idRole}</td>
+              <td>{item.role.role}</td>
               <td>
                 <button className='btn btn-success'>editar</button>
                 <button className='btn btn-danger'>cambiar</button>

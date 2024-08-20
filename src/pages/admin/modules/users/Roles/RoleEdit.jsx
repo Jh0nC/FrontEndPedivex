@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
-function RoleCreate() {
+function RoleEdit() {
   const [formData, setFormData] = useState({
     role: ''
   });
@@ -25,6 +25,20 @@ function RoleCreate() {
       }
     };
 
+    const fetchRole = async () => {
+        try {
+          const response = await fetch('http://localhost:3000/role');
+          if (!response.ok) {
+            throw new Error('Error al obtener los roles');
+          }
+          const data = await response.json();
+          setPermissions(data); // Guardar los role en el estado
+        } catch (error) {
+          setError('Error al cargar roles: ' + error.message);
+        }
+      };
+
+    fetchRole();
     fetchPermissions(); // Llamar a la función cuando el componente se monta
   }, []);
 
@@ -107,4 +121,4 @@ function RoleCreate() {
   );
 }
 
-export default RoleCreate;
+export default RoleEdit;
