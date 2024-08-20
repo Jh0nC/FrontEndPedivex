@@ -19,13 +19,21 @@ import Catalogue from "./pages/client/Catalogue";
 import AdminPage from "./pages/admin/AdminPage";
 import Dashboard from "./pages/admin/modules/Dashboard";
 import Products from "./pages/admin/modules/production/Products";
-import Supplies from "./pages/admin/modules/production/Supplies";
+import SuppliesCreate from "./pages/admin/modules/boughts/supplies/SuppliesCreate";
+import SuppliesUpdate from "./pages/admin/modules/boughts/supplies/SuppliesUpdate";
+import Supplies from "./pages/admin/modules/boughts/supplies/Supplies";
+
+
 import Boughts from "./pages/admin/modules/boughts/Boughts";
 import Roles from "./pages/admin/modules/users/Roles/Roles"
 import RoleCreate from './pages/admin/modules/users/Roles/RoleCreate';
 import RoleEdit from './pages/admin/modules/users/Roles/RoleEdit';
 import Users from "./pages/admin/modules/users/Users/Users"
 import UsersCreate from "./pages/admin/modules/users/Users/UserCreate"
+
+import ProductionOrder from "./pages/admin/modules/production/ProductionOrders/ProductionOrder"
+import ProductionOrderUpdate from "./pages/admin/modules/production/ProductionOrders/ProductionOrderUpdate";
+
 
 import Br from "./pages/Br";
 
@@ -56,13 +64,32 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
 
             <Route path='dashboard' element={<Dashboard />} />
             <Route path='products' element={<Products />} />
-            <Route path='supplies' element={<Supplies />} />
             <Route path='boughts' element={<Boughts />} />
             <Route path='roles' element={<Roles />} />
             <Route path='role-create' element={<RoleCreate />} />
+<<<<<<< HEAD
             <Route path='role-edit' element={<RoleEdit />} />
             <Route path='users' element={<Users />} />
             <Route path='user-create' element={<UsersCreate />} />
+=======
+
+            <Route path='supplies-create' element={<SuppliesCreate />} />
+            <Route path='supplies' element={<Supplies />} />
+
+            <Route path='supplies-Update/:id' element={<SuppliesUpdate />} />
+
+
+
+            <Route path='users' element={<Users />} />
+
+            <Route path='production-order' element={<ProductionOrder />} />
+            <Route path='production-order-Update/:id' element={<ProductionOrderUpdate />} />
+
+            
+  
+
+
+>>>>>>> 472fb45018c04d094a53cc51e0daa6f5e26b5050
             <Route path='*' element={<NotFound />} />
 
           </Route>
