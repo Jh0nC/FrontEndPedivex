@@ -25,6 +25,9 @@ import Roles from "./pages/admin/modules/users/Roles/Roles"
 import RoleCreate from './pages/admin/modules/users/Roles/RoleCreate';
 import Users from "./pages/admin/modules/users/Users/Users"
 
+import ProductionOrder from "./pages/admin/modules/production/ProductionOrders/ProductionOrder"
+
+
 import Br from "./pages/Br";
 
 ReactDOM.createRoot(document.querySelector('#root')).render(
@@ -59,6 +62,13 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
             <Route path='roles' element={<Roles />} />
             <Route path='role-create' element={<RoleCreate />} />
             <Route path='users' element={<Users />} />
+
+            <Route path='production-order' element={<ProductionOrder />} />
+
+            
+            
+
+
             <Route path='*' element={<NotFound />} />
 
           </Route>
