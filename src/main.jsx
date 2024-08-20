@@ -19,7 +19,11 @@ import Catalogue from "./pages/client/Catalogue";
 import AdminPage from "./pages/admin/AdminPage";
 import Dashboard from "./pages/admin/modules/Dashboard";
 import Products from "./pages/admin/modules/production/Products";
-import Supplies from "./pages/admin/modules/production/Supplies";
+import SuppliesCreate from "./pages/admin/modules/boughts/supplies/SuppliesCreate";
+import SuppliesUpdate from "./pages/admin/modules/boughts/supplies/SuppliesUpdate";
+import Supplies from "./pages/admin/modules/boughts/supplies/Supplies";
+
+
 import Boughts from "./pages/admin/modules/boughts/Boughts";
 import Roles from "./pages/admin/modules/users/Roles/Roles"
 import RoleCreate from './pages/admin/modules/users/Roles/RoleCreate';
@@ -54,10 +58,17 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
 
             <Route path='dashboard' element={<Dashboard />} />
             <Route path='products' element={<Products />} />
-            <Route path='supplies' element={<Supplies />} />
             <Route path='boughts' element={<Boughts />} />
             <Route path='roles' element={<Roles />} />
             <Route path='role-create' element={<RoleCreate />} />
+
+            <Route path='supplies-create' element={<SuppliesCreate />} />
+            <Route path='supplies' element={<Supplies />} />
+
+            <Route path='supplies-Update/:id' element={<SuppliesUpdate />} />
+
+
+
             <Route path='users' element={<Users />} />
             <Route path='*' element={<NotFound />} />
 
