@@ -10,9 +10,24 @@ function Sidenav() {
           </Link>
         </li>
         <li className="list-group-item list-group-item-action">
-          <Link to={'/admin/users'} className="d-block">
-            Ususarios
-          </Link>
+          <a data-bs-toggle="collapse"
+            href="#submenu-users"
+            role="button"
+            aria-expanded="false"
+            aria-controls="collapseExample"
+            className="d-flex justify-content-between rounded-5"
+          >
+            Usuarios
+            <i className="bi bi-chevron-down"></i>
+          </a>
+          <div className="collapse submenu-sidenav" id="submenu-users">
+            <Link to={'/admin/roles'} >
+              Roles
+            </Link>
+            <Link to={'/admin/users'} className="d-block">
+              Ususarios
+            </Link>
+          </div>
         </li>
         <li className="list-group-item list-group-item-action">
           <a data-bs-toggle="collapse"

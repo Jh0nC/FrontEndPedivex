@@ -38,7 +38,7 @@ function Catalogue() {
         data-bs-backdrop="static"
         data-bs-keyboard="false"
         id="add-shopcard"
-        tabindex="-1"
+        tabIndex="-1"
         aria-hidden="true">
         <div className="modal-dialog modal-sm modal-dialog-centered">
           <div className="modal-content">

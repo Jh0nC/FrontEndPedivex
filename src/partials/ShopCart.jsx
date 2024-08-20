@@ -10,7 +10,7 @@ function ShopCart() {
         data-bs-target="#carritoDeCompras">
         <h3 className="bi bi-cart"></h3>
       </button>
-      <div className="modal fade" id="carritoDeCompras" tabindex="-1" aria-labelledby="carritoDeComprasLabel" aria-hidden="true">
+      <div className="modal fade" id="carritoDeCompras" tabIndex="-1" aria-labelledby="carritoDeComprasLabel" aria-hidden="true">
         <div className="modal-dialog modal-lg">
           <div className="modal-content">
             <div className="container mt-5 carrito">
@@ -90,7 +90,7 @@ function ShopCart() {
             </div>
             <div className="modal-footer mt-3">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              <Link to={'/login'} kclassName="btn btn-warning" data-bs-dismiss="modal">Hacer pedido</Link>
+              <Link to={'/login'} className="btn btn-warning" data-bs-dismiss="modal">Hacer pedido</Link>
             </div>
           </div>
         </div>

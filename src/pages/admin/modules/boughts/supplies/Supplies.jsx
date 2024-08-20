@@ -1,13 +1,13 @@
-import Datatable from "../../../../components/DatatableBoughts";
+import Datatable from "../../../../../components/DatatableSupplies";
 import React, { useState, useEffect } from 'react';
 
-function Boughts() {
+function Supplies() {
   const [datos, setDatos] = useState([]);
 
   useEffect(() => {
     const fetchDatos = async () => {
       try {
-        const response = await fetch("http://localhost:3000/bought");
+        const response = await fetch("http://localhost:3000/supplie");
         if (!response.ok) {
           throw new Error("Network response was not ok " + response.statusText);
         }
@@ -22,12 +22,12 @@ function Boughts() {
   }, []);
 
   const data = {
-    module: "Compras",
-    title: "Compras",
-    colNames: ["Id", "nroRecibo", "Fecha", "Total", "Estado", "Acciones"],
+    module: "Insumos",
+    title: "Insumos",
+    colNames: ["Id", "Nombre", "Stock", "Unidad", "Estado", "Acciones"],
     content: datos.map(item => ({
       ...item,
-      date: item.date.split('T')[0]
+
     }))
   };
 
@@ -38,4 +38,4 @@ function Boughts() {
   );
 }
 
-export default Boughts;
+export default Supplies;
