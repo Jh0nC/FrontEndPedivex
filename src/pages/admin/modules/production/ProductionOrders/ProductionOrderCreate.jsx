@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-function ProductionOrderUpdate({ id, onSave, onClose }) {
+function ProductionOrderCreate({ onSave, onClose }) {
   const [formData, setFormData] = useState({
     date: '',
     notes: '',
@@ -15,25 +15,6 @@ function ProductionOrderUpdate({ id, onSave, onClose }) {
 
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-
-  useEffect(() => {
-    // Fetch existing data if id is provided
-    if (id) {
-      const fetchData = async () => {
-        try {
-          const response = await fetch(`http://localhost:2145/productionOrder/${id}`);
-          if (!response.ok) {
-            throw new Error('Error fetching data');
-          }
-          const result = await response.json();
-          setFormData(result);
-        } catch (err) {
-          setError(err.message);
-        }
-      };
-      fetchData();
-    }
-  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -73,8 +54,8 @@ function ProductionOrderUpdate({ id, onSave, onClose }) {
     e.preventDefault();
 
     try {
-      const response = await fetch(`http://localhost:2145/productionOrder/${id || ''}`, {
-        method: id ? 'PUT' : 'POST',
+      const response = await fetch('http://localhost:2145/productionOrder', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -86,7 +67,7 @@ function ProductionOrderUpdate({ id, onSave, onClose }) {
       }
 
       const result = await response.json();
-      setSuccess(id ? 'Orden de producción actualizada con éxito' : 'Orden de producción creada con éxito');
+      setSuccess('Orden de producción creada con éxito');
       setError(null);
       setFormData({
         date: '',
@@ -108,7 +89,7 @@ function ProductionOrderUpdate({ id, onSave, onClose }) {
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <h2 className="mx-3">{id ? 'Actualizar Orden de Producción' : 'Editar Orden de Producción'}</h2>
+      <h2 className="mx-3">Crear Nueva Orden de Producción</h2>
       <form onSubmit={handleSubmit}>
         <div className="m-3">
           <label htmlFor="date" className="form-label">Fecha:</label>
@@ -240,4 +221,4 @@ function ProductionOrderUpdate({ id, onSave, onClose }) {
   );
 }
 
-export default ProductionOrderUpdate;
+export default ProductionOrderCreate;
