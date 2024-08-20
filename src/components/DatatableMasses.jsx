@@ -1,11 +1,22 @@
-import '../../public/css/datatableStyles.css';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-function Datatables({ data }) {
+function Datatable({ data }) {
+  const [selectedMass, setSelectedMass] = useState(null);
+
+  const handleShowDetails = (mass) => {
+    setSelectedMass(mass);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedMass(null);
+  };
+
   return (
     <div className="datatable-container border rounded-4 mx-auto my-3">
       <div className="datatable_header">
-        <h2>{data.title}</h2>
-        <button>Agregar {data.module}</button>
+        <h2>Masas</h2>
+        <Link to={'create'} className='btn btn-warning rounded-5'>Agregar masa</Link>
 
         <div className="input_search">
           <input type="search" placeholder="Buscar" />
@@ -15,32 +26,26 @@ function Datatables({ data }) {
       <table className="datatable">
         <thead>
           <tr>
-            {data.colNames && data.colNames.map((col, index) => (
-              <th key={index}>
-                {col} <i className="bi bi-chevron-expand"></i>
-              </th>
-            ))}
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
-          {data.content && data.content.map((item, index) => (
+          {data.map((item, index) => (
             <tr key={index}>
               <td>{item.id}</td>
               <td>{item.name}</td>
-              <td>{item.stock + ' ' + item.unit}</td>
-              <td>{item.state}</td>
-              <td>
-                <button>See</button>
-                <button>Edit</button>
+              <td className='d-flex gap-2'>
+                <button className='btn btn-info' onClick={() => handleShowDetails(item)}>Ver Detalles</button>
+                <button className='btn btn-warning'>Editar</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
       <div className="datatable_fotter d-flex justify-content-between align-items-center">
-        <p>Total de filas : 05</p>
-
-
+        <p>Total de filas: {data.length}</p>
         <button className="btn btn-outline-success rounded-5">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -58,8 +63,38 @@ function Datatables({ data }) {
           Generar Excel
         </button>
       </div>
+
+      {selectedMass && (
+        <div className="modal fade show" style={{ display: 'block' }}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title fs-5">Detalles de la Masa</h5>
+                <button type="button" className="btn-close" onClick={handleCloseModal}></button>
+              </div>
+              <div className="modal-body">
+                <h6>Nombre: {selectedMass.name}</h6>
+                <p>Notas: {selectedMass.notes}</p>
+                <h6>Detalles:</h6>
+                <ul>
+                  {selectedMass.massDetails.map((detail, index) => (
+                    <li key={index}>
+                      <b>{detail.supply.name}</b>: {detail.amount} {detail.unit}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={handleCloseModal}>
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
-export default Datatables;
+export default Datatable;

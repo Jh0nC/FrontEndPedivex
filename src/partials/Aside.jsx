@@ -52,7 +52,7 @@ function Sidenav() {
             <Link to={'/admin/products'} >
               Productos y ficha técnica
             </Link>
-            <Link to={'/admin/doughts'} >
+            <Link to={'/admin/masses'} >
               Mojes
             </Link>
           </div>

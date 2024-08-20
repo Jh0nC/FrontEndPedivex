@@ -18,8 +18,11 @@ import About from "./pages/client/About";
 import Catalogue from "./pages/client/Catalogue";
 import AdminPage from "./pages/admin/AdminPage";
 import Dashboard from "./pages/admin/modules/Dashboard";
-import Products from "./pages/admin/modules/production/Products";
+import Products from "./pages/admin/modules/production/products/Products";
 import Supplies from "./pages/admin/modules/production/Supplies";
+import Masses from "./pages/admin/modules/production/masses/Masses";
+import CreateProducts from "./pages/admin/modules/production/products/CreateProduct";
+import CreateMass from "./pages/admin/modules/production/masses/CreateMass";
 import Br from "./pages/Br";
 
 ReactDOM.createRoot(document.querySelector('#root')).render(
@@ -48,7 +51,13 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
           <Route path='admin' element={<AdminPage />}>
 
             <Route path='dashboard' element={<Dashboard />} />
+
+            <Route path='masses' element={<Masses />} />
+            <Route path='masses/create' element={<CreateMass />} />
+
             <Route path='products' element={<Products />} />
+            <Route path='products/create' element={<CreateProducts />} />
+
             <Route path='supplies' element={<Supplies />} />
             <Route path='*' element={<NotFound />} />
 
