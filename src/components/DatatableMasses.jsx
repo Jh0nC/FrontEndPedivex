@@ -37,8 +37,8 @@ function Datatable({ data }) {
               <td>{item.id}</td>
               <td>{item.name}</td>
               <td className='d-flex gap-2'>
-                <button className='btn btn-secondary' onClick={() => handleShowDetails(item)}>Ver Detalles</button>
-                <button className='btn btn-warning'>Editar</button>
+                <button className='btn btn-secondary rounded-5' onClick={() => handleShowDetails(item)}>Ver Detalles</button>
+                <Link className='btn btn-warning rounded-5' to={`edit/${item.id}`}>Editar</Link>
               </td>
             </tr>
           ))}

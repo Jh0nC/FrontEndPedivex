@@ -37,9 +37,10 @@ import ProductionOrderUpdate from "./pages/admin/modules/production/ProductionOr
 
 
 import Masses from "./pages/admin/modules/production/masses/Masses";
-import CreateProducts from "./pages/admin/modules/production/products/CreateProduct";
 import CreateMass from "./pages/admin/modules/production/masses/CreateMass";
+import CreateProducts from "./pages/admin/modules/production/products/CreateProduct";
 import Br from "./pages/Br";
+import EditMass from "./pages/admin/modules/production/masses/EditMasses";
 
 ReactDOM.createRoot(document.querySelector('#root')).render(
 
@@ -48,9 +49,6 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
     <Router>
 
       <Navbar />
-
-      <ShopCart />
-      {/* <Config /> */}
 
       <Routes>
 
@@ -70,6 +68,8 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
 
             <Route path='masses' element={<Masses />} />
             <Route path='masses/create' element={<CreateMass />} />
+            <Route path="masses/edit/:id" element={<EditMass />} />
+
 
             <Route path='products' element={<Products />} />
             <Route path='boughts' element={<Boughts />} />
@@ -96,11 +96,6 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
 
             <Route path='devolutions' element={<Devolutions />} />
 
-            
-  
-
-
-            <Route path='*' element={<NotFound />} />
 
           </Route>
 
