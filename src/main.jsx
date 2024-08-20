@@ -41,6 +41,7 @@ import CreateMass from "./pages/admin/modules/production/masses/CreateMass";
 import CreateProducts from "./pages/admin/modules/production/products/CreateProduct";
 import Br from "./pages/Br";
 import EditMass from "./pages/admin/modules/production/masses/EditMasses";
+import OutletPage from "./pages/admin/OutletPage";
 
 ReactDOM.createRoot(document.querySelector('#root')).render(
 
@@ -63,6 +64,8 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
           <Route path='catalogue' element={<Catalogue />} />
 
           <Route path='admin' element={<AdminPage />}>
+
+            <Route path=""  element={<OutletPage />} />
 
             <Route path='dashboard' element={<Dashboard />} />
 
