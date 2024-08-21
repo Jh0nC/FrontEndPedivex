@@ -14,6 +14,7 @@ import Landing from "./pages/Landing";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
+import PasswordRecovery from "./pages/auth/PasswordRecovery";
 import About from "./pages/client/About";
 import Catalogue from "./pages/client/Catalogue";
 import AdminPage from "./pages/admin/AdminPage";
@@ -62,6 +63,8 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
         <Route path='*' element={<NotFound />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+        <Route path='/PasswordRecovery' element={<PasswordRecovery />} />
+
 
         <Route path='/'>
 
