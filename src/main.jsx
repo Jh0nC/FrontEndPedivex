@@ -14,6 +14,7 @@ import Landing from "./pages/Landing";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
+import PasswordRecovery from "./pages/auth/PasswordRecovery";
 import About from "./pages/client/About";
 import Catalogue from "./pages/client/Catalogue";
 import AdminPage from "./pages/admin/AdminPage";
@@ -45,6 +46,12 @@ import OutletPage from "./pages/admin/OutletPage";
 import ProductCategories from "./pages/admin/modules/production/porductCategories/ProductCategories";
 import CreateCategory from "./pages/admin/modules/production/porductCategories/CreateCategory";
 
+import Sales from "./pages/admin/modules/sales/Sales";
+
+
+import CreateReturn from "./pages/admin/modules/sales/createReturn";
+
+
 ReactDOM.createRoot(document.querySelector('#root')).render(
 
   <React.StrictMode>
@@ -58,6 +65,8 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
         <Route path='*' element={<NotFound />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+        <Route path='/PasswordRecovery' element={<PasswordRecovery />} />
+
 
         <Route path='/'>
 
@@ -104,6 +113,10 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
 
 
             <Route path='devolutions' element={<Devolutions />} />
+
+
+            <Route path='sales' element={<Sales />} />
+            <Route path="sales-return/:id" element={<CreateReturn />} />
 
 
           </Route>
