@@ -21,7 +21,7 @@ function ProductionOrderUpdate({ id, onSave, onClose }) {
     if (id) {
       const fetchData = async () => {
         try {
-          const response = await fetch(`http://localhost:2145/productionOrder/${id}`);
+          const response = await fetch(`http://localhost:3000/productionOrder/${id}`);
           if (!response.ok) {
             throw new Error('Error fetching data');
           }
@@ -73,7 +73,7 @@ function ProductionOrderUpdate({ id, onSave, onClose }) {
     e.preventDefault();
 
     try {
-      const response = await fetch(`http://localhost:2145/productionOrder/${id || ''}`, {
+      const response = await fetch(`http://localhost:3000/productionOrder/${id || ''}`, {
         method: id ? 'PUT' : 'POST',
         headers: {
           'Content-Type': 'application/json',

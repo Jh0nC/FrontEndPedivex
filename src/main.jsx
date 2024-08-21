@@ -18,24 +18,30 @@ import About from "./pages/client/About";
 import Catalogue from "./pages/client/Catalogue";
 import AdminPage from "./pages/admin/AdminPage";
 import Dashboard from "./pages/admin/modules/Dashboard";
-import Products from "./pages/admin/modules/production/Products";
+import Products from "./pages/admin/modules/production/products/Products";
 import SuppliesCreate from "./pages/admin/modules/boughts/supplies/SuppliesCreate";
 import SuppliesUpdate from "./pages/admin/modules/boughts/supplies/SuppliesUpdate";
 import Supplies from "./pages/admin/modules/boughts/supplies/Supplies";
-
-
 import Boughts from "./pages/admin/modules/boughts/Boughts";
 import Roles from "./pages/admin/modules/users/Roles/Roles"
 import RoleCreate from './pages/admin/modules/users/Roles/RoleCreate';
 import RoleEdit from './pages/admin/modules/users/Roles/RoleEdit';
 import Users from "./pages/admin/modules/users/Users/Users"
-import UserCreate from "./pages/admin/modules/users/Users/UserCreate"
+import UsersCreate from "./pages/admin/modules/users/Users/UserCreate"
+
+
+import Devolutions from "./pages/admin/modules/sales/Devolutions";
 
 import ProductionOrder from "./pages/admin/modules/production/ProductionOrders/ProductionOrder"
 import ProductionOrderUpdate from "./pages/admin/modules/production/ProductionOrders/ProductionOrderUpdate";
 
 
+import Masses from "./pages/admin/modules/production/masses/Masses";
+import CreateMass from "./pages/admin/modules/production/masses/CreateMass";
+import CreateProducts from "./pages/admin/modules/production/products/CreateProduct";
 import Br from "./pages/Br";
+import EditMass from "./pages/admin/modules/production/masses/EditMasses";
+import OutletPage from "./pages/admin/OutletPage";
 
 ReactDOM.createRoot(document.querySelector('#root')).render(
 
@@ -44,9 +50,6 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
     <Router>
 
       <Navbar />
-
-      <ShopCart />
-      {/* <Config /> */}
 
       <Routes>
 
@@ -62,15 +65,40 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
 
           <Route path='admin' element={<AdminPage />}>
 
+            <Route path=""  element={<OutletPage />} />
+
             <Route path='dashboard' element={<Dashboard />} />
+
+            <Route path='masses' element={<Masses />} />
+            <Route path='masses/create' element={<CreateMass />} />
+            <Route path="masses/edit/:id" element={<EditMass />} />
+
+
             <Route path='products' element={<Products />} />
             <Route path='boughts' element={<Boughts />} />
             <Route path='roles' element={<Roles />} />
             <Route path='role-create' element={<RoleCreate />} />
-            <Route path='role-edit/:id' element={<RoleEdit />} />
+            <Route path='role-edit' element={<RoleEdit />} />
             <Route path='users' element={<Users />} />
-            <Route path='user-create' element={<UserCreate />} />
-            <Route path='*' element={<NotFound />} />
+            <Route path='user-create' element={<UsersCreate />} />
+
+            <Route path='supplies-create' element={<SuppliesCreate />} />
+            <Route path='products/create' element={<CreateProducts />} />
+
+            <Route path='supplies' element={<Supplies />} />
+
+            <Route path='supplies-Update/:id' element={<SuppliesUpdate />} />
+
+
+
+            <Route path='users' element={<Users />} />
+
+            <Route path='production-order' element={<ProductionOrder />} />
+            <Route path='production-order-Update/:id' element={<ProductionOrderUpdate />} />
+
+
+            <Route path='devolutions' element={<Devolutions />} />
+
 
           </Route>
 

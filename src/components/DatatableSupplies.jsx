@@ -1,7 +1,28 @@
+import { useState } from 'react';
 import '../../public/css/datatableStyles.css';
 import { Link } from 'react-router-dom';
 
 function Datatables({ data }) {
+  // Estados para la búsqueda y la paginación
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
+
+  // Filtrar los datos según el término de búsqueda
+  const filteredData = data.content.filter(item =>
+    Object.values(item).some(
+      val => val.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
+
+  // Calcular índices de los elementos actuales
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Cambiar de página
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <div className="datatable-container border rounded-4 mx-auto my-3">
       <div className="datatable_header">
@@ -10,7 +31,15 @@ function Datatables({ data }) {
           <button>Agregar {data.module}</button>
         </Link>
         <div className="input_search">
-          <input type="search" placeholder="Buscar" />
+          <input
+            type="search"
+            placeholder="Buscar"
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1); // Resetear a la primera página al buscar
+            }}
+          />
           <i className="bi bi-search" id="search"></i>
         </div>
       </div>
@@ -25,14 +54,14 @@ function Datatables({ data }) {
           </tr>
         </thead>
         <tbody>
-          {data.content && data.content.map((item, index) => (
+          {currentItems.map((item, index) => (
             <tr key={index}>
               <td>{item.id}</td>
               <td>{item.name}</td>
               <td>{item.stock}</td>
               <td>{item.unit}</td>
               <td>{item.state}</td>
-              <td>
+              <td className='d-flex gap-2'>
                 <Link to={`/admin/supplies-update/${item.id}`}>
                   <button className='btn btn-warning'>Editar</button>
                 </Link>
@@ -41,8 +70,29 @@ function Datatables({ data }) {
           ))}
         </tbody>
       </table>
-      <div className="datatable_fotter d-flex justify-content-between align-items-center">
-        <p>Total de filas : {data.content.length}</p>
+      <div className="datatable_footer d-flex justify-content-between align-items-center">
+        <p>Total de filas : {filteredData.length}</p>
+        <div className="pagination">
+          {Array.from({ length: Math.ceil(filteredData.length / itemsPerPage) }, (_, index) => (
+            <button
+              key={index + 1}
+              onClick={() => paginate(index + 1)}
+              className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}
+              style={{
+                backgroundColor: currentPage === index + 1 ? '#FFD700' : '#FFFAE0', // Amarillo claro
+                color: '#000', // Color del texto
+                margin: '0 5px', // Separación entre botones
+                padding: '8px 12px',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer'
+              }}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
+
         <button className="btn btn-outline-success rounded-5">
           <svg
             xmlns="http://www.w3.org/2000/svg"
