@@ -42,6 +42,8 @@ import CreateProducts from "./pages/admin/modules/production/products/CreateProd
 import Br from "./pages/Br";
 import EditMass from "./pages/admin/modules/production/masses/EditMasses";
 import OutletPage from "./pages/admin/OutletPage";
+import ProductCategories from "./pages/admin/modules/production/porductCategories/ProductCategories";
+import CreateCategory from "./pages/admin/modules/production/porductCategories/CreateCategory";
 
 ReactDOM.createRoot(document.querySelector('#root')).render(
 
@@ -73,8 +75,12 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
             <Route path='masses/create' element={<CreateMass />} />
             <Route path="masses/edit/:id" element={<EditMass />} />
 
+            <Route path="productCategory" element={<ProductCategories />} />
+            <Route path="productCategory/create" element={<CreateCategory />} />
 
             <Route path='products' element={<Products />} />
+
+
             <Route path='boughts' element={<Boughts />} />
             <Route path='roles' element={<Roles />} />
             <Route path='role-create' element={<RoleCreate />} />
