@@ -44,6 +44,12 @@ import Br from "./pages/Br";
 import EditMass from "./pages/admin/modules/production/masses/EditMasses";
 import OutletPage from "./pages/admin/OutletPage";
 
+import Sales from "./pages/admin/modules/sales/Sales";
+
+
+import CreateReturn from "./pages/admin/modules/sales/createReturn";
+
+
 ReactDOM.createRoot(document.querySelector('#root')).render(
 
   <React.StrictMode>
@@ -101,6 +107,10 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
 
 
             <Route path='devolutions' element={<Devolutions />} />
+
+
+            <Route path='sales' element={<Sales />} />
+            <Route path="sales-return/:id" element={<CreateReturn />} />
 
 
           </Route>
