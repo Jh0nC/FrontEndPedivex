@@ -59,7 +59,7 @@ function Datatables({ data }) {
               <td>{item.id}</td>
               <td>{item.deliveryDate}</td>
               <td>{item.total}</td>
-              <td>{item.unit}</td>
+              <td>{item.idUser}</td>
               <td>{item.state}</td>
               <td className='d-flex gap-2'>
                 <Link to={`/admin/supplies-update/${item.id}`}>
