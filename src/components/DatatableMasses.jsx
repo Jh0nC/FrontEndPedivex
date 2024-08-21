@@ -2,21 +2,12 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function Datatable({ data }) {
-  const [selectedMass, setSelectedMass] = useState(null);
-
-  const handleShowDetails = (mass) => {
-    setSelectedMass(mass);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedMass(null);
-  };
-
   return (
     <div className="datatable-container border rounded-4 mx-auto my-3">
       <div className="datatable_header">
         <h2>Masas</h2>
-        <Link to={'create'} className='btn btn-warning rounded-5'>Agregar masa</Link>
+
+        <Link to={'create'} className='btn btn-warning rounded-5'>Agregar categoría</Link>
 
         <div className="input_search">
           <input type="search" placeholder="Buscar" />
@@ -37,7 +28,6 @@ function Datatable({ data }) {
               <td>{item.id}</td>
               <td>{item.name}</td>
               <td className='d-flex gap-2'>
-                <button className='btn btn-secondary rounded-5' onClick={() => handleShowDetails(item)}>Ver Detalles</button>
                 <Link className='btn btn-warning rounded-5' to={`edit/${item.id}`}>Editar</Link>
               </td>
             </tr>
@@ -63,36 +53,6 @@ function Datatable({ data }) {
           Generar Excel
         </button>
       </div>
-
-      {selectedMass && (
-        <div className="modal fade show" style={{ display: 'block' }}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title fs-5">Detalles de la Masa</h5>
-                <button type="button" className="btn-close" onClick={handleCloseModal}></button>
-              </div>
-              <div className="modal-body">
-                <h6>Nombre: {selectedMass.name}</h6>
-                <p>Notas: {selectedMass.notes}</p>
-                <h6>Detalles:</h6>
-                <ul>
-                  {selectedMass.massDetails.map((detail, index) => (
-                    <li key={index}>
-                      <b>{detail.supply.name}</b>: {detail.amount} {detail.unit}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={handleCloseModal}>
-                  Cerrar
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
