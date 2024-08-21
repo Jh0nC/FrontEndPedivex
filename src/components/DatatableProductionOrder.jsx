@@ -1,11 +1,12 @@
 import '../../public/css/datatableStyles.css';
+import { Link } from 'react-router-dom';
 
-function Datatables({ data }) {
+function Datatables({ data, onAddClick }) {
   return (
     <div className="datatable-container border rounded-4 mx-auto my-3">
       <div className="datatable_header">
         <h2>{data.title}</h2>
-        <button>Agregar {data.module}</button>
+        <button onClick={onAddClick}>Agregar {data.module}</button>
 
         <div className="input_search">
           <input type="search" placeholder="Buscar" />
@@ -26,21 +27,24 @@ function Datatables({ data }) {
           {data.content && data.content.map((item, index) => (
             <tr key={index}>
               <td>{item.id}</td>
-              <td>{item.name}</td>
-              <td>{item.stock + ' ' + item.unit}</td>
+              <td>{item.date}</td>
+              <td>{item.notes}</td>
+              <td>{item.idUser}</td>
               <td>{item.state}</td>
+              <td>{item.targetDate}</td>
               <td>
-                <button>See</button>
-                <button>Edit</button>
+                <button className='btn btn-warning me-2'>Detalles</button>
+                <Link to={`/admin/production-order-update/${item.id}`}>
+                  <button className='btn btn-secondary me-2'>Editar</button>
+                </Link>
+                <button className='btn btn-secondary me-2'>Estado</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <div className="datatable_fotter d-flex justify-content-between align-items-center">
-        <p>Total de filas : 05</p>
-
-
+      <div className="datatable_footer d-flex justify-content-between align-items-center">
+        <p>Total de filas: {data.content ? data.content.length : 0}</p>
         <button className="btn btn-outline-success rounded-5">
           <svg
             xmlns="http://www.w3.org/2000/svg"

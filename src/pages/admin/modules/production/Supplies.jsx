@@ -1,4 +1,4 @@
-import Datatable from "../../../../components/Datatable";
+import Datatable from "../../../../components/DatatableMasses";
 
 function Supplies() {
 

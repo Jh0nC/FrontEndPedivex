@@ -1,4 +1,4 @@
-import Datatable from "../../../../components/DatatableDevolution";
+import Datatable from "../../../../../components/DatatableSupplies";
 import React, { useState, useEffect } from 'react';
 
 function Supplies() {
@@ -7,7 +7,7 @@ function Supplies() {
   useEffect(() => {
     const fetchDatos = async () => {
       try {
-        const response = await fetch("http://localhost:3000/devolution");
+        const response = await fetch("http://localhost:3000/supplie");
         if (!response.ok) {
           throw new Error("Network response was not ok " + response.statusText);
         }
@@ -22,9 +22,9 @@ function Supplies() {
   }, []);
 
   const data = {
-    module: "Devoluciones",
-    title: "Devoluciones",
-    colNames: ["Id", "Numero venta", "Fecha", "Estado", "Motive", "Acciones"],
+    module: "Insumos",
+    title: "Insumos",
+    colNames: ["Id", "Nombre", "Stock", "Unidad", "Estado", "Acciones"],
     content: datos.map(item => ({
       ...item,
 
