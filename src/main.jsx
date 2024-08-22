@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* style */
 import "../public/css/index.css";
 import "../public/css/datatableStyles.css";
@@ -29,6 +30,7 @@ import RoleCreate from './pages/admin/modules/users/Roles/RoleCreate';
 import RoleEdit from './pages/admin/modules/users/Roles/RoleEdit';
 import Users from "./pages/admin/modules/users/Users/Users"
 import UsersCreate from "./pages/admin/modules/users/Users/UserCreate"
+import UsersEdit from "./pages/admin/modules/users/Users/UserEdit"
 
 
 import Devolutions from "./pages/admin/modules/sales/Devolutions";
@@ -43,8 +45,13 @@ import CreateProducts from "./pages/admin/modules/production/products/CreateProd
 import Br from "./pages/Br";
 import EditMass from "./pages/admin/modules/production/masses/EditMasses";
 import OutletPage from "./pages/admin/OutletPage";
+import ProductCategories from "./pages/admin/modules/production/porductCategories/ProductCategories";
+import CreateCategory from "./pages/admin/modules/production/porductCategories/CreateCategory";
 
 import Sales from "./pages/admin/modules/sales/Sales";
+import Clients from "./pages/admin/modules/clients/Clients";
+
+
 
 
 import CreateReturn from "./pages/admin/modules/sales/createReturn";
@@ -82,14 +89,19 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
             <Route path='masses/create' element={<CreateMass />} />
             <Route path="masses/edit/:id" element={<EditMass />} />
 
+            <Route path="productCategory" element={<ProductCategories />} />
+            <Route path="productCategory/create" element={<CreateCategory />} />
 
             <Route path='products' element={<Products />} />
+
+
             <Route path='boughts' element={<Boughts />} />
             <Route path='roles' element={<Roles />} />
             <Route path='role-create' element={<RoleCreate />} />
-            <Route path='role-edit' element={<RoleEdit />} />
+            <Route path='role-edit/:id' element={<RoleEdit />} />
             <Route path='users' element={<Users />} />
             <Route path='user-create' element={<UsersCreate />} />
+            <Route path='user-edit/:id' element={<UsersEdit />} />
 
             <Route path='supplies-create' element={<SuppliesCreate />} />
             <Route path='products/create' element={<CreateProducts />} />
@@ -108,7 +120,8 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
 
             <Route path='devolutions' element={<Devolutions />} />
 
-
+            {/* Dm */}
+            <Route path='clients' element={<Clients />} />
             <Route path='sales' element={<Sales />} />
             <Route path="sales-return/:id" element={<CreateReturn />} />
 

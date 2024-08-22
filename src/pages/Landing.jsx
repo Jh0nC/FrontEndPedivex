@@ -13,7 +13,7 @@ function Landing() {
         <div className="w-75 ps-5 ms-5">
           <h1 className="">Parcerottis</h1>
           <p className="w-50">
-            "<i>Parcerottis</i>", linea de productos congelados, totalmente artesanales y hechos a mano,  que no te puedes perder!
+          "<i>Parcerottis</i>", linea de productos congelados, totalmente artesanales y hechos a mano,  que no te puedes perder!
           </p>
         </div>
       </div>
@@ -91,6 +91,6 @@ function Landing() {
 
     </>
   )
-};
+}
 
 export default Landing;

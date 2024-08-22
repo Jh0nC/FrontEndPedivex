@@ -1,7 +1,7 @@
 import Datatable from "../../../../../components/DatatableRole";
 import React, { useState, useEffect } from 'react';
 
-function Boughts() {
+function Roles() {
   const [datos, setDatos] = useState([]);
 
   useEffect(() => {
@@ -37,4 +37,4 @@ function Boughts() {
   );
 }
 
-export default Boughts;
+export default Roles;
