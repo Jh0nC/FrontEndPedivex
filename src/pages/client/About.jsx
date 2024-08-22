@@ -7,6 +7,6 @@ function About() {
       <Footer />
     </>
   )
-};
+}
 
 export default About;

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* style */
 import "../public/css/index.css";
 import "../public/css/datatableStyles.css";
@@ -48,6 +49,9 @@ import ProductCategories from "./pages/admin/modules/production/porductCategorie
 import CreateCategory from "./pages/admin/modules/production/porductCategories/CreateCategory";
 
 import Sales from "./pages/admin/modules/sales/Sales";
+import Clients from "./pages/admin/modules/clients/Clients";
+
+
 
 
 import CreateReturn from "./pages/admin/modules/sales/createReturn";
@@ -116,7 +120,8 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
 
             <Route path='devolutions' element={<Devolutions />} />
 
-
+            {/* Dm */}
+            <Route path='clients' element={<Clients />} />
             <Route path='sales' element={<Sales />} />
             <Route path="sales-return/:id" element={<CreateReturn />} />
 
