@@ -319,7 +319,7 @@ a {
   right: 10px;
   top: -15px;
   height: 110%;
-  overflow: auto;
+  overflow: hidden;
   max-width: 33vh;
   min-width: 25vh;
   width: auto;
@@ -362,7 +362,7 @@ a {
 .admin-card {
 
   .card-head {
-    overflow: auto;
+    overflow: hidden;
 
     img {
       transition-duration: .3s;
