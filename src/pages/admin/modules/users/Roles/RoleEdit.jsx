@@ -85,8 +85,6 @@ function RoleEdit() {
     }
   };
 
-  console.log(role.role)
-
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
       <h2 className='mx-3'>{id ? 'Editar Rol' : 'Crear Nuevo Rol'}</h2>
@@ -106,28 +104,28 @@ function RoleEdit() {
           />
         </div>
         <div className='m-3'>
-          <label htmlFor="permission" className="form-label">Permisos:</label>
-          <select
-            id="permission"
-            className='form-control'
-            name="permission"
-            value={formData.permission || ''}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Seleccione un permiso</option>
-            {permissions.map((permission) => (
-              <option key={permission.id} value={permission.id}>
-                {permission.permission}
-              </option>
-            ))}
-          </select>
+          <p>Permisos:</p>
+              {permissions.map((permission) => (
+                <>
+                  <input
+                    id={permission.permission}
+                    className='btn-check'
+                    name="permission"
+                    value={formData.idPermission=permission.id}
+                    onChange={handleChange}
+                    required
+                    type='checkbox'
+                    autoComplete='off'
+                  />
+                  <label htmlFor={permission.permission} className="btn btn-outline-success me-1">{permission.permission}</label>
+                </>
+              ))}
         </div>
         <button type="submit" className='btn btn-warning m-3'>{id ? 'Actualizar' : 'Registrar'}</button>
         <Link to={"/admin/roles"} className='btn btn-danger m-3'>Regresar</Link>
       </form>
-      {success && <p className="text-success">{success}</p>}
-      {error && <p className="text-danger">{error}</p>}
+      {success && <p className="text-success m-3">{success}</p>}
+      {error && <p className="text-danger m-3">{error}</p>}
     </div>
   );
 }
