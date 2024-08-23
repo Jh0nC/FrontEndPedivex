@@ -1,27 +1,34 @@
 import { useState } from 'react';
-import '../../public/css/datatableStyles.css';
 import { Link } from 'react-router-dom';
+import * as XLSX from 'xlsx'; // Importa la librería xlsx
+import '../../public/css/datatableStyles.css';
 
 function Datatables({ data }) {
-  // Estados para la búsqueda y la paginación
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
 
-  // Filtrar los datos según el término de búsqueda
   const filteredData = data.content.filter(item =>
     Object.values(item).some(
       val => val.toString().toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
 
-  // Calcular índices de los elementos actuales
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Cambiar de página
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // Función para exportar los datos a un archivo Excel
+  const exportToExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(filteredData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Insumos");
+
+    // Generar un archivo Excel
+    XLSX.writeFile(workbook, "supplies_list.xlsx");
+  };
 
   return (
     <div className="datatable-container border rounded-4 mx-auto my-3">
@@ -37,7 +44,7 @@ function Datatables({ data }) {
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
-              setCurrentPage(1); // Resetear a la primera página al buscar
+              setCurrentPage(1);
             }}
           />
           <i className="bi bi-search" id="search"></i>
@@ -79,9 +86,9 @@ function Datatables({ data }) {
               onClick={() => paginate(index + 1)}
               className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}
               style={{
-                backgroundColor: currentPage === index + 1 ? '#FFD700' : '#FFFAE0', // Amarillo claro
-                color: '#000', // Color del texto
-                margin: '0 5px', // Separación entre botones
+                backgroundColor: currentPage === index + 1 ? '#FFD700' : '#FFFAE0',
+                color: '#000',
+                margin: '0 5px',
                 padding: '8px 12px',
                 border: 'none',
                 borderRadius: '5px',
@@ -93,7 +100,8 @@ function Datatables({ data }) {
           ))}
         </div>
 
-        <button className="btn btn-outline-success rounded-5">
+        {/* Botón para generar el Excel */}
+        <button className="btn btn-outline-success rounded-5" onClick={exportToExcel}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"

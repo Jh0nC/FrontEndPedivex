@@ -3,7 +3,7 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .register-container {
@@ -13,7 +13,7 @@ html, body {
   align-items: flex-start;
   padding-top: 50px;
   background-color: #fff;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .register-box {
