@@ -33,6 +33,7 @@ import UsersCreate from "./pages/admin/modules/users/Users/UserCreate"
 import Devolutions from "./pages/admin/modules/sales/Devolutions";
 
 import ProductionOrder from "./pages/admin/modules/production/ProductionOrders/ProductionOrder"
+import ProductionOrderCreate from "./pages/admin/modules/production/ProductionOrders/ProductionOrderCreate";
 import ProductionOrderUpdate from "./pages/admin/modules/production/ProductionOrders/ProductionOrderUpdate";
 
 
@@ -94,7 +95,8 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
             <Route path='users' element={<Users />} />
 
             <Route path='production-order' element={<ProductionOrder />} />
-            <Route path='production-order-Update/:id' element={<ProductionOrderUpdate />} />
+            <Route path='production-order-create' element={<ProductionOrderCreate />} />
+            <Route path='production-order-update/:id' element={<ProductionOrderUpdate />} />
 
 
             <Route path='devolutions' element={<Devolutions />} />

@@ -1,12 +1,14 @@
-import '../../public/css/datatableStyles.css';
-import { Link } from 'react-router-dom';
+import "../../public/css/datatableStyles.css";
+import { Link } from "react-router-dom";
 
 function Datatables({ data, onAddClick }) {
   return (
     <div className="datatable-container border rounded-4 mx-auto my-3">
       <div className="datatable_header">
         <h2>{data.title}</h2>
-        <button onClick={onAddClick}>Agregar {data.module}</button>
+        <Link to={`/admin/production-order-create`}>
+          <button>Agregar {data.module}</button>
+        </Link>
 
         <div className="input_search">
           <input type="search" placeholder="Buscar" />
@@ -16,31 +18,33 @@ function Datatables({ data, onAddClick }) {
       <table className="datatable">
         <thead>
           <tr>
-            {data.colNames && data.colNames.map((col, index) => (
-              <th key={index}>
-                {col} <i className="bi bi-chevron-expand"></i>
-              </th>
-            ))}
+            {data.colNames &&
+              data.colNames.map((col, index) => (
+                <th key={index}>
+                  {col} <i className="bi bi-chevron-expand"></i>
+                </th>
+              ))}
           </tr>
         </thead>
         <tbody>
-          {data.content && data.content.map((item, index) => (
-            <tr key={index}>
-              <td>{item.id}</td>
-              <td>{item.date}</td>
-              <td>{item.notes}</td>
-              <td>{item.idUser}</td>
-              <td>{item.state}</td>
-              <td>{item.targetDate}</td>
-              <td>
-                <button className='btn btn-warning me-2'>Detalles</button>
-                <Link to={`/admin/production-order-update/${item.id}`}>
-                  <button className='btn btn-secondary me-2'>Editar</button>
-                </Link>
-                <button className='btn btn-secondary me-2'>Estado</button>
-              </td>
-            </tr>
-          ))}
+          {data.content &&
+            data.content.map((item, index) => (
+              <tr key={index}>
+                <td>{item.id}</td>
+                <td>{item.date}</td>
+                <td>{item.notes}</td>
+                <td>{item.idUser}</td>
+                <td>{item.state}</td>
+                <td>{item.targetDate}</td>
+                <td>
+                  <button className="btn btn-warning me-2">Detalles</button>
+                  <Link to={`/admin/production-order-update/${item.id}`}>
+                    <button className="btn btn-secondary me-2">Editar</button>
+                  </Link>
+                  <button className="btn btn-secondary me-2">Estado</button>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
       <div className="datatable_footer d-flex justify-content-between align-items-center">
