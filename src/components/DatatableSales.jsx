@@ -1,42 +1,36 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import * as XLSX from 'xlsx'; // Importa la librería xlsx
 import '../../public/css/datatableStyles.css';
+import { Link } from 'react-router-dom';
 
 function Datatables({ data }) {
+  // Estados para la búsqueda y la paginación
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
 
+  // Filtrar los datos según el término de búsqueda
   const filteredData = data.content.filter(item =>
     Object.values(item).some(
       val => val.toString().toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
 
+  // Calcular índices de los elementos actuales
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
+  // Cambiar de página
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  // Función para exportar los datos a un archivo Excel
-  const exportToExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(filteredData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Insumos");
-
-    // Generar un archivo Excel
-    XLSX.writeFile(workbook, "supplies_list.xlsx");
-  };
 
   return (
     <div className="datatable-container border rounded-4 mx-auto my-3">
       <div className="datatable_header">
         <h2>{data.title}</h2>
-        <Link to="/admin/supplies-create">
+        {/* Eliminar el botón de agregar */}
+        {/* <Link to="/admin/supplies-create">
           <button>Agregar {data.module}</button>
-        </Link>
+        </Link> */}
         <div className="input_search">
           <input
             type="search"
@@ -44,7 +38,7 @@ function Datatables({ data }) {
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
-              setCurrentPage(1);
+              setCurrentPage(1); // Resetear a la primera página al buscar
             }}
           />
           <i className="bi bi-search" id="search"></i>
@@ -64,13 +58,17 @@ function Datatables({ data }) {
           {currentItems.map((item, index) => (
             <tr key={index}>
               <td>{item.id}</td>
-              <td>{item.name}</td>
-              <td>{item.stock}</td>
-              <td>{item.unit}</td>
+              <td>{item.deliveryDate}</td>
+              <td>{item.total}</td>
+              <td>{item.idUser}</td>
               <td>{item.state}</td>
               <td className='d-flex gap-2'>
-                <Link to={`/admin/supplies-update/${item.id}`}>
-                  <button className='btn btn-warning'>Editar</button>
+                {/* Botón de Ver Detalle */}
+                <Link to={`/admin/saleDetails/${item.id}`}>
+                  <button className='btn btn-info'>Ver Detalle</button>
+                </Link>
+                <Link to={`/admin/sales-return/${item.id}`}>
+                  <button className='btn btn-danger'>Realizar Devolución</button>
                 </Link>
               </td>
             </tr>
@@ -86,9 +84,9 @@ function Datatables({ data }) {
               onClick={() => paginate(index + 1)}
               className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}
               style={{
-                backgroundColor: currentPage === index + 1 ? '#FFD700' : '#FFFAE0',
-                color: '#000',
-                margin: '0 5px',
+                backgroundColor: currentPage === index + 1 ? '#FFD700' : '#FFFAE0', // Amarillo claro
+                color: '#000', // Color del texto
+                margin: '0 5px', // Separación entre botones
                 padding: '8px 12px',
                 border: 'none',
                 borderRadius: '5px',
@@ -100,8 +98,7 @@ function Datatables({ data }) {
           ))}
         </div>
 
-        {/* Botón para generar el Excel */}
-        <button className="btn btn-outline-success rounded-5" onClick={exportToExcel}>
+        <button className="btn btn-outline-success rounded-5">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"

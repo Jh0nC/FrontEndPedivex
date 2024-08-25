@@ -1,0 +1,117 @@
+/* public/css/authRegister.css */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+}
+
+.register-container {
+  display: flex;
+  height: calc(100vh - 100px);
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 50px;
+  background-color: #fff;
+  overflow: auto;
+}
+
+.register-box {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff; /* Fondo blanco para el contenedor del formulario */
+  border-radius: 10px; /* Bordes redondeados */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra sutil alrededor del formulario */
+  padding: 50px; /* Espacio interno del formulario */
+  width: 600px; /* Ancho del formulario */
+}
+
+.register-title {
+  font-size: 2rem; /* Tamaño de fuente grande para el título */
+  margin-bottom: 10px; /* Espacio debajo del título */
+  color: #333; /* Color del texto principal */
+  text-align: center; /* Centrar el texto del título */
+}
+
+.register-subtitle {
+  margin-bottom: 30px; /* Espacio debajo del subtítulo */
+  color: #555; /* Color del texto secundario */
+  text-align: center; /* Centrar el texto del subtítulo */
+}
+
+.input-container {
+  position: relative;
+  margin-bottom: 20px; /* Espacio debajo de cada campo */
+}
+
+.input-container i {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px; /* Tamaño del ícono */
+  color: #333; /* Color del ícono */
+}
+
+.input-container i.fas.fa-user, 
+.input-container i.fas.fa-envelope, 
+.input-container i.fas.fa-lock {
+  left: 10px; /* Posición del ícono a la izquierda del input */
+}
+
+.input-container i.fas.fa-eye, 
+.input-container i.fas.fa-eye-slash {
+  right: 10px; /* Posición del ícono del ojo a la derecha del input */
+  cursor: pointer; /* Cursor en forma de mano cuando se pasa por encima */
+}
+
+.register-input {
+  width: 100%; /* Los inputs ocupan el 100% del ancho disponible */
+  padding: 10px; /* Espacio interno de los inputs */
+  padding-left: 40px; /* Espacio para el ícono en la izquierda */
+  padding-right: 40px; /* Espacio para el ícono en la derecha */
+  background-color: #f0f0f0; /* Fondo gris claro para los inputs */
+  border: 1px solid #ccc; /* Borde gris claro */
+  border-radius: 5px; /* Bordes redondeados para los inputs */
+  color: #333; /* Color del texto dentro de los inputs */
+  box-sizing: border-box; /* Asegura que el padding no expanda el tamaño total */
+}
+
+.register-button {
+  width: 100%; /* El botón ocupa el 100% del ancho disponible */
+  padding: 10px; /* Espacio interno del botón */
+  background-color: #FEB81C; /* Color de fondo del botón */
+  border: none; /* Sin borde */
+  border-radius: 5px; /* Bordes redondeados para el botón */
+  cursor: pointer; /* Cambia el cursor a pointer cuando se pasa por encima */
+  color: white; /* Color del texto en el botón */
+  font-size: 1rem; /* Tamaño de fuente estándar para el botón */
+  transition: all 0.3s ease; /* Transición suave para los cambios de estilo */
+}
+
+.register-button:hover {
+  background-color: white; /* Fondo blanco al pasar el cursor por encima */
+  color: #333; /* Color del texto oscuro al pasar el cursor por encima */
+  border: 2px solid #FEB81C; /* Borde del color #FEB81C al pasar el cursor por encima */
+}
+
+.error-message {
+  color: red;
+  font-size: 0.875rem; /* Tamaño de la fuente para el mensaje de error */
+  margin-top: 5px; /* Espacio encima del mensaje de error */
+}
+
+.login-link-container {
+  text-align: center; /* Centrar el texto */
+  margin-top: 20px; /* Espacio superior para el contenedor del enlace */
+}
+
+.login-link {
+  color: #333; /* Color del texto */
+  text-decoration: none; /* Sin subrayado */
+  font-size: 1rem; /* Tamaño de la fuente */
+  transition: color 0.3s ease; /* Transición suave del color */
+}
+
+.login-link:hover {
+  color: #FEB81C; /* Cambiar el color al pasar el cursor por encima */
+}

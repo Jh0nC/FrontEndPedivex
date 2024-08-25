@@ -65,10 +65,13 @@ function Sidenav() {
               Orden de producción
             </Link>
             <Link to={'/admin/products'} >
-              Productos y ficha técnica
+              Producto
+            </Link>
+            <Link to={'/admin/productCategory'} >
+              Categoría de producto
             </Link>
             <Link to={'/admin/masses'} >
-              Mojes
+              Masas
             </Link>
           </div>
         </li>
@@ -96,7 +99,7 @@ function Sidenav() {
             <Link to={'/admin/sales'} >
               Venta de productos
             </Link>
-            <Link to={'/admin/returns'} >
+            <Link to={'/admin/devolutions'} >
               Devolución de productos
             </Link>
           </div>

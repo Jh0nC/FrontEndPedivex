@@ -1,7 +1,17 @@
+import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import '../../public/css/datatableStyles.css';
-import { Link } from 'react-router-dom';
 
 function Datatables({ data }) {
+  const navigate = useNavigate();
+  const [selectedUserId, setSelectedUserId] = useState(null);
+
+  const handleEditClick = (id) => {
+    setSelectedUserId(id);
+    navigate(`/admin/user-edit/${id}`); 
+  };
+
+
   return (
     <div className="datatable-container border rounded-4 mx-auto my-3">
       <div className="datatable_header">
@@ -36,7 +46,12 @@ function Datatables({ data }) {
               <td>{item.phoneNumber}</td>
               <td>{item.role.role}</td>
               <td>
-                <button className='btn btn-success'>editar</button>
+                <button
+                  className='btn btn-success'
+                  onClick={() => handleEditClick(item.id)}
+                >
+                  Editar
+                </button>
                 <button className='btn btn-danger'>cambiar</button>
               </td>
             </tr>

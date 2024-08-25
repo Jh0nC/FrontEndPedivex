@@ -1,7 +1,9 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
-function UserCreate() {
+function UserEdit() {
+  const { id } = useParams();
+  console.log(id)
   const [formData, setFormData] = useState({
     mail: '',
     password: '',
@@ -10,29 +12,44 @@ function UserCreate() {
     document: '',
     address: '',
     phoneNumber: '',
-    idRole: '' // Asegúrate de que sea "idRole"
+    idRole: ''
   });
 
+  const [user, setUser] = useState([]); 
   const [roles, setRoles] = useState([]);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
   useEffect(() => {
-    // Función para obtener los roles desde la API
     const fetchRoles = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/role');
-        if (!response.ok) {
-          throw new Error('Error al obtener los roles');
+        try {
+          const response = await fetch('http://localhost:3000/role');
+          if (!response.ok) {
+            throw new Error('Error al obtener los roles');
+          }
+          const data = await response.json();
+          setRoles(data); // Guardar los roles en el estado
+        } catch (error) {
+          setError('Error al cargar roles: ' + error.message);
         }
-        const data = await response.json();
-        setRoles(data); // Guardar los roles en el estado
-      } catch (error) {
-        setError('Error al cargar roles: ' + error.message);
-      }
-    };
+      };
 
-    fetchRoles(); // Llamar a la función cuando el componente se monta
+      const fetchUser = async () => {
+        try {
+          const response = await fetch(`http://localhost:3000/user/${id}`);
+          if (!response.ok) {
+            throw new Error('Error al obtener el usuario');
+          }
+          const data = await response.json();
+          console.log(data)
+          setUser(user);
+        } catch (error) {
+          setError('Error al cargar el usuario: ' + error.message);
+        }
+      };
+
+      fetchRoles();
+        fetchUser();
   }, []);
 
   const handleChange = (e) => {
@@ -48,36 +65,38 @@ function UserCreate() {
     
     const formDataToSend = {
       ...formData,
-      idRole: parseInt(formData.idRole, 10) // Asegúrate de que "idRole" sea un número
+      idRole: parseInt(formData.idRole, 10)
     };
-
+  
     try {
-      const response = await fetch('http://localhost:3000/user', {
-        method: 'POST',
+      const response = await fetch(`http://localhost:3000/user/${id}`, { 
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formDataToSend),
       });
-
+  
       if (!response.ok) {
         throw new Error('Error en la solicitud');
       }
-
+  
       const result = await response.json();
-      setSuccess('Usuario creado con éxito');
+      setSuccess('Usuario actualizado con éxito'); 
       setError(null);
-      setFormData({ mail: '', password: '', firstName: '', lastName: '', document: '', address: '', phoneNumber: '', idRole: '' }); // Limpiar formulario
+      setFormData({ mail: '', password: '', firstName: '', lastName: '', document: '', address: '', phoneNumber: '', idRole: '' });
       console.log('Response:', result);
     } catch (err) {
       setError(err.message);
       setSuccess(null);
     }
-  };
+  };  
+
+  console.log(user)
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <h2 className='mx-3'>Crear Nuevo Usuario</h2>
+      <h2 className='mx-3'>Editar Usuario</h2>
       <form onSubmit={handleSubmit}>
         <div className='m-3'>
           <label htmlFor="email" className="form-label">Correo:</label>
@@ -89,6 +108,7 @@ function UserCreate() {
             value={formData.mail}
             onChange={handleChange}
             required
+            placeholder=''
           />
         </div>
         <div className='m-3'>
@@ -174,7 +194,7 @@ function UserCreate() {
           <select
             id="role"
             className='form-control'
-            name="idRole" // Cambiado a "idRole" para que coincida con el estado
+            name="idRole" 
             value={formData.idRole}
             onChange={handleChange}
             required
@@ -187,7 +207,7 @@ function UserCreate() {
             ))}
           </select>
         </div>
-        <button type="submit" className='btn btn-warning m-3'>Registrar</button>
+        <button type="submit" className='btn btn-warning m-3'>Editar</button>
         <Link to={"/admin/users"} className='btn btn-danger m-3'>Regresar</Link>
       </form>
       {success && <p className="text-success m-3">{success}</p>}
@@ -196,4 +216,4 @@ function UserCreate() {
   );
 }
 
-export default UserCreate;
+export default UserEdit;

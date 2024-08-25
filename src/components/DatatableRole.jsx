@@ -1,7 +1,17 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import '../../public/css/datatableStyles.css';
 
 function Datatables({ data }) {
+  const navigate = useNavigate();
+  const [selectedRoleId, setSelectedRoleId] = useState(null);
+
+  const handleEditClick = (id) => {
+    setSelectedRoleId(id); // Guardar el ID en el estado local (esto es opcional si no lo necesitas)
+    navigate(`/admin/role-edit/${id}`); // Redirigir a la página de edición con el ID en la URL
+  };
+
+
   return (
     <div className="datatable-container border rounded-4 mx-auto my-3">
       <div className="datatable_header">
@@ -31,16 +41,19 @@ function Datatables({ data }) {
               <td>{item.id}</td>
               <td>{item.role}</td>
               <td>
-                <button className='btn btn-success'>editar</button>
-                <button className='btn btn-danger'>cambiar</button>
+                <button 
+                  className='btn btn-success' 
+                  onClick={() => handleEditClick(item.id)}
+                >
+                  Editar
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
       <div className="datatable_fotter d-flex justify-content-between align-items-center">
-        <p>Total de filas : 05</p>
-
+        <p>Total de filas: {data.content.length}</p>
 
         <button className="btn btn-outline-success rounded-5">
           <svg
