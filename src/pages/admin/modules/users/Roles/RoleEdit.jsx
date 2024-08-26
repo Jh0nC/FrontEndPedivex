@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 
 function RoleEdit() {
   const { id } = useParams();
-  console.log(id)
   const [formData, setFormData] = useState({
     role: ''
   });
   const [permissions, setPermissions] = useState([]);
-  const [role, setRole] = useState([]); 
+  const [selectedPermissions, setSelectedPermissions] = useState([]);
+  const [role, setRole] = useState([]);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
@@ -35,7 +35,9 @@ function RoleEdit() {
           throw new Error('Error al obtener el rol');
         }
         const data = await response.json();
-        setRole({ role: data.role }); // Establecer el rol y permiso actual en el formulario
+        setRole({ role: data.role }); // Establecer el rol actual en el formulario
+        setFormData({ role: data.role }); // Llenar el formulario con los datos del rol
+        setSelectedPermissions(data.permissions.map(p => p.id)); // Asignar los permisos ya seleccionados
       } catch (error) {
         setError('Error al cargar el rol: ' + error.message);
       }
@@ -55,15 +57,22 @@ function RoleEdit() {
     });
   };
 
+  const handlePermissionChange = (e) => {
+    const { value, checked } = e.target;
+    setSelectedPermissions((prevPermissions) =>
+      checked
+        ? [...prevPermissions, value]
+        : prevPermissions.filter((permission) => permission !== value)
+    );
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
-      const method = id ? 'PUT' : 'POST'; // Usar PUT si es para actualizar un rol existente
-      const url = id ? `http://localhost:3000/role/${id}` : 'http://localhost:3000/role';
-      
-      const response = await fetch(url, {
-        method,
+      // Actualizar el rol con un PUT
+      const response = await fetch(`http://localhost:3000/role/${id}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -71,13 +80,33 @@ function RoleEdit() {
       });
 
       if (!response.ok) {
-        throw new Error('Error en la solicitud');
+        throw new Error('Error en la solicitud para actualizar el rol');
       }
 
       const result = await response.json();
-      setSuccess(id ? 'Rol actualizado con éxito' : 'Rol creado con éxito');
+      const roleId = id; // Usar el ID de la URL ya que estamos en modo edición
+
+      // Eliminar todas las relaciones existentes entre el rol y los permisos
+      await fetch(`http://localhost:3000/rolePermission/${roleId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      // Crear nuevas relaciones en rolePermission para cada permiso seleccionado
+      for (let permissionId of selectedPermissions) {
+        await fetch(`http://localhost:3000/rolePermission`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ idRole: roleId, idPermission: permissionId }),
+        });
+      }
+
+      setSuccess('Rol y permisos actualizados con éxito');
       setError(null);
-      setFormData({ role: '', permission: '' }); // Limpiar formulario
       console.log('Response:', result);
     } catch (err) {
       setError(err.message);
@@ -87,7 +116,7 @@ function RoleEdit() {
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <h2 className='mx-3'>{id ? 'Editar Rol' : 'Crear Nuevo Rol'}</h2>
+      <h2 className='mx-3'>Editar Rol</h2>
       <form onSubmit={handleSubmit}>
         <div className='m-3'>
           <label htmlFor="role" className="form-label">Rol:</label>
@@ -105,23 +134,25 @@ function RoleEdit() {
         </div>
         <div className='m-3'>
           <p>Permisos:</p>
-              {permissions.map((permission) => (
-                <>
-                  <input
-                    id={permission.permission}
-                    className='btn-check'
-                    name="permission"
-                    value={formData.idPermission=permission.id}
-                    onChange={handleChange}
-                    required
-                    type='checkbox'
-                    autoComplete='off'
-                  />
-                  <label htmlFor={permission.permission} className="btn btn-outline-success me-1">{permission.permission}</label>
-                </>
-              ))}
+          {permissions.map((permission) => (
+            <div key={permission.id}>
+              <input
+                id={permission.permission}
+                className='btn-check'
+                name="permission"
+                value={permission.id}
+                onChange={handlePermissionChange}
+                type='checkbox'
+                checked={selectedPermissions.includes(permission.id)}
+                autoComplete='off'
+              />
+              <label htmlFor={permission.permission} className="btn btn-outline-success me-1">
+                {permission.permission}
+              </label>
+            </div>
+          ))}
         </div>
-        <button type="submit" className='btn btn-warning m-3'>{id ? 'Actualizar' : 'Registrar'}</button>
+        <button type="submit" className='btn btn-warning m-3'>Actualizar</button>
         <Link to={"/admin/roles"} className='btn btn-danger m-3'>Regresar</Link>
       </form>
       {success && <p className="text-success m-3">{success}</p>}
