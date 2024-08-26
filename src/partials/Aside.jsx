@@ -102,7 +102,7 @@ function Sidenav() {
             <Link to={'/admin/sales'} >
               Venta de productos
             </Link>
-            <Link to={'/admin/returns'} >
+            <Link to={'/admin/devolutions'} >
               Devolución de productos
             </Link>
           </div>

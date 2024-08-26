@@ -21,7 +21,7 @@ function ProductionOrderUpdate({ id, onSave, onClose }) {
     if (id) {
       const fetchData = async () => {
         try {
-          const response = await fetch(`http://localhost:3000/productionOrder/${id}`);
+          const response = await fetch(`http://localhost:2145/productionOrder/${id}`);
           if (!response.ok) {
             throw new Error('Error fetching data');
           }
@@ -225,7 +225,7 @@ function ProductionOrderUpdate({ id, onSave, onClose }) {
         >
           Añadir Detalle
         </button>
-        <button type="submit" className="btn btn-warning m-3">Registrar</button>
+        <button type="submit" className="btn btn-warning m-3">Guardar</button>
         <button
           type="button"
           className="btn btn-danger m-3"

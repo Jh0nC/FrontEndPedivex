@@ -54,7 +54,7 @@ function ProductionOrderCreate({ onSave, onClose }) {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3000/productionOrder', {
+      const response = await fetch('http://localhost:2145/productionOrder', { // Cambiar de puerto en caso de ser necesario
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ function ProductionOrderCreate({ onSave, onClose }) {
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <h2 className="mx-3">Crear Nueva Orden de Producción</h2>
+      <h2 className="mx-3">Crear Orden de Producción</h2>
       <form onSubmit={handleSubmit}>
         <div className="m-3">
           <label htmlFor="date" className="form-label">Fecha:</label>
@@ -206,7 +206,7 @@ function ProductionOrderCreate({ onSave, onClose }) {
         >
           Añadir Detalle
         </button>
-        <button type="submit" className="btn btn-warning m-3">Registrar</button>
+        <button type="submit" className="btn btn-warning m-3">Guardar</button>
         <button
           type="button"
           className="btn btn-danger m-3"

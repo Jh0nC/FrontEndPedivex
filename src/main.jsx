@@ -8,8 +8,6 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 /* partials */
 import Navbar from "./partials/Navbar";
-import ShopCart from "./partials/ShopCart"
-import Config from "./partials/Config"
 /* pages */
 import Landing from "./pages/Landing";
 import NotFound from "./pages/NotFound";
@@ -30,11 +28,13 @@ import RoleCreate from './pages/admin/modules/users/Roles/RoleCreate';
 import RoleEdit from './pages/admin/modules/users/Roles/RoleEdit';
 import Users from "./pages/admin/modules/users/Users/Users"
 import UsersCreate from "./pages/admin/modules/users/Users/UserCreate"
+import UsersEdit from "./pages/admin/modules/users/Users/UserEdit"
 
 
 import Devolutions from "./pages/admin/modules/sales/Devolutions";
 
 import ProductionOrder from "./pages/admin/modules/production/ProductionOrders/ProductionOrder"
+import ProductionOrderCreate from "./pages/admin/modules/production/ProductionOrders/ProductionOrderCreate";
 import ProductionOrderUpdate from "./pages/admin/modules/production/ProductionOrders/ProductionOrderUpdate";
 
 
@@ -109,9 +109,10 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
             <Route path='boughts' element={<Boughts />} />
             <Route path='roles' element={<Roles />} />
             <Route path='role-create' element={<RoleCreate />} />
-            <Route path='role-edit' element={<RoleEdit />} />
+            <Route path='role-edit/:id' element={<RoleEdit />} />
             <Route path='users' element={<Users />} />
             <Route path='user-create' element={<UsersCreate />} />
+            <Route path='user-edit/:id' element={<UsersEdit />} />
 
             <Route path='supplies-create' element={<SuppliesCreate />} />
             <Route path='products/create' element={<CreateProducts />} />
@@ -125,7 +126,8 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
             <Route path='users' element={<Users />} />
 
             <Route path='production-order' element={<ProductionOrder />} />
-            <Route path='production-order-Update/:id' element={<ProductionOrderUpdate />} />
+            <Route path='production-order-create' element={<ProductionOrderCreate />} />
+            <Route path='production-order-update/:id' element={<ProductionOrderUpdate />} />
 
 
             <Route path='devolutions' element={<Devolutions />} />

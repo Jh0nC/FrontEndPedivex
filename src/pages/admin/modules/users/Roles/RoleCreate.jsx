@@ -7,6 +7,7 @@ function RoleCreate() {
   });
 
   const [permissions, setPermissions] = useState([]); // Estado para almacenar los permisos obtenidos de la API
+  const [selectedPermissions, setSelectedPermissions] = useState([]); // Estado para almacenar los permisos seleccionados
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
@@ -36,10 +37,20 @@ function RoleCreate() {
     });
   };
 
+  const handlePermissionChange = (e) => {
+    const { value, checked } = e.target;
+    setSelectedPermissions((prevPermissions) =>
+      checked
+        ? [...prevPermissions, value]
+        : prevPermissions.filter((permission) => permission !== value)
+    );
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     try {
+      // Crear el rol
       const response = await fetch('http://localhost:3000/role', {
         method: 'POST',
         headers: {
@@ -53,10 +64,24 @@ function RoleCreate() {
       }
 
       const result = await response.json();
+      const roleId = result.id; // Asumimos que el ID del rol está en 'result.id'
+      
+      // Crear rolePermission para cada permiso seleccionado
+      for (let permissionId of selectedPermissions) {
+        await fetch('http://localhost:3000/rolePermission', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ idRole: roleId, idPermission: permissionId }),
+        });
+      }
+
       setSuccess('Rol creado con éxito');
       setError(null);
-      setFormData({ role: '', permission: '' }); // Limpiar formulario
-      console.log('Response:', result);
+      setFormData({ role: '' });
+      setSelectedPermissions([]); // Limpiar los permisos seleccionados
+      console.log('Rol creado:', result);
     } catch (err) {
       setError(err.message);
       setSuccess(null);
@@ -81,28 +106,29 @@ function RoleCreate() {
           />
         </div>
         <div className='m-3'>
-          <label htmlFor="permission" className="form-label">Permisos:</label>
-          <select
-            id="permission"
-            className='form-control'
-            name="permission"
-            value={formData.idRole}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Seleccione un permiso</option>
-            {permissions.map((permission) => (
-              <option key={permission.id} value={permission.id}>
+          <p>Permisos:</p>
+          {permissions.map((permission) => (
+            <div key={permission.id}>
+              <input
+                id={permission.permission}
+                className='btn-check'
+                name="permission"
+                value={permission.id}
+                onChange={handlePermissionChange}
+                type='checkbox'
+                autoComplete='off'
+              />
+              <label htmlFor={permission.permission} className="btn btn-outline-success mt-1">
                 {permission.permission}
-              </option>
-            ))}
-          </select>
+              </label>
+            </div>
+          ))}
         </div>
         <button type="submit" className='btn btn-warning m-3'>Registrar</button>
-        <Link to={"/admin/roles"} className='btn btn-danger m-3'>Regresar</Link>
+        <Link to={"/admin/roles"} className='btn btn-danger'>Regresar</Link>
       </form>
-      {success && <p className="text-success">{success}</p>}
-      {error && <p className="text-danger">{error}</p>}
+      {success && <p className="text-success m-3">{success}</p>}
+      {error && <p className="text-danger m-3">{error}</p>}
     </div>
   );
 }

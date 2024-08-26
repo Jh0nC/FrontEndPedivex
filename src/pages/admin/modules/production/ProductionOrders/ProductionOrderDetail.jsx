@@ -1,51 +1,49 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'; // Para obtener el ID de la orden desde la URL
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
 
-function ProductionOrderDetail() {
-  const [orderDetails, setOrderDetails] = useState(null);
-  const [error, setError] = useState(null);
-  const { id } = useParams(); // Obtener el ID de la orden desde la URL
-
+function ProductionOrderDetailsModal({ show, onClose, details }) {
   useEffect(() => {
-    const fetchOrderDetails = async () => {
-      try {
-        const response = await fetch(`http://localhost:3000/productionOrder/${id}`);
-        if (!response.ok) {
-          throw new Error("Network response was not ok " + response.statusText);
-        }
-        const data = await response.json();
-        setOrderDetails(data);
-      } catch (error) {
-        setError(error.message);
+    // Crear un enlace para el CDN de Bootstrap
+    const link = document.createElement('link');
+    link.href = 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css';
+
+
+    
+    // Agregar el enlace al documento
+    document.head.appendChild(link);
+
+    // Limpiar el enlace cuando el componente se desmonte
+    return () => {
+      const linkElement = document.getElementById('bootstrap-css');
+      if (linkElement) {
+        document.head.removeChild(linkElement);
       }
     };
+  }, []);
 
-    fetchOrderDetails();
-  }, [id]);
-
-  if (error) {
-    return <div className="text-danger">Error: {error}</div>;
-  }
-
-  if (!orderDetails) {
-    return <div>Cargando...</div>;
-  }
+  if (!show) return null;
 
   return (
-    <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <h2 className="mx-3">Detalles de la Orden de Producción</h2>
-      <div className="m-3">
-        <p><strong>ID:</strong> {orderDetails.id}</p>
-        <p><strong>Fecha:</strong> {new Date(orderDetails.date).toLocaleDateString()}</p>
-        <p><strong>Notas:</strong> {orderDetails.notes}</p>
-        <p><strong>ID Usuario:</strong> {orderDetails.idUser}</p>
-        <p><strong>Estado:</strong> {orderDetails.state}</p>
-        <p><strong>Fecha de Entrega:</strong> {new Date(orderDetails.targetDate).toLocaleDateString()}</p>
+    <div className="modal fade show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+      <div className="modal-dialog">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">Detalles de la Orden de Producción</h5>
+            <button type="button" className="btn-close" onClick={onClose}></button>
+          </div>
+          <div className="modal-body">
+            <p>ID: {details.id}</p>
+            <p>Orden de Producción ID: {details.idProductionOrder}</p>
+            <p>Producto ID: {details.idProduct}</p>
+            <p>Cantidad: {details.amount}</p>
+            <p>Estado: {details.state}</p>
+          </div>
+          <div className="modal-footer">
+            <button type="button" className="btn btn-secondary" onClick={onClose}>Cerrar</button>
+          </div>
+        </div>
       </div>
-      <Link to="/admin/production-order" className="btn btn-danger m-3">Regresar</Link>
     </div>
   );
 }
 
-export default ProductionOrderDetail;
+export default ProductionOrderDetailsModal;
