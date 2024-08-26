@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 function CreateProducts() {
   const [categories, setCategories] = useState([]);
@@ -7,6 +9,8 @@ function CreateProducts() {
   const [productDetails, setProductDetails] = useState([
     { idSupplie: "", amount: "", unit: "" },
   ]);
+
+  const navigate = useNavigate(); // Hook para la redirección
 
   useEffect(() => {
     fetch("http://localhost:3000/productCategories")
@@ -38,7 +42,7 @@ function CreateProducts() {
     setProductDetails(newDetails);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
 
@@ -54,16 +58,39 @@ function CreateProducts() {
       },
     };
 
-    fetch("http://localhost:2415/product", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },  
-      body: JSON.stringify(product),
-    })
-      .then((response) => response.json())
-      .then((data) => console.log("Producto creado:", data))
-      .catch((error) => console.error("Error:", error));
+    try {
+      const response = await fetch("http://localhost:2415/product", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(product),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Producto creado:", data);
+
+        Swal.fire({
+          title: '¡Producto creado!',
+          text: 'El producto ha sido creado exitosamente.',
+          icon: 'success',
+          confirmButtonText: 'Ok',
+        }).then(() => {
+          navigate("/products"); // Redirige a la lista de productos
+        });
+      } else {
+        throw new Error("Error al crear el producto");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      Swal.fire({
+        title: 'Error',
+        text: error.message,
+        icon: 'error',
+        confirmButtonText: 'Ok',
+      });
+    }
   };
 
   return (
@@ -173,4 +200,4 @@ function CreateProducts() {
   );
 }
 
-export default CreateProducts;
+export default CreateProducts; q  

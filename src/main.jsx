@@ -8,8 +8,6 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 /* partials */
 import Navbar from "./partials/Navbar";
-import ShopCart from "./partials/ShopCart"
-import Config from "./partials/Config"
 /* pages */
 import Landing from "./pages/Landing";
 import NotFound from "./pages/NotFound";

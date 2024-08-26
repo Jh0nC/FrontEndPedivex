@@ -7,7 +7,7 @@ function Datatable({ data }) {
       <div className="datatable_header">
         <h2>Masas</h2>
 
-        <Link to={'create'} className='btn btn-warning rounded-5'>Agregar categoría</Link>
+        <Link to={'create'} className='btn btn-warning rounded-5'>Agregar masa</Link>
 
         <div className="input_search">
           <input type="search" placeholder="Buscar" />

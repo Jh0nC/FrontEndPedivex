@@ -1,9 +1,9 @@
 import dummyImg from "../../public/assets/1140x696.jpg";
 
 function Card({ data }) {
-  const { 
-    name, stock, price, state, productCategory, 
-    datasheet: { mass, datasheetDetails } 
+  const {
+    name, stock, price, state, productCategory,
+    datasheet: { mass, datasheetDetails }
   } = data;
 
   console.log(mass);
@@ -13,8 +13,9 @@ function Card({ data }) {
       <div className="card rounded-4 overflow-hidden admin-card">
         <div className="card-head rounded-top-3">
           <img src={dummyImg} alt="" className="img-fluid border-bottom" />
-          <h5 className="text-center mt-2">
-            {productCategory.name + ' - ' + name}
+          <h5 className="text-center mt-2 d-flex flex-column justify-content-between">
+            <span className="fs-6 fw-lighter">{productCategory.name}</span>
+            {name}
           </h5>
         </div>
         <div className="card-body d-flex justify-content-between">
