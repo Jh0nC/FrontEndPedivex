@@ -1,7 +1,38 @@
+import React, { useState } from "react";
 import "../../public/css/datatableStyles.css";
 import { Link } from "react-router-dom";
+import ProductionOrderDetailsModal from "../pages/admin/modules/production/ProductionOrders/ProductionOrderDetail";
 
-function Datatables({ data, onAddClick }) {
+function Datatables({ data }) {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedDetails, setSelectedDetails] = useState({});
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(6); // Mostrar 6 registros por página
+
+  const handleDetailsClick = (item) => {
+    console.log("Detalles clickeados:", item); // Verifica si el botón está llamando a esta función
+    setSelectedDetails(item);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedDetails({});
+  };
+
+  const filteredData = data.content.filter(item =>
+    Object.values(item).some(
+      val => val.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <div className="datatable-container border rounded-4 mx-auto my-3">
       <div className="datatable_header">
@@ -11,7 +42,12 @@ function Datatables({ data, onAddClick }) {
         </Link>
 
         <div className="input_search">
-          <input type="search" placeholder="Buscar" />
+          <input 
+            type="search" 
+            placeholder="Buscar" 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
           <i className="bi bi-search" id="search"></i>
         </div>
       </div>
@@ -27,8 +63,8 @@ function Datatables({ data, onAddClick }) {
           </tr>
         </thead>
         <tbody>
-          {data.content &&
-            data.content.map((item, index) => (
+          {currentItems &&
+            currentItems.map((item, index) => (
               <tr key={index}>
                 <td>{item.id}</td>
                 <td>{item.date}</td>
@@ -37,7 +73,12 @@ function Datatables({ data, onAddClick }) {
                 <td>{item.state}</td>
                 <td>{item.targetDate}</td>
                 <td>
-                  <button className="btn btn-warning me-2">Detalles</button>
+                  <button
+                    className="btn btn-warning me-2"
+                    onClick={() => handleDetailsClick(item)}
+                  >
+                    Detalles
+                  </button>
                   <Link to={`/admin/production-order-update/${item.id}`}>
                     <button className="btn btn-secondary me-2">Editar</button>
                   </Link>
@@ -48,7 +89,27 @@ function Datatables({ data, onAddClick }) {
         </tbody>
       </table>
       <div className="datatable_footer d-flex justify-content-between align-items-center">
-        <p>Total de filas: {data.content ? data.content.length : 0}</p>
+        <p>Total de filas : {filteredData.length}</p>
+        <div className="pagination">
+          {Array.from({ length: Math.ceil(filteredData.length / itemsPerPage) }, (_, index) => (
+            <button
+              key={index + 1}
+              onClick={() => paginate(index + 1)}
+              className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}
+              style={{
+                backgroundColor: currentPage === index + 1 ? '#FFD700' : '#FFFAE0',
+                color: '#000',
+                margin: '0 5px',
+                padding: '8px 12px',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer'
+              }}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
         <button className="btn btn-outline-success rounded-5">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -66,6 +127,13 @@ function Datatables({ data, onAddClick }) {
           Generar Excel
         </button>
       </div>
+      {showModal && (
+        <ProductionOrderDetailsModal
+          show={showModal}
+          onClose={handleCloseModal}
+          details={selectedDetails}
+        />
+      )}
     </div>
   );
 }
