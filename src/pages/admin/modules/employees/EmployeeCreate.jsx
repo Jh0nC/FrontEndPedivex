@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
-function ClientCreate() {
+function EmployeeCreate() {
   const [formData, setFormData] = useState({
     nombre: '',
     apellido: '',
@@ -10,23 +10,11 @@ function ClientCreate() {
     telefono: ''
   });
 
-  const [permissions, setPermissions] = useState([]);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
   useEffect(() => {
-    const fetchPermissions = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/permission');
-        if (!response.ok) throw new Error('Error al obtener los permisos');
-        const data = await response.json();
-        setPermissions(data);
-      } catch (error) {
-        setError(`Error al cargar permisos: ${error.message}`);
-      }
-    };
-
-    fetchPermissions();
+    // No es necesario obtener permisos para esta funcionalidad, así que el código para fetchPermissions se elimina
   }, []);
 
   const handleChange = (e) => {
@@ -41,7 +29,7 @@ function ClientCreate() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3000/user', {
+      const response = await fetch('http://localhost:3000/employees', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -52,7 +40,7 @@ function ClientCreate() {
       if (!response.ok) throw new Error('Error en la solicitud');
 
       await response.json();
-      setSuccess('Usuario creado con éxito');
+      setSuccess('Empleado creado con éxito');
       setError(null);
       setFormData({
         nombre: '',
@@ -69,7 +57,7 @@ function ClientCreate() {
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <h2 className='mx-3'>Crear Nuevo Usuario</h2>
+      <h2 className='mx-3'>Crear Nuevo Empleado</h2>
       <form onSubmit={handleSubmit}>
         {['nombre', 'apellido', 'documento', 'direccion', 'telefono'].map((field) => (
           <div key={field} className='m-3'>
@@ -88,7 +76,7 @@ function ClientCreate() {
           </div>
         ))}
         <button type="submit" className='btn btn-warning m-3'>Registrar</button>
-        <Link to={"/admin/users"} className='btn btn-danger m-3'>Regresar</Link>
+        <Link to={"/admin/employees"} className='btn btn-danger m-3'>Regresar</Link>
       </form>
       {success && <p className="text-success">{success}</p>}
       {error && <p className="text-danger">{error}</p>}
@@ -96,4 +84,4 @@ function ClientCreate() {
   );
 }
 
-export default ClientCreate;
+export default EmployeeCreate;

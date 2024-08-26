@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import Datatable from "../../../../../components/DatatableRole";
 import React, { useState, useEffect } from 'react';
 

@@ -1,33 +1,35 @@
 import { Link, useParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
-function PurchaseEdit() {
-  const { id } = useParams(); // Suponiendo que estás utilizando un parámetro de ruta para identificar la compra a editar
+function EditClient() {
+  const { id } = useParams(); // Obtener el id del cliente desde la URL
   const [formData, setFormData] = useState({
-    product: '',
-    quantity: '',
-    date: ''
+    nombre: '',
+    apellido: '',
+    documento: '',
+    direccion: '',
+    telefono: ''
   });
 
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
   useEffect(() => {
-    // Función para obtener la compra específica desde la API
-    const fetchPurchase = async () => {
+    // Función para obtener los datos del cliente desde la API
+    const fetchClientData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/purchases/${id}`);
+        const response = await fetch(`http://localhost:3000/user/${id}`);
         if (!response.ok) {
-          throw new Error('Error al obtener la compra');
+          throw new Error('Error al obtener los datos del cliente');
         }
         const data = await response.json();
-        setFormData(data); // Guardar los datos de la compra en el estado
+        setFormData(data); // Cargar los datos del cliente en el estado
       } catch (error) {
-        setError('Error al cargar la compra: ' + error.message);
+        setError('Error al cargar datos del cliente: ' + error.message);
       }
     };
 
-    fetchPurchase(); // Llamar a la función cuando el componente se monta
+    fetchClientData(); // Llamar a la función cuando el componente se monta
   }, [id]);
 
   const handleChange = (e) => {
@@ -42,7 +44,7 @@ function PurchaseEdit() {
     e.preventDefault();
     
     try {
-      const response = await fetch(`http://localhost:3000/purchases/${id}`, {
+      const response = await fetch(`http://localhost:3000/user/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -55,7 +57,7 @@ function PurchaseEdit() {
       }
 
       const result = await response.json();
-      setSuccess('Compra actualizada con éxito');
+      setSuccess('Usuario actualizado con éxito');
       setError(null);
       console.log('Response:', result);
     } catch (err) {
@@ -66,46 +68,70 @@ function PurchaseEdit() {
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <h2 className='mx-3'>Actualizar Compra</h2>
+      <h2 className='mx-3'>Editar Usuario</h2>
       <form onSubmit={handleSubmit}>
         <div className='m-3'>
-          <label htmlFor="product" className="form-label">Producto:</label>
+          <label htmlFor="nombre" className="form-label">Nombre:</label>
           <input
-            id="product"
+            id="nombre"
             className='form-control'
             type="text"
-            name="product"
-            value={formData.product}
+            name="nombre"
+            value={formData.nombre}
             onChange={handleChange}
             required
           />
         </div>
         <div className='m-3'>
-          <label htmlFor="quantity" className="form-label">Cantidad:</label>
+          <label htmlFor="apellido" className="form-label">Apellido:</label>
           <input
-            id="quantity"
+            id="apellido"
             className='form-control'
-            type="number"
-            name="quantity"
-            value={formData.quantity}
+            type="text"
+            name="apellido"
+            value={formData.apellido}
             onChange={handleChange}
             required
           />
         </div>
         <div className='m-3'>
-          <label htmlFor="date" className="form-label">Fecha:</label>
+          <label htmlFor="documento" className="form-label">Documento:</label>
           <input
-            id="date"
+            id="documento"
             className='form-control'
-            type="date"
-            name="date"
-            value={formData.date}
+            type="text"
+            name="documento"
+            value={formData.documento}
             onChange={handleChange}
             required
           />
         </div>
-        <button type="submit" className='btn btn-warning m-3'>Actualizar Compra</button>
-        <Link to={"/client/purchases"} className='btn btn-danger m-3'>Regresar</Link>
+        <div className='m-3'>
+          <label htmlFor="direccion" className="form-label">Dirección:</label>
+          <input
+            id="direccion"
+            className='form-control'
+            type="text"
+            name="direccion"
+            value={formData.direccion}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className='m-3'>
+          <label htmlFor="telefono" className="form-label">Teléfono:</label>
+          <input
+            id="telefono"
+            className='form-control'
+            type="text"
+            name="telefono"
+            value={formData.telefono}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <button type="submit" className='btn btn-warning m-3'>Actualizar</button>
+        <Link to={"/admin/users"} className='btn btn-danger m-3'>Regresar</Link>
       </form>
       {success && <p className="text-success">{success}</p>}
       {error && <p className="text-danger">{error}</p>}
@@ -113,4 +139,4 @@ function PurchaseEdit() {
   );
 }
 
-export default PurchaseEdit;
+export default EditClient;

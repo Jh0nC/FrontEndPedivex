@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
 import '../../public/css/datatableStyles.css';
 
-function Datatables({ data }) {
+function DatatablesEmployees({ data }) {
   return (
     <div className="datatable-container border rounded-4 mx-auto my-3">
       <div className="datatable_header">
         <h2>{data.title}</h2>
-        <Link to="/admin/ClientCreate">
-          <button>Agregar Cliente</button>
+        <Link to="/admin/EmployeeCreate">
+          <button>Agregar Empleado</button>
         </Link>
 
         <div className="input_search">
@@ -35,17 +35,15 @@ function Datatables({ data }) {
               <td>{item.Dirección}</td>
               <td>{item.Teléfono}</td>
               <td>
-                <button className='btn btn-success'>editar</button>
-                <button className='btn btn-danger'>cambiar</button>
+                <button className='btn btn-success'>Editar</button>
+                <button className='btn btn-danger'>Eliminar</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
       <div className="datatable_fotter d-flex justify-content-between align-items-center">
-        <p>Total de filas : 05</p>
-
-
+        <p>Total de filas: {data.content?.length}</p>
         <button className="btn btn-outline-success rounded-5">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -67,4 +65,4 @@ function Datatables({ data }) {
   );
 }
 
-export default Datatables;
+export default DatatablesEmployees;

@@ -1,14 +1,14 @@
 /* eslint-disable no-unused-vars */
-import Datatable from "../../../../components/DatatableClients";
+import Datatable from "../../../../components/DatatableEmployees";
 import React, { useState, useEffect } from 'react';
 
-function Clients() {
+function Employees() {
   const [datos, setDatos] = useState([]);
 
   useEffect(() => {
     const fetchDatos = async () => {
       try {
-        const response = await fetch("http://localhost:3000/clients");
+        const response = await fetch("http://localhost:3000/employees");
         if (!response.ok) {
           throw new Error("Network response was not ok " + response.statusText);
         }
@@ -23,9 +23,9 @@ function Clients() {
   }, []);
 
   const data = {
-    module: "Clients",
-    title: "Clients",
-    colNames: ["Id", "Nombre", "Apellido","Documento","Direccion", "Telefono", "Acciones"],
+    module: "Employees",
+    title: "Employees",
+    colNames: ["Id", "Nombre", "Apellido", "Documento", "Direccion", "Telefono", "Acciones"],
     content: datos.map(item => ({
       ...item
     }))
@@ -38,4 +38,4 @@ function Clients() {
   );
 }
 
-export default Clients;
+export default Employees;

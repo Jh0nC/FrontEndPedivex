@@ -1,7 +1,8 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
-function ClientCreate() {
+function EditEmployee() {
+  const { id } = useParams(); // Obtener el id del empleado desde la URL
   const [formData, setFormData] = useState({
     nombre: '',
     apellido: '',
@@ -10,24 +11,26 @@ function ClientCreate() {
     telefono: ''
   });
 
-  const [permissions, setPermissions] = useState([]);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
   useEffect(() => {
-    const fetchPermissions = async () => {
+    // Función para obtener los datos del empleado desde la API
+    const fetchEmployeeData = async () => {
       try {
-        const response = await fetch('http://localhost:3000/permission');
-        if (!response.ok) throw new Error('Error al obtener los permisos');
+        const response = await fetch(`http://localhost:3000/employees/${id}`);
+        if (!response.ok) {
+          throw new Error('Error al obtener los datos del empleado');
+        }
         const data = await response.json();
-        setPermissions(data);
+        setFormData(data); // Cargar los datos del empleado en el estado
       } catch (error) {
-        setError(`Error al cargar permisos: ${error.message}`);
+        setError('Error al cargar datos del empleado: ' + error.message);
       }
     };
 
-    fetchPermissions();
-  }, []);
+    fetchEmployeeData(); // Llamar a la función cuando el componente se monta
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,26 +44,21 @@ function ClientCreate() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3000/user', {
-        method: 'POST',
+      const response = await fetch(`http://localhost:3000/employees/${id}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
 
-      if (!response.ok) throw new Error('Error en la solicitud');
+      if (!response.ok) {
+        throw new Error('Error en la solicitud');
+      }
 
       await response.json();
-      setSuccess('Usuario creado con éxito');
+      setSuccess('Empleado actualizado con éxito');
       setError(null);
-      setFormData({
-        nombre: '',
-        apellido: '',
-        documento: '',
-        direccion: '',
-        telefono: ''
-      });
     } catch (err) {
       setError(`Error: ${err.message}`);
       setSuccess(null);
@@ -69,7 +67,7 @@ function ClientCreate() {
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <h2 className='mx-3'>Crear Nuevo Usuario</h2>
+      <h2 className='mx-3'>Editar Empleado</h2>
       <form onSubmit={handleSubmit}>
         {['nombre', 'apellido', 'documento', 'direccion', 'telefono'].map((field) => (
           <div key={field} className='m-3'>
@@ -87,8 +85,8 @@ function ClientCreate() {
             />
           </div>
         ))}
-        <button type="submit" className='btn btn-warning m-3'>Registrar</button>
-        <Link to={"/admin/users"} className='btn btn-danger m-3'>Regresar</Link>
+        <button type="submit" className='btn btn-warning m-3'>Actualizar</button>
+        <Link to={"/admin/employees"} className='btn btn-danger m-3'>Regresar</Link>
       </form>
       {success && <p className="text-success">{success}</p>}
       {error && <p className="text-danger">{error}</p>}
@@ -96,4 +94,4 @@ function ClientCreate() {
   );
 }
 
-export default ClientCreate;
+export default EditEmployee;
