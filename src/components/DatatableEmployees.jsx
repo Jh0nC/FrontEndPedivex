@@ -1,14 +1,13 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../../public/css/datatableStyles.css';
 
-function DatatablesEmployees({ data }) {
+function DatatableEmployees({ data = [] }) {
   return (
     <div className="datatable-container border rounded-4 mx-auto my-3">
       <div className="datatable_header">
-        <h2>{data.title}</h2>
-        <Link to="/admin/EmployeeCreate">
-          <button>Agregar Empleado</button>
-        </Link>
+        <h2>Empleados</h2>
+
+        {/* <Link to={'create'} className='btn btn-warning rounded-5'>Agregar masa</Link> */}
 
         <div className="input_search">
           <input type="search" placeholder="Buscar" />
@@ -18,32 +17,41 @@ function DatatablesEmployees({ data }) {
       <table className="datatable">
         <thead>
           <tr>
-            {data.colNames && data.colNames.map((col, index) => (
-              <th key={index}>
-                {col} <i className="bi bi-chevron-expand"></i>
-              </th>
-            ))}
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Documento</th>
+            <th>Dirección</th>
+            <th>Teléfono</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
-          {data.content && data.content.map((item, index) => (
-            <tr key={index}>
-              <td>{item.id}</td>
-              <td>{item.Nombre}</td>
-              <td>{item.Apellido}</td>
-              <td>{item.Documento}</td>
-              <td>{item.Dirección}</td>
-              <td>{item.Teléfono}</td>
-              <td>
-                <button className='btn btn-success'>Editar</button>
-                <button className='btn btn-danger'>Eliminar</button>
-              </td>
+          {data.length > 0 ? (
+            data.map((item, index) => (
+              <tr key={index}>
+                <td>{item.id}</td>
+                <td>{item.name}</td>
+                <td>{item.lastName}</td>
+                <td>{item.document}</td>
+                <td>{item.address}</td>
+                <td>{item.phone}</td>
+                <td className="d-flex gap-2">
+                  <Link className="btn btn-warning rounded-5" to={`edit/${item.id}`}>
+                    Editar
+                  </Link>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="7" className="text-center">No hay datos disponibles</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
       <div className="datatable_fotter d-flex justify-content-between align-items-center">
-        <p>Total de filas: {data.content?.length}</p>
+        <p>Total de filas: {data.length}</p>
         <button className="btn btn-outline-success rounded-5">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -65,4 +73,4 @@ function DatatablesEmployees({ data }) {
   );
 }
 
-export default DatatablesEmployees;
+export default DatatableEmployees;
