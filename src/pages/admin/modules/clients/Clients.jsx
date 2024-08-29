@@ -1,40 +1,22 @@
-/* eslint-disable no-unused-vars */
 import Datatable from "../../../../components/DatatableClients";
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 function Clients() {
-  const [datos, setDatos] = useState([]);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    const fetchDatos = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/clients");
-        if (!response.ok) {
-          throw new Error("Network response was not ok " + response.statusText);
-        }
-        const data = await response.json();
-        setDatos(data);
-      } catch (error) {
-        console.error("There was a problem with the fetch operation:", error);
-      }
-    };
-
-    fetchDatos();
+    fetch('http://localhost:3000/user/client')
+      .then(response => response.json())
+      .then(data => setData(data))
+      .catch(error => console.error('Error fetching masses:', error));
   }, []);
 
-  const data = {
-    module: "Clients",
-    title: "Clients",
-    colNames: ["Id", "Nombre", "Apellido","Documento","Direccion", "Telefono", "Acciones"],
-    content: datos.map(item => ({
-      ...item
-    }))
-  };
-
   return (
-    <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <Datatable data={data} />
-    </div>
+    <>
+      <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
+        <Datatable data={data} />
+      </div>
+    </>
   );
 }
 
