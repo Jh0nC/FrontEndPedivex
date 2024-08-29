@@ -54,7 +54,7 @@ function ProductionOrderCreate({ onSave, onClose }) {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:2145/productionOrder', { // Cambiar de puerto en caso de ser necesario
+      const response = await fetch('http://localhost:3000/productionOrder', { // Cambiar de puerto en caso de ser necesario
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

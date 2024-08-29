@@ -7,7 +7,7 @@ function ProductionOrder() {
   useEffect(() => {
     const fetchDatos = async () => {
       try {
-        const response = await fetch("http://localhost:2145/productionOrder"); // Cambiar de puerto en caso de ser necesario
+        const response = await fetch("http://localhost:3000/productionOrder"); // Cambiar de puerto en caso de ser necesario
         if (!response.ok) {
           throw new Error("Network response was not ok " + response.statusText);
         }
