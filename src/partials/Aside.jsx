@@ -90,6 +90,9 @@ function Sidenav() {
             <Link to={'/admin/clients'} >
               Clientes
             </Link>
+            <Link to={'/admin/employees'} >
+              Empleados
+            </Link>
             <Link to={'/admin/catalogue'} >
               Catálogo
             </Link>

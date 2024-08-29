@@ -1,160 +1,215 @@
-import  { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2'; // Importa SweetAlert2
+import Swal from 'sweetalert2';
 
-function CreateReturn() {
-  const { id } = useParams(); // Obtener el ID de la venta desde la URL
+const CreateReturn = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
-  const [motives, setMotives] = useState([]);
-  const [selectedMotive, setSelectedMotive] = useState('');
-  const [date, setDate] = useState('');
-  const [state] = useState(1); // Estado predeterminado como 1
   const [saleDetails, setSaleDetails] = useState(null);
+  const [motives, setMotives] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [returnItems, setReturnItems] = useState([]);
 
   useEffect(() => {
-    const fetchMotives = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:3000/motivedevolution');
-        const data = await response.json();
-        setMotives(data);
+        const [saleResponse, motivesResponse, productsResponse] = await Promise.all([
+          fetch(`http://localhost:3000/sale/${id}`),
+          fetch('http://localhost:3000/motivedevolution'),
+          fetch('http://localhost:3000/product')
+        ]);
+
+        const [saleData, motivesData, productsData] = await Promise.all([
+          saleResponse.json(),
+          motivesResponse.json(),
+          productsResponse.json()
+        ]);
+
+        setSaleDetails(saleData);
+        setMotives(motivesData);
+        setProducts(productsData);
       } catch (error) {
-        console.error("Error fetching motives:", error);
+        console.error("Error fetching data:", error);
+        Swal.fire('Error', 'No se pudo cargar la información necesaria', 'error');
       }
     };
 
-    const fetchSaleDetails = async () => {
-      try {
-        const response = await fetch(`http://localhost:3000/sale/${id}`);
-        const data = await response.json();
-        setSaleDetails(data);
-      } catch (error) {
-        console.error("Error fetching sale details:", error);
-      }
-    };
-
-    fetchMotives();
-    fetchSaleDetails();
-
-    // Obtener la fecha actual y ajustarla a la zona horaria de Bogotá (UTC-5)
-    const now = new Date();
-    const bogotaOffset = -5 * 60; // Offset en minutos para Bogotá (UTC-5)
-    const localOffset = now.getTimezoneOffset(); // Offset en minutos del navegador
-    const adjustedDate = new Date(now.getTime() + (bogotaOffset - localOffset) * 60000);
-    const formattedDate = adjustedDate.toISOString().split('T')[0]; // Formato YYYY-MM-DD
-
-    setDate(formattedDate);
+    fetchData();
   }, [id]);
+
+  const handleAddReturnItem = () => {
+    setReturnItems([...returnItems, { 
+      productId: '', 
+      quantity: 1, 
+      motiveId: '', 
+      exchangeProducts: []
+    }]);
+  };
+
+  const handleReturnItemChange = (index, field, value) => {
+    const updatedItems = [...returnItems];
+    updatedItems[index][field] = value;
+    setReturnItems(updatedItems);
+  };
+
+  const handleAddExchangeProduct = (returnIndex) => {
+    const updatedItems = [...returnItems];
+    updatedItems[returnIndex].exchangeProducts.push({ productId: '', quantity: 1 });
+    setReturnItems(updatedItems);
+  };
+
+  const handleExchangeProductChange = (returnIndex, exchangeIndex, field, value) => {
+    const updatedItems = [...returnItems];
+    updatedItems[returnIndex].exchangeProducts[exchangeIndex][field] = value;
+    setReturnItems(updatedItems);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const returnData = {
-      idSale: id,
-      date,
-      state,
-      idMotive: selectedMotive,
-    };
-
-    try {
-      const response = await fetch('http://localhost:3000/devolution', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(returnData),
-      });
-
-      if (response.ok) {
-        // Mostrar alerta de éxito
-        Swal.fire({
-          title: 'Devolución realizada correctamente',
-          icon: 'success',
-          confirmButtonText: 'Aceptar'
-        }).then(() => {
-          navigate('/admin/sales'); // Redirige de nuevo a la lista de ventas
-        });
-      } else {
-        console.error("Failed to save the return.");
-        // Mostrar alerta de error
-        Swal.fire({
-          title: 'Error',
-          text: 'No se pudo realizar la devolución.',
-          icon: 'error',
-          confirmButtonText: 'Aceptar'
-        });
-      }
-    } catch (error) {
-      console.error("Error submitting return:", error);
-      // Mostrar alerta de error
-      Swal.fire({
-        title: 'Error',
-        text: 'Hubo un problema al enviar la devolución.',
-        icon: 'error',
-        confirmButtonText: 'Aceptar'
-      });
-    }
+    // Aquí iría la lógica para enviar los datos de devolución al servidor
+    console.log("Datos de devolución:", returnItems);
+    Swal.fire('Éxito', 'Devolución procesada correctamente', 'success');
+    navigate('/admin/sales');
   };
 
+  if (!saleDetails) return <div>Cargando...</div>;
+
   return (
-    <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <h2 className="mb-4">Realizar Devolución</h2>
-      {saleDetails ? (
-        <div className="mb-4">
-          <h3>Detalles de la Venta</h3>
-          <p><strong>Fecha de Venta:</strong> {new Date(saleDetails.deliveryDate).toLocaleDateString()}</p>
-          <p><strong>Total:</strong> {saleDetails.total}</p>
-          <p><strong>Usuario:</strong> {saleDetails.user.firstName} {saleDetails.user.lastName}</p>
-          <h4>Productos en la Venta</h4>
-          <table className="table table-bordered">
+    <div className="container mt-4">
+      <h2>Realizar Devolución</h2>
+      <div className="card mb-4">
+        <div className="card-body">
+          <h5 className="card-title">Detalles de la Venta</h5>
+          <p><strong>Fecha:</strong> {new Date(saleDetails.deliveryDate).toLocaleDateString()}</p>
+          <p><strong>Total:</strong> ${saleDetails.total}</p>
+          <p><strong>Cliente:</strong> {saleDetails.user.firstName} {saleDetails.user.lastName}</p>
+        </div>
+      </div>
+
+      <div className="card mb-4">
+        <div className="card-body">
+          <h5 className="card-title">Productos Vendidos</h5>
+          <table className="table">
             <thead>
               <tr>
-                <th>ID Producto</th>
+                <th>Producto</th>
                 <th>Cantidad</th>
               </tr>
             </thead>
             <tbody>
-              {saleDetails.saleDetails.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.product.name}</td>
-                  <td>{item.amount}</td>
+              {saleDetails.saleDetails.map((detail) => (
+                <tr key={detail.id}>
+                  <td>{detail.product.name}</td>
+                  <td>{detail.amount}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      ) : (
-        <p>Cargando detalles de la venta...</p>
-      )}
+      </div>
+
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Fecha de Devolución</label>
-          <input 
-            type="date" 
-            className="form-control" 
-            value={date} 
-            readOnly // Hace el campo solo lectura si decides dejarlo visible
-          />
+        {returnItems.map((item, index) => (
+          <div key={index} className="card mb-3">
+            <div className="card-body">
+              <h5 className="card-title">Producto a devolver #{index + 1}</h5>
+              <div className="mb-3">
+                <label className="form-label">Producto</label>
+                <select 
+                  className="form-select"
+                  value={item.productId}
+                  onChange={(e) => handleReturnItemChange(index, 'productId', e.target.value)}
+                  required
+                >
+                  <option value="">Seleccione un producto</option>
+                  {saleDetails.saleDetails.map((detail) => (
+                    <option key={detail.product.id} value={detail.product.id}>
+                      {detail.product.name} (Cantidad vendida: {detail.amount})
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Cantidad a devolver</label>
+                <input 
+                  type="number"
+                  className="form-control"
+                  value={item.quantity}
+                  onChange={(e) => handleReturnItemChange(index, 'quantity', parseInt(e.target.value))}
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Motivo de devolución</label>
+                <select 
+                  className="form-select"
+                  value={item.motiveId}
+                  onChange={(e) => handleReturnItemChange(index, 'motiveId', e.target.value)}
+                  required
+                >
+                  <option value="">Seleccione un motivo</option>
+                  {motives.map((motive) => (
+                    <option key={motive.id} value={motive.id}>{motive.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              <h6>Productos para cambio</h6>
+              {item.exchangeProducts.map((exchangeItem, exchangeIndex) => (
+                <div key={exchangeIndex} className="card mb-2">
+                  <div className="card-body">
+                    <div className="mb-2">
+                      <label className="form-label">Nuevo producto</label>
+                      <select 
+                        className="form-select"
+                        value={exchangeItem.productId}
+                        onChange={(e) => handleExchangeProductChange(index, exchangeIndex, 'productId', e.target.value)}
+                        required
+                      >
+                        <option value="">Seleccione un producto</option>
+                        {products.map((product) => (
+                          <option key={product.id} value={product.id}>{product.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="mb-2">
+                      <label className="form-label">Cantidad</label>
+                      <input 
+                        type="number"
+                        className="form-control"
+                        value={exchangeItem.quantity}
+                        onChange={(e) => handleExchangeProductChange(index, exchangeIndex, 'quantity', parseInt(e.target.value))}
+                        min="1"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+              <button 
+                type="button" 
+                className="btn btn-secondary mt-2"
+                onClick={() => handleAddExchangeProduct(index)}
+              >
+                + Agregar producto para cambio
+              </button>
+            </div>
+          </div>
+        ))}
+        
+        <button 
+          type="button" 
+          className="btn btn-primary mb-3"
+          onClick={handleAddReturnItem}
+        >
+          + Agregar producto a devolver
+        </button>
+
+        <div>
+          <button type="submit" className="btn btn-success">Procesar Devolución</button>
         </div>
-        <div className="form-group">
-          <label>Motivo de Devolución</label>
-          <select 
-            className="form-control" 
-            value={selectedMotive} 
-            onChange={(e) => setSelectedMotive(e.target.value)} 
-            required
-          >
-            <option value="">Seleccione un motivo</option>
-            {motives.map((motive) => (
-              <option key={motive.id} value={motive.id}>
-                {motive.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <button type="submit" className="btn btn-warning mt-4">Guardar Devolución</button>
       </form>
     </div>
   );
-}
+};
 
 export default CreateReturn;

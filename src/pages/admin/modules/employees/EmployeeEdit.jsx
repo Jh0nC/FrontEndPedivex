@@ -1,35 +1,36 @@
 import { Link, useParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
-function EditClient() {
-  const { id } = useParams(); // Obtener el id del cliente desde la URL
+function EditEmployee() {
+  const { id } = useParams(); // Obtener el id del empleado desde la URL
   const [formData, setFormData] = useState({
     nombre: '',
     apellido: '',
     documento: '',
     direccion: '',
-    telefono: ''
+    telefono: '',
+    email: ''
   });
 
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
   useEffect(() => {
-    // Función para obtener los datos del cliente desde la API
-    const fetchClientData = async () => {
+    // Función para obtener los datos del empleado desde la API
+    const fetchEmployeeData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/user/${id}`);
+        const response = await fetch(`http://localhost:3000/employee/${id}`);
         if (!response.ok) {
-          throw new Error('Error al obtener los datos del cliente');
+          throw new Error('Error al obtener los datos del empleado');
         }
         const data = await response.json();
-        setFormData(data); // Cargar los datos del cliente en el estado
+        setFormData(data); // Cargar los datos del empleado en el estado
       } catch (error) {
-        setError('Error al cargar datos del cliente: ' + error.message);
+        setError('Error al cargar datos del empleado: ' + error.message);
       }
     };
 
-    fetchClientData(); // Llamar a la función cuando el componente se monta
+    fetchEmployeeData(); // Llamar a la función cuando el componente se monta
   }, [id]);
 
   const handleChange = (e) => {
@@ -44,7 +45,7 @@ function EditClient() {
     e.preventDefault();
     
     try {
-      const response = await fetch(`http://localhost:3000/user/${id}`, {
+      const response = await fetch(`http://localhost:3000/employee/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -57,7 +58,7 @@ function EditClient() {
       }
 
       const result = await response.json();
-      setSuccess('Usuario actualizado con éxito');
+      setSuccess('Empleado actualizado con éxito');
       setError(null);
       console.log('Response:', result);
     } catch (err) {
@@ -68,7 +69,7 @@ function EditClient() {
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <h2 className='mx-3'>Editar Usuario</h2>
+      <h2 className='mx-3'>Editar Empleado</h2>
       <form onSubmit={handleSubmit}>
         <div className='m-3'>
           <label htmlFor="nombre" className="form-label">Nombre:</label>
@@ -90,6 +91,18 @@ function EditClient() {
             type="text"
             name="apellido"
             value={formData.apellido}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className='m-3'>
+          <label htmlFor="correoElectronico" className="form-label">Correo Electrónico:</label>
+          <input
+            id="correoElectronico"
+            className='form-control'
+            type="correoElectronico"
+            name="correoElectronico"
+            value={formData.correoElectronico}
             onChange={handleChange}
             required
           />
@@ -131,7 +144,7 @@ function EditClient() {
           />
         </div>
         <button type="submit" className='btn btn-warning m-3'>Actualizar</button>
-        <Link to={"/admin/users"} className='btn btn-danger m-3'>Regresar</Link>
+        <Link to={"/admin/employees"} className='btn btn-danger m-3'>Regresar</Link>
       </form>
       {success && <p className="text-success">{success}</p>}
       {error && <p className="text-danger">{error}</p>}
@@ -139,4 +152,4 @@ function EditClient() {
   );
 }
 
-export default EditClient;
+export default EditEmployee;

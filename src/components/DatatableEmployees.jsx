@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-function DatatableClients({ data = [] }) {
+function DatatableEmployees({ data = [] }) {
   return (
     <div className="datatable-container border rounded-4 mx-auto my-3">
       <div className="datatable_header">
-        <h2>Clientes</h2>
+        <h2>Empleados</h2>
 
         {/* <Link to={'create'} className='btn btn-warning rounded-5'>Agregar masa</Link> */}
 
@@ -32,12 +32,12 @@ function DatatableClients({ data = [] }) {
             data.map((item, index) => (
               <tr key={index}>
                 <td>{item.id}</td>
-                <td>{item.firstName}</td>
+                <td>{item.name}</td>
                 <td>{item.lastName}</td>
                 <td>{item.mail}</td>
                 <td>{item.document}</td>
                 <td>{item.address}</td>
-                <td>{item.phoneNumber}</td>
+                <td>{item.phone}</td>
                 <td className="d-flex gap-2">
                   <Link className="btn btn-warning rounded-5" to={`edit/${item.id}`}>
                     Editar
@@ -75,4 +75,4 @@ function DatatableClients({ data = [] }) {
   );
 }
 
-export default DatatableClients;
+export default DatatableEmployees;
