@@ -8,7 +8,8 @@ function EditEmployee() {
     apellido: '',
     documento: '',
     direccion: '',
-    telefono: ''
+    telefono: '',
+    email: ''
   });
 
   const [error, setError] = useState(null);
@@ -18,7 +19,7 @@ function EditEmployee() {
     // Función para obtener los datos del empleado desde la API
     const fetchEmployeeData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/employees/${id}`);
+        const response = await fetch(`http://localhost:3000/employee/${id}`);
         if (!response.ok) {
           throw new Error('Error al obtener los datos del empleado');
         }
@@ -34,17 +35,17 @@ function EditEmployee() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
+    setFormData({
+      ...formData,
       [name]: value,
-    }));
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     try {
-      const response = await fetch(`http://localhost:3000/employees/${id}`, {
+      const response = await fetch(`http://localhost:3000/employee/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -56,11 +57,12 @@ function EditEmployee() {
         throw new Error('Error en la solicitud');
       }
 
-      await response.json();
+      const result = await response.json();
       setSuccess('Empleado actualizado con éxito');
       setError(null);
+      console.log('Response:', result);
     } catch (err) {
-      setError(`Error: ${err.message}`);
+      setError(err.message);
       setSuccess(null);
     }
   };
@@ -69,22 +71,78 @@ function EditEmployee() {
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
       <h2 className='mx-3'>Editar Empleado</h2>
       <form onSubmit={handleSubmit}>
-        {['nombre', 'apellido', 'documento', 'direccion', 'telefono'].map((field) => (
-          <div key={field} className='m-3'>
-            <label htmlFor={field} className="form-label">
-              {field.charAt(0).toUpperCase() + field.slice(1)}:
-            </label>
-            <input
-              id={field}
-              className='form-control'
-              type="text"
-              name={field}
-              value={formData[field]}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        ))}
+        <div className='m-3'>
+          <label htmlFor="nombre" className="form-label">Nombre:</label>
+          <input
+            id="nombre"
+            className='form-control'
+            type="text"
+            name="nombre"
+            value={formData.nombre}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className='m-3'>
+          <label htmlFor="apellido" className="form-label">Apellido:</label>
+          <input
+            id="apellido"
+            className='form-control'
+            type="text"
+            name="apellido"
+            value={formData.apellido}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className='m-3'>
+          <label htmlFor="correoElectronico" className="form-label">Correo Electrónico:</label>
+          <input
+            id="correoElectronico"
+            className='form-control'
+            type="correoElectronico"
+            name="correoElectronico"
+            value={formData.correoElectronico}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className='m-3'>
+          <label htmlFor="documento" className="form-label">Documento:</label>
+          <input
+            id="documento"
+            className='form-control'
+            type="text"
+            name="documento"
+            value={formData.documento}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className='m-3'>
+          <label htmlFor="direccion" className="form-label">Dirección:</label>
+          <input
+            id="direccion"
+            className='form-control'
+            type="text"
+            name="direccion"
+            value={formData.direccion}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className='m-3'>
+          <label htmlFor="telefono" className="form-label">Teléfono:</label>
+          <input
+            id="telefono"
+            className='form-control'
+            type="text"
+            name="telefono"
+            value={formData.telefono}
+            onChange={handleChange}
+            required
+          />
+        </div>
         <button type="submit" className='btn btn-warning m-3'>Actualizar</button>
         <Link to={"/admin/employees"} className='btn btn-danger m-3'>Regresar</Link>
       </form>

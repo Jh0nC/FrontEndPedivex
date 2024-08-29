@@ -20,6 +20,7 @@ function DatatableClients({ data = [] }) {
             <th>ID</th>
             <th>Nombre</th>
             <th>Apellido</th>
+            <th>Correo Electrónico</th>
             <th>Documento</th>
             <th>Dirección</th>
             <th>Teléfono</th>
@@ -31,11 +32,12 @@ function DatatableClients({ data = [] }) {
             data.map((item, index) => (
               <tr key={index}>
                 <td>{item.id}</td>
-                <td>{item.name}</td>
+                <td>{item.firstName}</td>
                 <td>{item.lastName}</td>
+                <td>{item.mail}</td>
                 <td>{item.document}</td>
                 <td>{item.address}</td>
-                <td>{item.phone}</td>
+                <td>{item.phoneNumber}</td>
                 <td className="d-flex gap-2">
                   <Link className="btn btn-warning rounded-5" to={`edit/${item.id}`}>
                     Editar

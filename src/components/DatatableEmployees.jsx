@@ -20,6 +20,7 @@ function DatatableEmployees({ data = [] }) {
             <th>ID</th>
             <th>Nombre</th>
             <th>Apellido</th>
+            <th>Correo Electrónico</th>
             <th>Documento</th>
             <th>Dirección</th>
             <th>Teléfono</th>
@@ -33,6 +34,7 @@ function DatatableEmployees({ data = [] }) {
                 <td>{item.id}</td>
                 <td>{item.name}</td>
                 <td>{item.lastName}</td>
+                <td>{item.mail}</td>
                 <td>{item.document}</td>
                 <td>{item.address}</td>
                 <td>{item.phone}</td>

@@ -95,6 +95,19 @@ function EditClient() {
           />
         </div>
         <div className='m-3'>
+          <label htmlFor="email" className="form-label">Correo Electrónico:</label>
+          <input
+            id="email"
+            className='form-control'
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className='m-3'>
           <label htmlFor="documento" className="form-label">Documento:</label>
           <input
             id="documento"
