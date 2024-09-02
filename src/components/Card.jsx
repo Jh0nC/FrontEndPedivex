@@ -40,14 +40,14 @@ function Card({ data }) {
         </div>
         <div className="card-footer d-flex justify-content-between">
           <button type="button"
-            className="btn rounded-4 btn-outline-secondary d-flex gap-2"
+            className="btn rounded-5 btn-secondary d-flex gap-2"
             data-bs-toggle="modal"
             data-bs-target={"#modalCard" + data.id}>
             Ver detalle
             <i className="bi bi-eye"></i>
           </button>
           <button type="button"
-            className="btn rounded-4 btn-outline-warning d-flex gap-2"
+            className="btn rounded-5 btn-warning d-flex gap-2"
             data-bs-toggle="modal"
             data-bs-target={"#modal3Card" + data.id}>
             Editar

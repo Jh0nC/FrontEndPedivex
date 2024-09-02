@@ -61,7 +61,7 @@ function Sidenav() {
             <i className="bi bi-chevron-down"></i>
           </a>
           <div className="collapse submenu-sidenav" id="submenu-production">
-            <Link to={'/admin/production-order'} >
+            <Link to={'/admin/productionOrder'} >
               Orden de producción
             </Link>
             <Link to={'/admin/products'} >
@@ -96,7 +96,7 @@ function Sidenav() {
             <Link to={'/admin/catalogue'} >
               Catálogo
             </Link>
-            <Link to={'/admin/order'} >
+            <Link to={'/admin/request'} >
               Pedidos
             </Link>
             <Link to={'/admin/sales'} >

@@ -59,7 +59,7 @@ function CreateProducts() {
     };
 
     try {
-      const response = await fetch("http://localhost:2415/product", {
+      const response = await fetch("http://localhost:3000/product", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -201,3 +201,4 @@ function CreateProducts() {
 }
 
 export default CreateProducts; 
+
