@@ -2,7 +2,7 @@ import { useState } from 'react';
 import '../../public/css/datatableStyles.css';
 import { Link } from 'react-router-dom';
 
-function Datatables({ data }) {
+function Datatable({ data }) {
   // Estados para la búsqueda y la paginación
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -119,4 +119,4 @@ function Datatables({ data }) {
   );
 }
 
-export default Datatables;
+export default Datatable;

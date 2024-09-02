@@ -1,11 +1,11 @@
-import Datatable from "../../../../components/DatatableClients";
+import Datatable from "../../../../components/DatatableEmployees";
 import { useEffect, useState } from 'react';
 
-function Clients() {
+function Employees() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/user/clients')
+    fetch('http://localhost:3000/user/employees')
       .then(response => response.json())
       .then(data => setData(data))
       .catch(error => console.error('Error fetching masses:', error));
@@ -20,4 +20,4 @@ function Clients() {
   );
 }
 
-export default Clients;
+export default Employees;

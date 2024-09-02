@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 function ProductionOrderUpdate({ id, onSave, onClose }) {
   const [formData, setFormData] = useState({
@@ -8,31 +9,39 @@ function ProductionOrderUpdate({ id, onSave, onClose }) {
     idUser: '',
     state: '',
     targetDate: '',
-    details: [
-      { idProduct: '', amount: '', state: '' }
-    ]
+    details: [{ idProduct: '', amount: '', state: '' }]
   });
 
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [users, setUsers] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch existing data if id is provided
     if (id) {
       const fetchData = async () => {
         try {
-          const response = await fetch(`http://localhost:2145/productionOrder/${id}`);
+          const response = await fetch(`http://localhost:3000/productionOrder/${id}`);
           if (!response.ok) {
             throw new Error('Error fetching data');
           }
           const result = await response.json();
           setFormData(result);
         } catch (err) {
-          setError(err.message);
+          console.error(err);
         }
       };
       fetchData();
     }
+
+    fetch("http://localhost:3000/product")
+      .then((response) => response.json())
+      .then((data) => setProducts(data))
+      .catch((error) => console.error("Error fetching products:", error));
+
+    fetch("http://localhost:3000/user")
+      .then((response) => response.json())
+      .then((data) => setUsers(data))
+      .catch((error) => console.error("Error fetching users:", error));
   }, [id]);
 
   const handleChange = (e) => {
@@ -43,11 +52,9 @@ function ProductionOrderUpdate({ id, onSave, onClose }) {
     });
   };
 
-  const handleDetailChange = (index, e) => {
-    const { name, value } = e.target;
-    const updatedDetails = formData.details.map((detail, i) => 
-      i === index ? { ...detail, [name]: value } : detail
-    );
+  const handleDetailChange = (index, field, value) => {
+    const updatedDetails = [...formData.details];
+    updatedDetails[index][field] = value;
     setFormData({
       ...formData,
       details: updatedDetails,
@@ -72,13 +79,15 @@ function ProductionOrderUpdate({ id, onSave, onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const formattedDate = new Date(formData.date).toISOString();
+
     try {
       const response = await fetch(`http://localhost:3000/productionOrder/${id || ''}`, {
         method: id ? 'PUT' : 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, date: formattedDate }),
       });
 
       if (!response.ok) {
@@ -86,156 +95,171 @@ function ProductionOrderUpdate({ id, onSave, onClose }) {
       }
 
       const result = await response.json();
-      setSuccess(id ? 'Orden de producción actualizada con éxito' : 'Orden de producción creada con éxito');
-      setError(null);
-      setFormData({
-        date: '',
-        notes: '',
-        idUser: '',
-        state: '',
-        targetDate: '',
-        details: [
-          { idProduct: '', amount: '', state: '' }
-        ]
-      }); // Limpiar formulario
-      console.log('Response:', result);
-      if (onSave) onSave(); // Llamar a onSave para refrescar datos en el componente padre
+      Swal.fire({
+        title: id ? 'Orden de Producción actualizada con éxito' : 'Orden de Producción creada con éxito',
+        icon: 'success',
+        confirmButtonText: 'Aceptar'
+      }).then(() => {
+        if (onSave) onSave();
+        navigate('/admin/productionOrder');
+      });
     } catch (err) {
-      setError(err.message);
-      setSuccess(null);
+      Swal.fire({
+        title: 'Error',
+        text: 'Hubo un problema al actualizar la orden de producción',
+        icon: 'error',
+        confirmButtonText: 'Aceptar'
+      });
+      console.error("Error:", err);
     }
+  };
+
+  const handleCancel = () => {
+    navigate('/admin/productionOrder');
   };
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <h2 className="mx-3">{id ? 'Actualizar Orden de Producción' : 'Editar Orden de Producción'}</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="m-3">
-          <label htmlFor="date" className="form-label">Fecha:</label>
-          <input
-            id="date"
-            className="form-control"
-            type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="m-3">
-          <label htmlFor="notes" className="form-label">Notas:</label>
-          <textarea
-            id="notes"
-            className="form-control"
-            name="notes"
-            value={formData.notes}
-            onChange={handleChange}
-            required
-          ></textarea>
-        </div>
-        <div className="m-3">
-          <label htmlFor="idUser" className="form-label">ID Usuario:</label>
-          <input
-            id="idUser"
-            className="form-control"
-            type="number"
-            name="idUser"
-            value={formData.idUser}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="m-3">
-          <label htmlFor="state" className="form-label">Estado:</label>
-          <input
-            id="state"
-            className="form-control"
-            type="text"
-            name="state"
-            value={formData.state}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="m-3">
-          <label htmlFor="targetDate" className="form-label">Fecha de Entrega:</label>
-          <input
-            id="targetDate"
-            className="form-control"
-            type="date"
-            name="targetDate"
-            value={formData.targetDate}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        
-        <h4 className="m-3">Detalles</h4>
-        {formData.details.map((detail, index) => (
-          <div key={index} className="m-3 border p-3">
-            <div className="mb-3">
-              <label htmlFor={`idProduct-${index}`} className="form-label">ID Producto:</label>
-              <input
-                id={`idProduct-${index}`}
-                className="form-control"
-                type="number"
-                name="idProduct"
-                value={detail.idProduct}
-                onChange={(e) => handleDetailChange(index, e)}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor={`amount-${index}`} className="form-label">Cantidad:</label>
-              <input
-                id={`amount-${index}`}
-                className="form-control"
-                type="number"
-                name="amount"
-                value={detail.amount}
-                onChange={(e) => handleDetailChange(index, e)}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor={`state-${index}`} className="form-label">Estado:</label>
-              <input
-                id={`state-${index}`}
-                className="form-control"
-                type="text"
-                name="state"
-                value={detail.state}
-                onChange={(e) => handleDetailChange(index, e)}
-                required
-              />
-            </div>
-            <button
-              type="button"
-              className="btn btn-danger"
-              onClick={() => handleRemoveDetail(index)}
-            >
-              Eliminar Detalle
-            </button>
+      <div className="order-form-container border rounded-4 mx-auto my-3 p-3">
+        <h2>{id ? 'Actualizar Orden de Producción' : 'Editar Orden de Producción'}</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label className="form-label">Fecha:</label>
+            <input
+              type="date"
+              className="form-control"
+              name="date"
+              value={formData.date.split("T")[0]}
+              onChange={handleChange}
+              required
+            />
           </div>
-        ))}
-        <button
-          type="button"
-          className="btn btn-secondary m-3"
-          onClick={handleAddDetail}
-        >
-          Añadir Detalle
-        </button>
-        <button type="submit" className="btn btn-warning m-3">Guardar</button>
-        <button
-          type="button"
-          className="btn btn-danger m-3"
-          onClick={onClose}
-        >
-          Cancelar
-        </button>
-      </form>
-      {success && <p className="text-success">{success}</p>}
-      {error && <p className="text-danger">{error}</p>}
+          <div className="mb-3">
+            <label className="form-label">Notas:</label>
+            <textarea
+              className="form-control"
+              name="notes"
+              value={formData.notes}
+              onChange={handleChange}
+              required
+            ></textarea>
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Usuario:</label>
+            <select
+              className="form-control"
+              name="idUser"
+              value={formData.idUser}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Selecciona un usuario</option>
+              {users.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {`${user.firstName} ${user.lastName}`}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Estado:</label>
+            <input
+              type="text"
+              className="form-control"
+              name="state"
+              value={formData.state}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Fecha de Entrega:</label>
+            <input
+              type="date"
+              className="form-control"
+              name="targetDate"
+              value={formData.targetDate.split("T")[0]}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="mb-3">
+            <h5>Detalles</h5>
+            {formData.details.map((detail, index) => (
+              <div key={index} className="d-flex align-items-center mb-2 gap-2">
+                <select
+                  className="form-control"
+                  name="idProduct"
+                  value={detail.idProduct}
+                  onChange={(e) =>
+                    handleDetailChange(index, 'idProduct', e.target.value)
+                  }
+                  required
+                >
+                  <option value="">Selecciona un producto</option>
+                  {products.map((product) => (
+                    <option key={product.id} value={product.id}>
+                      {product.name}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="number"
+                  className="form-control w-50"
+                  placeholder="Cantidad"
+                  name="amount"
+                  value={detail.amount}
+                  onChange={(e) =>
+                    handleDetailChange(index, "amount", e.target.value)
+                  }
+                  required
+                />
+                <input
+                  type="text"
+                  className="form-control w-50"
+                  placeholder="Estado"
+                  name="state"
+                  value={detail.state}
+                  onChange={(e) =>
+                    handleDetailChange(index, "state", e.target.value)
+                  }
+                  required
+                />
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary"
+                  onClick={() => handleRemoveDetail(index)}
+                >
+                  <i className="bi bi-dash"></i>
+                </button>
+              </div>
+            ))}
+            <div className="d-flex justify-content-end">
+              <button
+                type="button"
+                className="btn btn-outline-info"
+                onClick={handleAddDetail}
+              >
+                <i className="bi bi-plus-lg"></i>
+              </button>
+            </div>
+            <div className="m-1 d-flex gap-3">
+              <button
+                type="button"
+                className="btn btn-secondary rounded-5"
+                onClick={handleCancel}
+              >
+                Cancelar
+              </button>
+              <button type="submit" className="btn btn-success rounded-5">
+                {id ? "Actualizar" : "Guardar"}
+              </button>
+            </div>
+          </div>
+          
+        </form>
+      </div>
     </div>
   );
 }
