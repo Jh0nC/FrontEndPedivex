@@ -5,7 +5,7 @@ function Employees() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/user/employee')
+    fetch('http://localhost:3000/user/employees')
       .then(response => response.json())
       .then(data => setData(data))
       .catch(error => console.error('Error fetching masses:', error));
