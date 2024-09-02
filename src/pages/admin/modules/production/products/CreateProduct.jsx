@@ -200,8 +200,5 @@ function CreateProducts() {
   );
 }
 
-<<<<<<< HEAD
-export default CreateProducts;
-=======
 export default CreateProducts; 
->>>>>>> ddb2f8f299a5e11d6c567d86fdea1f5c78aa3cfa
+
