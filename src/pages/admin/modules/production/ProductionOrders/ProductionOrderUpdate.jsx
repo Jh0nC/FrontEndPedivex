@@ -33,7 +33,6 @@ function ProductionOrderUpdate({ id, onSave, onClose }) {
       fetchData();
     }
 
-    // Fetch products and users for dropdowns
     fetch("http://localhost:3000/product")
       .then((response) => response.json())
       .then((data) => setProducts(data))
@@ -80,13 +79,15 @@ function ProductionOrderUpdate({ id, onSave, onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const formattedDate = new Date(formData.date).toISOString();
+
     try {
       const response = await fetch(`http://localhost:3000/productionOrder/${id || ''}`, {
         method: id ? 'PUT' : 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, date: formattedDate }),
       });
 
       if (!response.ok) {
@@ -100,7 +101,7 @@ function ProductionOrderUpdate({ id, onSave, onClose }) {
         confirmButtonText: 'Aceptar'
       }).then(() => {
         if (onSave) onSave();
-        navigate('/productionOrder');
+        navigate('/admin/productionOrder');
       });
     } catch (err) {
       Swal.fire({
@@ -210,7 +211,7 @@ function ProductionOrderUpdate({ id, onSave, onClose }) {
                   name="amount"
                   value={detail.amount}
                   onChange={(e) =>
-                    handleDetailChange(index, 'amount', e.target.value)
+                    handleDetailChange(index, "amount", e.target.value)
                   }
                   required
                 />
@@ -221,27 +222,42 @@ function ProductionOrderUpdate({ id, onSave, onClose }) {
                   name="state"
                   value={detail.state}
                   onChange={(e) =>
-                    handleDetailChange(index, 'state', e.target.value)
+                    handleDetailChange(index, "state", e.target.value)
                   }
                   required
                 />
-                <button type="button" className="btn btn-outline-secondary" onClick={() => handleRemoveDetail(index)}>
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary"
+                  onClick={() => handleRemoveDetail(index)}
+                >
                   <i className="bi bi-dash"></i>
                 </button>
               </div>
             ))}
-            <button type="button" className="btn btn-outline-info" onClick={handleAddDetail}>
-              <i className="bi bi-plus-lg"></i>
-            </button>
+            <div className="d-flex justify-content-end">
+              <button
+                type="button"
+                className="btn btn-outline-info"
+                onClick={handleAddDetail}
+              >
+                <i className="bi bi-plus-lg"></i>
+              </button>
+            </div>
+            <div className="m-1 d-flex gap-3">
+              <button
+                type="button"
+                className="btn btn-secondary rounded-5"
+                onClick={handleCancel}
+              >
+                Cancelar
+              </button>
+              <button type="submit" className="btn btn-success rounded-5">
+                {id ? "Actualizar" : "Guardar"}
+              </button>
+            </div>
           </div>
-          <div className="d-flex justify-content-end gap-2">
-            <button type="button" className="btn btn-secondary" onClick={handleCancel}>
-              Cancelar
-            </button>
-            <button type="submit" className="btn btn-success">
-              Guardar
-            </button>
-          </div>
+          
         </form>
       </div>
     </div>

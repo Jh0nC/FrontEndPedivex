@@ -5,11 +5,11 @@ import { useNavigate } from "react-router-dom";
 function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
   const [formData, setFormData] = useState({
     date: initialData.date || new Date().toISOString(),
-    notes: initialData.notes || '',
-    idUser: initialData.idUser || '',
-    state: initialData.state || '',
-    targetDate: initialData.targetDate || '',
-    details: initialData.details || [{ idProduct: '', amount: '', state: '' }]
+    notes: initialData.notes || "",
+    idUser: initialData.idUser || "",
+    state: initialData.state || "",
+    targetDate: initialData.targetDate || "",
+    details: initialData.details || [{ idProduct: "", amount: "", state: "" }],
   });
 
   const [products, setProducts] = useState([]);
@@ -48,7 +48,7 @@ function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
   const handleAddDetail = () => {
     setFormData({
       ...formData,
-      details: [...formData.details, { idProduct: '', amount: '', state: '' }]
+      details: [...formData.details, { idProduct: "", amount: "", state: "" }],
     });
   };
 
@@ -64,7 +64,7 @@ function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
     e.preventDefault();
 
     const formattedDate = new Date(formData.date).toISOString();
-    
+
     const updatedFormData = {
       ...formData,
       date: formattedDate,
@@ -79,39 +79,43 @@ function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error('Error en la solicitud');
+          throw new Error("Error en la solicitud");
         }
         return response.json();
       })
       .then((data) => {
         Swal.fire({
-          title: 'Orden de Producción creada con éxito',
-          icon: 'success',
-          confirmButtonText: 'Aceptar'
+          title: "Orden de Producción creada con éxito",
+          icon: "success",
+          confirmButtonText: "Aceptar",
         }).then(() => {
           if (onSave) onSave();
-          navigate('/productionOrder');
+          navigate("/admin/productionOrder");
         });
       })
       .catch((error) => {
         Swal.fire({
-          title: 'Error',
-          text: 'Hubo un problema al crear la orden de producción',
-          icon: 'error',
-          confirmButtonText: 'Aceptar'
+          title: "Error",
+          text: "Hubo un problema al crear la orden de producción",
+          icon: "error",
+          confirmButtonText: "Aceptar",
         });
         console.error("Error:", error);
       });
   };
 
   const handleCancel = () => {
-    navigate('/admin/productionOrder');
+    navigate("/admin/productionOrder");
   };
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
       <div className="order-form-container border rounded-4 mx-auto my-3 p-3">
-        <h2>{initialData.id ? 'Editar Orden de Producción' : 'Crear Orden de Producción'}</h2>
+        <h2>
+          {initialData.id
+            ? "Editar Orden de Producción"
+            : "Crear Orden de Producción"}
+        </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label className="form-label">Fecha:</label>
@@ -183,7 +187,7 @@ function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
                   name="idProduct"
                   value={detail.idProduct}
                   onChange={(e) =>
-                    handleDetailChange(index, 'idProduct', e.target.value)
+                    handleDetailChange(index, "idProduct", e.target.value)
                   }
                   required
                 >
@@ -201,7 +205,7 @@ function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
                   name="amount"
                   value={detail.amount}
                   onChange={(e) =>
-                    handleDetailChange(index, 'amount', e.target.value)
+                    handleDetailChange(index, "amount", e.target.value)
                   }
                   required
                 />
@@ -212,27 +216,42 @@ function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
                   name="state"
                   value={detail.state}
                   onChange={(e) =>
-                    handleDetailChange(index, 'state', e.target.value)
+                    handleDetailChange(index, "state", e.target.value)
                   }
                   required
                 />
-                <button type="button" className="btn btn-outline-secondary" onClick={() => handleRemoveDetail(index)}>
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary"
+                  onClick={() => handleRemoveDetail(index)}
+                >
                   <i className="bi bi-dash"></i>
                 </button>
               </div>
             ))}
-            <button type="button" className="btn btn-outline-info" onClick={handleAddDetail}>
-              <i className="bi bi-plus-lg"></i>
-            </button>
-          </div>
-          <div className="d-flex justify-content-end gap-2">
-            <button type="button" className="btn btn-secondary" onClick={handleCancel}>
+            <div className="d-flex justify-content-end">
+              <button
+                type="button"
+                className="btn btn-outline-info"
+                onClick={handleAddDetail}
+              >
+                <i className="bi bi-plus-lg"></i>
+              </button>
+            </div>
+            <div className="m-1 d-flex gap-3">
+            <button
+              type="button"
+              className="btn btn-secondary rounded-5"
+              onClick={handleCancel}
+            >
               Cancelar
             </button>
-            <button type="submit" className="btn btn-success">
-              {initialData.id ? 'Actualizar' : 'Guardar'}
+            <button type="submit" className="btn btn-success rounded-5">
+              {initialData.id ? "Actualizar" : "Guardar"}
             </button>
           </div>
+          </div>
+          
         </form>
       </div>
     </div>
