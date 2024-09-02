@@ -1,14 +1,13 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
-function RoleEdit() {
-  const { id } = useParams();
+function roleCreate() {
   const [formData, setFormData] = useState({
     role: ''
   });
-  const [permissions, setPermissions] = useState([]);
-  const [selectedPermissions, setSelectedPermissions] = useState([]);
-  const [role, setRole] = useState([]);
+
+  const [permissions, setPermissions] = useState([]); // Estado para almacenar los permisos obtenidos de la API
+  const [selectedPermissions, setSelectedPermissions] = useState([]); // Estado para almacenar los permisos seleccionados
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
@@ -27,27 +26,8 @@ function RoleEdit() {
       }
     };
 
-    // Función para obtener los detalles del rol específico usando el ID
-    const fetchRole = async () => {
-      try {
-        const response = await fetch(`http://localhost:3000/role/${id}`);
-        if (!response.ok) {
-          throw new Error('Error al obtener el rol');
-        }
-        const data = await response.json();
-        setRole({ role: data.role }); // Establecer el rol actual en el formulario
-        setFormData({ role: data.role }); // Llenar el formulario con los datos del rol
-        setSelectedPermissions(data.permissions.map(p => p.id)); // Asignar los permisos ya seleccionados
-      } catch (error) {
-        setError('Error al cargar el rol: ' + error.message);
-      }
-    };
-
-    fetchPermissions(); // Llamar a la función para obtener permisos cuando el componente se monta
-    if (id) {
-      fetchRole(); // Llamar a la función para obtener el rol si hay un ID en la URL
-    }
-  }, [id]); // El efecto depende del ID, se ejecuta cuando el ID cambia
+    fetchPermissions(); // Llamar a la función cuando el componente se monta
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -68,11 +48,11 @@ function RoleEdit() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     try {
-      // Actualizar el rol con un PUT
-      const response = await fetch(`http://localhost:3000/role/${id}`, {
-        method: 'PUT',
+      // Crear el rol
+      const response = await fetch('http://localhost:3000/role', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -80,23 +60,15 @@ function RoleEdit() {
       });
 
       if (!response.ok) {
-        throw new Error('Error en la solicitud para actualizar el rol');
+        throw new Error('Error en la solicitud');
       }
 
       const result = await response.json();
-      const roleId = id; // Usar el ID de la URL ya que estamos en modo edición
-
-      // Eliminar todas las relaciones existentes entre el rol y los permisos
-      await fetch(`http://localhost:3000/rolePermission/${roleId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-
-      // Crear nuevas relaciones en rolePermission para cada permiso seleccionado
+      const roleId = result.id; // Asumimos que el ID del rol está en 'result.id'
+      
+      // Crear rolePermission para cada permiso seleccionado
       for (let permissionId of selectedPermissions) {
-        await fetch(`http://localhost:3000/rolePermission`, {
+        await fetch('http://localhost:3000/rolePermission', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -105,9 +77,11 @@ function RoleEdit() {
         });
       }
 
-      setSuccess('Rol y permisos actualizados con éxito');
+      setSuccess('Rol creado con éxito');
       setError(null);
-      console.log('Response:', result);
+      setFormData({ role: '' });
+      setSelectedPermissions([]); // Limpiar los permisos seleccionados
+      console.log('Rol creado:', result);
     } catch (err) {
       setError(err.message);
       setSuccess(null);
@@ -116,20 +90,19 @@ function RoleEdit() {
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <h2 className='mx-3'>Editar Rol</h2>
+      <h2 className='mx-3'>Crear Nuevo Rol</h2>
       <form onSubmit={handleSubmit}>
         <div className='m-3'>
-          <label htmlFor="role" className="form-label">Rol:</label>
+          <label htmlFor="exampleInputEmail1" className="form-label">Rol:</label>
           <input
-            id="role"
-            aria-describedby="roleHelp"
+            id="exampleInputEmail1"
+            aria-describedby="emailHelp"
             className='form-control'
             type="text"
             name="role"
-            value={formData.role} // Muestra el rol actual obtenido de la API
+            value={formData.role}
             onChange={handleChange}
             required
-            placeholder={role.role}
           />
         </div>
         <div className='m-3'>
@@ -143,17 +116,16 @@ function RoleEdit() {
                 value={permission.id}
                 onChange={handlePermissionChange}
                 type='checkbox'
-                checked={selectedPermissions.includes(permission.id)}
                 autoComplete='off'
               />
-              <label htmlFor={permission.permission} className="btn btn-outline-success me-1">
+              <label htmlFor={permission.permission} className="btn btn-outline-success mt-1">
                 {permission.permission}
               </label>
             </div>
           ))}
         </div>
-        <button type="submit" className='btn btn-warning m-3'>Actualizar</button>
-        <Link to={"/admin/roles"} className='btn btn-danger m-3'>Regresar</Link>
+        <button type="submit" className='btn btn-warning m-3'>Registrar</button>
+        <Link to={"/admin/roles"} className='btn btn-danger'>Regresar</Link>
       </form>
       {success && <p className="text-success m-3">{success}</p>}
       {error && <p className="text-danger m-3">{error}</p>}
@@ -161,4 +133,4 @@ function RoleEdit() {
   );
 }
 
-export default RoleEdit;
+export default roleCreate;

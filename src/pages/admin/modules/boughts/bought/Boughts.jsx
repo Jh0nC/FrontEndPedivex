@@ -1,4 +1,4 @@
-import Datatable from "../../../../components/DatatableBoughts";
+import Datatable from "../../../../../components/DatatableBoughts";
 import React, { useState, useEffect } from 'react';
 
 function Boughts() {
@@ -24,7 +24,7 @@ function Boughts() {
   const data = {
     module: "Compras",
     title: "Compras",
-    colNames: ["Id", "nroRecibo", "Fecha", "Total", "Estado", "Acciones"],
+    colNames: ["Id", "Nro Recibo", "Fecha", "Total", "Estado", "Acciones"],
     content: datos.map(item => ({
       ...item,
       date: item.date.split('T')[0]

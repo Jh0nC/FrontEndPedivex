@@ -8,7 +8,7 @@ function Datatables({ data }) {
 
   const handleEditClick = (id) => {
     setSelectedRoleId(id); // Guardar el ID en el estado local (esto es opcional si no lo necesitas)
-    navigate(`/admin/role-edit/${id}`); // Redirigir a la página de edición con el ID en la URL
+    navigate(`/admin/roleEdit/${id}`); // Redirigir a la página de edición con el ID en la URL
   };
 
 
@@ -16,7 +16,7 @@ function Datatables({ data }) {
     <div className="datatable-container border rounded-4 mx-auto my-3">
       <div className="datatable_header">
         <h2>{data.title}</h2>
-        <Link to="/admin/role-create">
+        <Link to="/admin/roleCreate">
           <button>Agregar {data.module}</button>
         </Link>
 

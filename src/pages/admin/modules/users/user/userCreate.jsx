@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
-function UserCreate() {
+function userCreate() {
   const [formData, setFormData] = useState({
     mail: '',
     password: '',
@@ -196,4 +196,4 @@ function UserCreate() {
   );
 }
 
-export default UserCreate;
+export default userCreate;

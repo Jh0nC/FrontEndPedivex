@@ -8,7 +8,7 @@ function Datatables({ data }) {
 
   const handleEditClick = (id) => {
     setSelectedUserId(id);
-    navigate(`/admin/user-edit/${id}`); 
+    navigate(`/admin/userEdit/${id}`); 
   };
 
 
@@ -16,7 +16,7 @@ function Datatables({ data }) {
     <div className="datatable-container border rounded-4 mx-auto my-3">
       <div className="datatable_header">
         <h2>{data.title}</h2>
-        <Link to="/admin/user-create">
+        <Link to="/admin/userCreate">
           <button>Agregar {data.module}</button>
         </Link>
 
@@ -52,7 +52,6 @@ function Datatables({ data }) {
                 >
                   Editar
                 </button>
-                <button className='btn btn-danger'>cambiar</button>
               </td>
             </tr>
           ))}

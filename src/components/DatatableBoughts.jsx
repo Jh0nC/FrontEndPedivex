@@ -1,3 +1,5 @@
+import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import '../../public/css/datatableStyles.css';
 
 function Datatables({ data }) {
@@ -5,7 +7,9 @@ function Datatables({ data }) {
     <div className="datatable-container border rounded-4 mx-auto my-3">
       <div className="datatable_header">
         <h2>{data.title}</h2>
-        <button>Agregar {data.module}</button>
+        <Link to="/admin/boughtCreate">
+          <button>Agregar {data.module}</button>
+        </Link>
 
         <div className="input_search">
           <input type="search" placeholder="Buscar" />
