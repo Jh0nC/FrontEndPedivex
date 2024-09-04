@@ -69,6 +69,7 @@ function Datatable({ data }) {
                 </Link>
                 <Link to={`/admin/sales-return/${item.id}`}>
                   <button className='btn btn-danger'>Realizar Devolución</button>
+                  <i class="bi bi-pencil-square"></i> 
                 </Link>
               </td>
             </tr>

@@ -5,7 +5,7 @@ function Clients() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/user/clients')
+    fetch('http://localhost:3000/client')
       .then(response => response.json())
       .then(data => setData(data))
       .catch(error => console.error('Error fetching masses:', error));
