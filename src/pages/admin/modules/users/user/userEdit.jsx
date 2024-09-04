@@ -198,9 +198,9 @@ function userEdit() {
             ))}
           </select>
         </div>
-        <button type="submit" className='btn btn-warning m-3'>Editar</button>
-        <Link to={'/PasswordRecovery'} className='btn btn-secondary m-3'>Recuperar Contraseña</Link>
-        <Link to={"/admin/users"} className='btn btn-danger m-3'>Regresar</Link>
+        <button type="submit" className='btn btn-success rounded-5 m-3'>Editar</button>
+        <Link to={'/PasswordRecovery'} className='btn btn-warning rounded-5 me-3'>Recuperar Contraseña</Link>
+        <Link to={"/admin/users"} className='btn btn-secondary rounded-5'>Regresar</Link>
       </form>
       {success && <p className="text-success m-3">{success}</p>}
       {error && <p className="text-danger m-3">{error}</p>}

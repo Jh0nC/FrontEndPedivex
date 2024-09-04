@@ -229,7 +229,7 @@ function boughtCreate() {
                             </div>
                             <button
                                 type="button"
-                                className="btn btn-danger"
+                                className="btn btn-danger rounded-5"
                                 onClick={() => handleRemoveDetail(index)}
                             >
                                 Eliminar Detalle
@@ -239,14 +239,14 @@ function boughtCreate() {
 
                     <button
                         type="button"
-                        className="btn btn-secondary m-3"
+                        className="btn btn-warning rounded-5 m-3"
                         onClick={handleAddDetail}
                     >
                         Añadir Detalle
                     </button>
 
-                    <button type="submit" className='btn btn-warning m-3'>Registrar</button>
-                    <Link to={"/admin/boughts"} className='btn btn-danger m-3'>Regresar</Link>
+                    <button type="submit" className='btn btn-success rounded-5 me-3'>Registrar</button>
+                    <Link to={"/admin/boughts"} className='btn btn-secondary rounded-5'>Regresar</Link>
                 </form>
                 {success && <p className="text-success m-3">{success}</p>}
                 {error && <p className="text-danger m-3">{error}</p>}

@@ -146,14 +146,14 @@ function roleEdit() {
                 checked={selectedPermissions.includes(permission.id)}
                 autoComplete='off'
               />
-              <label htmlFor={permission.permission} className="btn btn-outline-success mt-1">
+              <label htmlFor={permission.permission} className="btn btn-outline-success rounded-5 mt-1">
                 {permission.permission}
               </label>
             </div>
           ))}
         </div>
-        <button type="submit" className='btn btn-warning m-3'>Actualizar</button>
-        <Link to={"/admin/roles"} className='btn btn-danger m-3'>Regresar</Link>
+        <button type="submit" className='btn btn-success rounded-5 m-3'>Actualizar</button>
+        <Link to={"/admin/roles"} className='btn btn-secondary rounded-5'>Regresar</Link>
       </form>
       {success && <p className="text-success m-3">{success}</p>}
       {error && <p className="text-danger m-3">{error}</p>}
