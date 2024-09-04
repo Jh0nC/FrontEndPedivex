@@ -1,7 +1,9 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import Swal from 'sweetalert2';
 
 function userEdit() {
+  const navigate = useNavigate();
   const { id } = useParams();  // Obtener el ID desde la URL
   const [formData, setFormData] = useState({
     mail: '',
@@ -97,10 +99,25 @@ function userEdit() {
       setSuccess('Usuario actualizado con éxito'); 
       setError(null);
       setFormData({ mail: '', password: '', firstName: '', lastName: '', document: '', address: '', phoneNumber: '', idRole: '' });
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Éxito',
+        text: 'Usuario editado con éxito.',
+      }).then(() => {
+        navigate('/admin/users'); // Redireccionar después de hacer clic en "OK"
+      });
+
       console.log('Response:', result);
     } catch (err) {
       setError(err.message);
       setSuccess(null);
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un problema al editar el usuario.',
+      });
     }
   };  
 
