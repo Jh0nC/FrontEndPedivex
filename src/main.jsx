@@ -50,12 +50,12 @@ import CreateCategory from "./pages/admin/modules/production/porductCategories/C
 import Sales from "./pages/admin/modules/sales/Sales";
 
 import Clients from "./pages/admin/modules/clients/Clients";
-import ClientCreate from "./pages/admin/modules/clients/ClientCreate";
-import ClientEdit from "./pages/admin/modules/clients/ClientEdit";
+// import ClientCreate from "./pages/admin/modules/clients/ClientCreate";
+// import ClientEdit from "./pages/admin/modules/clients/ClientEdit";
 
 import Employees from "./pages/admin/modules/employees/Employees";
-import EmployeeCreate from "./pages/admin/modules/employees/EmployeeCreate";
-import EmployeeEdit from "./pages/admin/modules/employees/EmployeeEdit";
+// import EmployeeCreate from "./pages/admin/modules/employees/EmployeeCreate";
+// import EmployeeEdit from "./pages/admin/modules/employees/EmployeeEdit";
 
 
 
@@ -134,12 +134,12 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
 
             {/* Dm */}
             <Route path='clients' element={<Clients />} />
-            <Route path='clientCreate' element={<ClientCreate />} />
-            <Route path='clientEdit' element={<ClientEdit />} />
+            {/* <Route path='clientCreate' element={<ClientCreate />} /> */}
+            {/* <Route path='clientEdit' element={<ClientEdit />} /> */}
 
             <Route path='Employees' element={<Employees />} />
-            <Route path='EmployeeCreate' element={<EmployeeCreate />} />
-            <Route path='EmployeeEdit' element={<EmployeeEdit />} />
+            {/* <Route path='EmployeeCreate' element={<EmployeeCreate />} /> */}
+            {/* <Route path='EmployeeEdit' element={<EmployeeEdit />} /> */}
             
             <Route path='sales' element={<Sales />} />
             <Route path="sales-return/:id" element={<CreateReturn />} />
