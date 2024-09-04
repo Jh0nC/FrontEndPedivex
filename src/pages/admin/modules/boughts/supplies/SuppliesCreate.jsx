@@ -124,8 +124,8 @@ function SupplieCreate() {
           </select>
         </div>
         <div className="m-3 d-flex gap-3">
-          <button type="submit" className='btn btn-warning m-3'>Registrar</button>
-          <Link to={"/admin/supplies"} className='btn btn-danger m-3'>Regresar</Link>
+        <button type="submit" className='btn btn-success rounded-5'>Registrar</button>
+        <Link to={"/admin/supplies"} className='btn btn-secondary rounded-5'>Regresar</Link>
         </div>
       </form>
       {success && <p className="text-success">{success}</p>}

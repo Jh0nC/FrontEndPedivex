@@ -1,14 +1,13 @@
-/* eslint-disable no-unused-vars */
-import Datatable from "../../../../../components/DatatableRole";
+import Datatable from "../../../../../components/DatatableUser";
 import React, { useState, useEffect } from 'react';
 
-function Roles() {
+function users() {
   const [datos, setDatos] = useState([]);
 
   useEffect(() => {
     const fetchDatos = async () => {
       try {
-        const response = await fetch("http://localhost:3000/role");
+        const response = await fetch("http://localhost:3000/user");
         if (!response.ok) {
           throw new Error("Network response was not ok " + response.statusText);
         }
@@ -23,9 +22,9 @@ function Roles() {
   }, []);
 
   const data = {
-    module: "Roles",
-    title: "Roles",
-    colNames: ["Id", "rol", "Acciones"],
+    module: "Usuarios",
+    title: "Usuarios",
+    colNames: ["Id", "Correo", "Nombre", "Documento", "Dirección", "Teléfono", "Rol", "Acciones"],
     content: datos.map(item => ({
       ...item
     }))
@@ -38,4 +37,4 @@ function Roles() {
   );
 }
 
-export default Roles;
+export default users;
