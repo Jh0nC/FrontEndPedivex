@@ -22,13 +22,14 @@ import Products from "./pages/admin/modules/production/products/Products";
 import SuppliesCreate from "./pages/admin/modules/boughts/supplies/SuppliesCreate";
 import SuppliesUpdate from "./pages/admin/modules/boughts/supplies/SuppliesUpdate";
 import Supplies from "./pages/admin/modules/boughts/supplies/Supplies";
-import Boughts from "./pages/admin/modules/boughts/Boughts";
-import Roles from "./pages/admin/modules/users/Roles/Roles"
-import RoleCreate from './pages/admin/modules/users/Roles/RoleCreate';
-import RoleEdit from './pages/admin/modules/users/Roles/RoleEdit';
-import Users from "./pages/admin/modules/users/Users/Users"
-import UsersCreate from "./pages/admin/modules/users/Users/UserCreate"
-import UsersEdit from "./pages/admin/modules/users/Users/UserEdit"
+import Boughts from "./pages/admin/modules/boughts/bought/Boughts";
+import BoughtCreate from "./pages/admin/modules/boughts/bought/boughtCreate";
+import Roles from "./pages/admin/modules/users/role/roles";
+import RoleCreate from './pages/admin/modules/users/role/roleCreate';
+import RoleEdit from './pages/admin/modules/users/role/roleEdit';
+import Users from "./pages/admin/modules/users/user/users";
+import UsersCreate from "./pages/admin/modules/users/user/userCreate";
+import UsersEdit from "./pages/admin/modules/users/user/userEdit";
 
 
 import Devolutions from "./pages/admin/modules/sales/Devolutions";
@@ -106,12 +107,13 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
 
 
             <Route path='boughts' element={<Boughts />} />
+            <Route path='boughtCreate' element={<BoughtCreate />} />
             <Route path='roles' element={<Roles />} />
-            <Route path='role-create' element={<RoleCreate />} />
-            <Route path='role-edit/:id' element={<RoleEdit />} />
+            <Route path='roleCreate' element={<RoleCreate />} />
+            <Route path='roleEdit/:id' element={<RoleEdit />} />
             <Route path='users' element={<Users />} />
-            <Route path='user-create' element={<UsersCreate />} />
-            <Route path='user-edit/:id' element={<UsersEdit />} />
+            <Route path='userCreate' element={<UsersCreate />} />
+            <Route path='userEdit/:id' element={<UsersEdit />} />
 
             <Route path='supplies-create' element={<SuppliesCreate />} />
             <Route path='products/create' element={<CreateProducts />} />

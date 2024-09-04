@@ -25,7 +25,7 @@ function Sidenav() {
               Roles
             </Link>
             <Link to={'/admin/users'} className="d-block">
-              Ususarios
+              Usuarios
             </Link>
           </div>
         </li>

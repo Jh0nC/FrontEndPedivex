@@ -1,7 +1,9 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import Swal from 'sweetalert2';
 
-function RoleEdit() {
+function roleEdit() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [formData, setFormData] = useState({
     role: ''
@@ -107,10 +109,22 @@ function RoleEdit() {
 
       setSuccess('Rol y permisos actualizados con éxito');
       setError(null);
+      Swal.fire({
+        icon: 'success',
+        title: 'Éxito',
+        text: 'Rol actualizado con éxito.',
+      }).then(() => {
+        navigate('/admin/roles'); // Redireccionar después de hacer clic en "OK"
+      });
       console.log('Response:', result);
     } catch (err) {
       setError(err.message);
       setSuccess(null);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un problema al editar el rol.',
+      });
     }
   };
 
@@ -146,14 +160,14 @@ function RoleEdit() {
                 checked={selectedPermissions.includes(permission.id)}
                 autoComplete='off'
               />
-              <label htmlFor={permission.permission} className="btn btn-outline-success me-1">
+              <label htmlFor={permission.permission} className="btn btn-outline-success rounded-5 mt-1">
                 {permission.permission}
               </label>
             </div>
           ))}
         </div>
-        <button type="submit" className='btn btn-warning m-3'>Actualizar</button>
-        <Link to={"/admin/roles"} className='btn btn-danger m-3'>Regresar</Link>
+        <button type="submit" className='btn btn-success rounded-5 m-3'>Actualizar</button>
+        <Link to={"/admin/roles"} className='btn btn-secondary rounded-5'>Regresar</Link>
       </form>
       {success && <p className="text-success m-3">{success}</p>}
       {error && <p className="text-danger m-3">{error}</p>}
@@ -161,4 +175,4 @@ function RoleEdit() {
   );
 }
 
-export default RoleEdit;
+export default roleEdit;

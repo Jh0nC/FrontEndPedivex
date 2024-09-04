@@ -1,7 +1,9 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import Swal from 'sweetalert2';
 
-function RoleCreate() {
+function roleCreate() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     role: ''
   });
@@ -81,10 +83,25 @@ function RoleCreate() {
       setError(null);
       setFormData({ role: '' });
       setSelectedPermissions([]); // Limpiar los permisos seleccionados
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Éxito',
+        text: 'Rol creado con éxito.',
+      }).then(() => {
+        navigate('/admin/roles'); // Redireccionar después de hacer clic en "OK"
+      });
+
       console.log('Rol creado:', result);
     } catch (err) {
       setError(err.message);
       setSuccess(null);
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un problema al crear el rol.',
+      });
     }
   };
 
@@ -118,19 +135,19 @@ function RoleCreate() {
                 type='checkbox'
                 autoComplete='off'
               />
-              <label htmlFor={permission.permission} className="btn btn-outline-success mt-1">
+              <label htmlFor={permission.permission} className="btn btn-outline-success rounded-5 mt-1">
                 {permission.permission}
               </label>
             </div>
           ))}
         </div>
-        <button type="submit" className='btn btn-warning m-3'>Registrar</button>
-        <Link to={"/admin/roles"} className='btn btn-danger'>Regresar</Link>
+        <button type="submit" className='btn btn-success rounded-5 m-3'>Registrar</button>
+        <Link to={"/admin/roles"} className='btn btn-secondary rounded-5'>Regresar</Link>
       </form>
-      {success && <p className="text-success m-3">{success}</p>}
-      {error && <p className="text-danger m-3">{error}</p>}
+      {/* {success && <p className="text-success m-3">{success}</p>} */}
+      {/* {error && <p className="text-danger m-3">{error}</p>} */}
     </div>
   );
 }
 
-export default RoleCreate;
+export default roleCreate;
