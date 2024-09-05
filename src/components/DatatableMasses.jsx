@@ -30,7 +30,7 @@ function Datatable({ data }) {
               <td className='d-flex gap-2'>
                 <Link className='btn btn-warning rounded-5' to={`edit/${item.id}`}>
                   Editar
-                  <i class="bi bi-pencil-square"></i>
+                  <i className="bi bi-pencil-square"></i>
                 </Link>
               </td>
             </tr>

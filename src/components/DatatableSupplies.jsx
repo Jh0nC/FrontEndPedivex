@@ -37,7 +37,7 @@ function Datatables({ data }) {
         <h2>{data.title}</h2>
         <Link to="/admin/supplies-create" className="btn btn-success rounded-5 d-flex gap-2 align-items-center">
           Agregar {data.module}
-          <i class="bi bi-plus-circle"></i>
+          <i className="bi bi-plus-circle"></i>
         </Link>
         <div className="input_search">
           <input
@@ -89,7 +89,7 @@ function Datatables({ data }) {
               <td className='d-flex gap-2'>
                 <Link className='btn btn-warning rounded-5' to={`/admin/supplies-update/${item.id}`}>
                   Editar
-                  <i class="bi bi-pencil-square"></i>
+                  <i className="bi bi-pencil-square"></i>
                 </Link>
               </td>
             </tr>
