@@ -1,8 +1,23 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import '../../public/css/datatableStyles.css';
+import BoughtDetails from "../pages/admin/modules/boughts/bought/boughtDetails";
 
 function Datatables({ data }) {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedDetails, setSelectedDetails] = useState({});
+
+  const handleDetailsClick = (item) => {
+    console.log("Detalles clickeados:", item); // Verifica si el botón está llamando a esta función
+    setSelectedDetails(item);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedDetails({});
+  };
+
   return (
     <div className="datatable-container border rounded-4 mx-auto my-3">
       <div className="datatable_header">
@@ -56,7 +71,12 @@ function Datatables({ data }) {
               <td>{item.total}</td>
               <td>{item.state}</td>
               <td>
-                <button className='btn btn-secondary rounded-5 me-1'>detalles</button>
+                  <button
+                    className="btn btn-secondary rounded-5 me-1"
+                    onClick={() => handleDetailsClick(item)}
+                  >
+                    Detalles
+                  </button>
                 <button className='btn btn-danger rounded-5'>estado</button>
               </td>
             </tr>
@@ -84,6 +104,13 @@ function Datatables({ data }) {
           Generar Excel
         </button>
       </div>
+      {showModal && (
+        <BoughtDetails
+          show={showModal}
+          onClose={handleCloseModal}
+          details={selectedDetails}
+        />
+      )}
     </div>
   );
 }
