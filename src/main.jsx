@@ -34,9 +34,15 @@ import UsersEdit from "./pages/admin/modules/users/user/userEdit";
 
 import Devolutions from "./pages/admin/modules/sales/Devolutions";
 
+
 import ProductionOrder from "./pages/admin/modules/production/ProductionOrders/ProductionOrder"
 import ProductionOrderCreate from "./pages/admin/modules/production/ProductionOrders/ProductionOrderCreate";
 import ProductionOrderUpdate from "./pages/admin/modules/production/ProductionOrders/ProductionOrderUpdate";
+
+import Request  from "./pages/admin/modules/sales/requests/Request";
+import RequestCreate  from "./pages/admin/modules/sales/requests/RequestCreate";
+//import RequestUpdate  from "./pages/admin/modules/sales/requests/RequestUpdate";
+
 
 
 import Masses from "./pages/admin/modules/production/masses/Masses";
@@ -51,11 +57,12 @@ import CreateCategory from "./pages/admin/modules/production/porductCategories/C
 import Sales from "./pages/admin/modules/sales/Sales";
 
 import Clients from "./pages/admin/modules/clients/Clients";
-
-import ClientEdit from "./pages/admin/modules/clients/ClientEdit";
+// import ClientCreate from "./pages/admin/modules/clients/ClientCreate";
+// import ClientEdit from "./pages/admin/modules/clients/ClientEdit";
 
 import Employees from "./pages/admin/modules/employees/Employees";
-import EmployeeEdit from "./pages/admin/modules/employees/EmployeeEdit";
+// import EmployeeCreate from "./pages/admin/modules/employees/EmployeeCreate";
+// import EmployeeEdit from "./pages/admin/modules/employees/EmployeeEdit";
 
 
 
@@ -130,17 +137,24 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
             <Route path='production-order-create' element={<ProductionOrderCreate />} />
             <Route path='production-order-update/:id' element={<ProductionOrderUpdate />} />
 
+            <Route path='request' element={<Request />} />
+            <Route path='request-create' element={<RequestCreate/>} />
+            {/* <Route path='request-update' element={<RequestUpdate />} /> */}  
+
+
+
+
 
             <Route path='devolutions' element={<Devolutions />} />
 
             {/* Dm */}
             <Route path='clients' element={<Clients />} />
-       
-            <Route path='clientEdit' element={<ClientEdit />} />
+            {/* <Route path='clientCreate' element={<ClientCreate />} /> */}
+            {/* <Route path='clientEdit' element={<ClientEdit />} /> */}
 
             <Route path='Employees' element={<Employees />} />
-   
-            <Route path='EmployeeEdit' element={<EmployeeEdit />} />
+            {/* <Route path='EmployeeCreate' element={<EmployeeCreate />} /> */}
+            {/* <Route path='EmployeeEdit' element={<EmployeeEdit />} /> */}
             
             <Route path='sales' element={<Sales />} />
             <Route path="sales-return/:id" element={<CreateReturn />} />

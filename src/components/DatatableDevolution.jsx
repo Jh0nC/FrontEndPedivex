@@ -5,7 +5,7 @@ function Datatables({ data }) {
     <div className="datatable-container border rounded-4 mx-auto my-3">
       <div className="datatable_header">
         <h2>{data.title}</h2>
-        <button>Agregar {data.module}</button>
+        {/* <button>Agregar {data.module}</button> */}
 
         <div className="input_search">
           <input type="search" placeholder="Buscar" />
@@ -40,9 +40,9 @@ function Datatables({ data }) {
       </table>
       <div className="datatable_footer d-flex justify-content-between align-items-center">
         <p>Total de filas: {data.content.length}</p>
-        <button className="btn btn-outline-success rounded-5">
+        {/* <button className="btn btn-outline-success rounded-5">
           Generar Excel
-        </button>
+        </button> */}
       </div>
     </div>
   );

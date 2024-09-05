@@ -65,7 +65,7 @@ function Datatable({ data }) {
               <td className='d-flex gap-2'>
                 {/* Botón de Ver Detalle */}
                 <Link to={`/admin/saleDetails/${item.id}`}>
-                  <button className='btn btn-info'>Ver Detalle</button>
+                  <button className='btn btn-info rounded-5 d-flex gap-2 align-items-center'>Ver Detalle</button>
                 </Link>
                 <Link to={`/admin/sales-return/${item.id}`}>
                   <button className='btn btn-danger'>Realizar Devolución</button>
@@ -97,7 +97,7 @@ function Datatable({ data }) {
             </button>
           ))}
         </div>
-
+{/* 
         <button className="btn btn-outline-success rounded-5">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -113,7 +113,7 @@ function Datatable({ data }) {
             />
           </svg>
           Generar Excel
-        </button>
+        </button> */}
       </div>
     </div>
   );

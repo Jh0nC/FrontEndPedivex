@@ -64,8 +64,8 @@ function Register() {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
 
-    // Validar campo
     let errorMessage = '';
+
     switch (name) {
       case 'username':
         errorMessage = validateUsername(value);
@@ -82,13 +82,13 @@ function Register() {
       default:
         break;
     }
+
     setErrors({ ...errors, [name]: errorMessage });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validaciones finales antes de enviar
     const usernameError = validateUsername(form.username);
     const emailError = validateEmail(form.email);
     const passwordError = validatePassword(form.password);
@@ -102,8 +102,31 @@ function Register() {
     });
 
     if (!usernameError && !emailError && !passwordError && !confirmPasswordError) {
-      // Aquí puedes enviar el formulario si no hay errores
-      console.log('Formulario enviado');
+      try {
+        const response = await fetch('http://localhost:', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: form.username,
+            mail: form.email,
+            password: form.password,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error('Error al registrarse:', errorData.error);
+          return;
+        }
+
+        const data = await response.json();
+        console.log('Usuario registrado:', data);
+        // Redireccionar o informar al usuario sobre el éxito
+      } catch (error) {
+        console.error('Error en la solicitud:', error);
+      }
     }
   };
 
@@ -112,7 +135,7 @@ function Register() {
       <div className="register-box">
         <h2 className="register-title">Regístrate</h2>
         <p className="register-subtitle">Crea tu cuenta</p>
-        
+
         <form onSubmit={handleSubmit}>
           <div className="input-container">
             <i className="fas fa-user"></i>
@@ -126,7 +149,7 @@ function Register() {
             />
             {errors.username && <span className="error-message">{errors.username}</span>}
           </div>
-          
+
           <div className="input-container">
             <i className="fas fa-envelope"></i>
             <input
@@ -139,7 +162,7 @@ function Register() {
             />
             {errors.email && <span className="error-message">{errors.email}</span>}
           </div>
-          
+
           <div className="input-container">
             <i className="fas fa-lock"></i>
             <input
@@ -152,7 +175,7 @@ function Register() {
             />
             {errors.password && <span className="error-message">{errors.password}</span>}
           </div>
-          
+
           <div className="input-container">
             <i className="fas fa-lock"></i>
             <input
@@ -165,7 +188,7 @@ function Register() {
             />
             {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
           </div>
-          
+
           <button type="submit" className="register-button">Crear Cuenta</button>
         </form>
 
