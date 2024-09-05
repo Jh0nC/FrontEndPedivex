@@ -30,6 +30,7 @@ function Login() {
     setForm({ ...form, [name]: value });
 
     let errorMessage = '';
+
     if (name === 'email') {
       errorMessage = validateEmail(value);
     }
@@ -37,7 +38,7 @@ function Login() {
     setErrors({ ...errors, [name]: errorMessage });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const emailError = validateEmail(form.email);
@@ -48,7 +49,31 @@ function Login() {
     });
 
     if (!emailError && form.password) {
-      console.log('Formulario enviado');
+      try {
+        const response = await fetch('http://localhost:3000/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            mail: form.email,
+            password: form.password,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          setErrors({ ...errors, email: errorData.error || 'Credenciales incorrectas.' });
+          return;
+        }
+
+        const data = await response.json();
+        localStorage.setItem('token', data.token); // Guarda el token en localStorage
+        console.log('Login exitoso:', data);
+        // Redireccionar o hacer otra acción después del login
+      } catch (error) {
+        console.error('Error en la solicitud:', error);
+      }
     }
   };
 
@@ -90,6 +115,7 @@ function Login() {
             <a href="/PasswordRecovery" className="login-link">¿Olvidaste tu contraseña?</a>
           </form>
         </div>
+
         <div className="login-right">
           <h2 className="login-title">¡Regístrate ahora!</h2>
           <p className="login-subtitle">Únete a nosotros y disfruta de todos los beneficios al registrarte.</p>
@@ -100,6 +126,6 @@ function Login() {
       </div>
     </div>
   );
-}
+}     
 
 export default Login;

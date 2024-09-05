@@ -1,7 +1,9 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import Swal from 'sweetalert2';
 
 function roleEdit() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [formData, setFormData] = useState({
     role: ''
@@ -107,10 +109,22 @@ function roleEdit() {
 
       setSuccess('Rol y permisos actualizados con éxito');
       setError(null);
+      Swal.fire({
+        icon: 'success',
+        title: 'Éxito',
+        text: 'Rol actualizado con éxito.',
+      }).then(() => {
+        navigate('/admin/roles'); // Redireccionar después de hacer clic en "OK"
+      });
       console.log('Response:', result);
     } catch (err) {
       setError(err.message);
       setSuccess(null);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un problema al editar el rol.',
+      });
     }
   };
 

@@ -1,7 +1,9 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import Swal from 'sweetalert2';
 
 function userCreate() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     mail: '',
     password: '',
@@ -10,7 +12,7 @@ function userCreate() {
     document: '',
     address: '',
     phoneNumber: '',
-    idRole: '' // Asegúrate de que sea "idRole"
+    idRole: ''
   });
 
   const [roles, setRoles] = useState([]);
@@ -68,10 +70,25 @@ function userCreate() {
       setSuccess('Usuario creado con éxito');
       setError(null);
       setFormData({ mail: '', password: '', firstName: '', lastName: '', document: '', address: '', phoneNumber: '', idRole: '' }); // Limpiar formulario
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Éxito',
+        text: 'Usuario creado con éxito.',
+      }).then(() => {
+        navigate('/admin/users'); // Redireccionar después de hacer clic en "OK"
+      });
+
       console.log('Response:', result);
     } catch (err) {
       setError(err.message);
       setSuccess(null);
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un problema al crear el usuario.',
+      });
     }
   };
 
