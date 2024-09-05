@@ -34,9 +34,15 @@ import UsersEdit from "./pages/admin/modules/users/user/userEdit";
 
 import Devolutions from "./pages/admin/modules/sales/Devolutions";
 
+
 import ProductionOrder from "./pages/admin/modules/production/ProductionOrders/ProductionOrder"
 import ProductionOrderCreate from "./pages/admin/modules/production/ProductionOrders/ProductionOrderCreate";
 import ProductionOrderUpdate from "./pages/admin/modules/production/ProductionOrders/ProductionOrderUpdate";
+
+import Request  from "./pages/admin/modules/sales/requests/Request";
+import RequestCreate  from "./pages/admin/modules/sales/requests/RequestCreate";
+//import RequestUpdate  from "./pages/admin/modules/sales/requests/RequestUpdate";
+
 
 
 import Masses from "./pages/admin/modules/production/masses/Masses";
@@ -130,6 +136,13 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
             <Route path='productionOrder' element={<ProductionOrder />} />
             <Route path='production-order-create' element={<ProductionOrderCreate />} />
             <Route path='production-order-update/:id' element={<ProductionOrderUpdate />} />
+
+            <Route path='request' element={<Request />} />
+            <Route path='request-create' element={<RequestCreate/>} />
+            {/* <Route path='request-update' element={<RequestUpdate />} /> */}  
+
+
+
 
 
             <Route path='devolutions' element={<Devolutions />} />

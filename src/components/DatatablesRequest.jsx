@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import "../../public/css/datatableStyles.css";
 import { Link } from "react-router-dom";
-import ProductionOrderDetailsModal from "../pages/admin/modules/production/ProductionOrders/ProductionOrderDetail";
+import RequestDetailsModal from "../pages/admin/modules/sales/requests/RequestDetail";
 
 function Datatables({ data }) {
   const [showModal, setShowModal] = useState(false);
   const [selectedDetails, setSelectedDetails] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5); // Mostrar 5 registros por página
+  const [itemsPerPage] = useState(5);
 
   const handleDetailsClick = (item) => {
-    console.log("Detalles clickeados:", item); // Verifica si el botón está llamando a esta función
+    console.log("Detalles clickeados:", item);
     setSelectedDetails(item);
     setShowModal(true);
   };
@@ -33,14 +33,12 @@ function Datatables({ data }) {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Función para exportar los datos a un archivo Excel
   const exportToExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(filteredData);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Ordenes de Producción");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Pedidos");
 
-    // Generar un archivo Excel
-    XLSX.writeFile(workbook, "ProductionOrders_list.xlsx");
+    XLSX.writeFile(workbook, "Request_list.xlsx");
   };
 
   return (
@@ -48,7 +46,7 @@ function Datatables({ data }) {
       <div className="datatable_header">
         <h2>{data.title}</h2>
         <Link
-          to="/admin/production-order-create"
+          to="/admin/request-create"
           className="btn btn-success rounded-5 d-flex gap-2 align-items-center"
         >
           Agregar {data.module}
@@ -83,12 +81,13 @@ function Datatables({ data }) {
       <table className="datatable">
         <thead>
           <tr>
-            {data.colNames &&
-              data.colNames.map((col, index) => (
-                <th key={index}>
-                  {col} <i className="bi bi-chevron-expand"></i>
-                </th>
-              ))}
+            <th>ID</th>
+            <th>Fecha Creación</th>
+            <th>Usuario</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Fecha Límite</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -96,11 +95,11 @@ function Datatables({ data }) {
             currentItems.map((item, index) => (
               <tr key={index}>
                 <td>{item.id}</td>
-                <td>{item.date}</td>
-                <td>{item.notes}</td>
+                <td>{item.creationDate}</td>
                 <td>{item.idUser}</td>
+                <td>{item.total}</td>
                 <td>{item.state}</td>
-                <td>{item.targetDate}</td>
+                <td>{item.deadLine}</td>
                 <td>
                   <button
                     className="btn btn-secondary me-2"
@@ -108,7 +107,7 @@ function Datatables({ data }) {
                   >
                     Detalles
                   </button>
-                  <Link to={`/admin/production-order-update/${item.id}`}>
+                  <Link to={`/admin/request-update/${item.id}`}>
                     <button className="btn btn-warning me-2">Editar</button>
                   </Link>
                 </td>
@@ -151,7 +150,7 @@ function Datatables({ data }) {
       </div>
 
       {showModal && (
-        <ProductionOrderDetailsModal
+        <RequestDetailsModal
           show={showModal}
           onClose={handleCloseModal}
           details={selectedDetails}
