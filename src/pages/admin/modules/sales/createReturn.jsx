@@ -48,6 +48,16 @@ const CreateReturn = () => {
 
   const handleReturnItemChange = (index, field, value) => {
     const updatedItems = [...returnItems];
+
+    if (field === 'quantity') {
+      const productId = updatedItems[index].productId;
+      const saleDetail = saleDetails.saleDetails.find(detail => detail.product.id === productId);
+      if (saleDetail && value > saleDetail.amount) {
+        Swal.fire('Error', `La cantidad no puede ser mayor a la cantidad vendida (${saleDetail.amount})`, 'error');
+        return;
+      }
+    }
+
     updatedItems[index][field] = value;
     setReturnItems(updatedItems);
   };
@@ -66,10 +76,44 @@ const CreateReturn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aquí iría la lógica para enviar los datos de devolución al servidor
-    console.log("Datos de devolución:", returnItems);
-    Swal.fire('Éxito', 'Devolución procesada correctamente', 'success');
-    navigate('/admin/sales');
+
+    const payload = {
+      idSale: saleDetails.id,
+      date: new Date().toISOString(),
+      state: 1, // Estado predeterminado
+      details: returnItems.map(item => ({
+        idProduct: item.productId,
+        quantity: item.quantity,
+        idMotive: item.motiveId,
+        changedProduct: item.exchangeProducts.length > 0 ? item.exchangeProducts[0].productId : null, // Producto cambiado
+        changedQuantity: item.exchangeProducts.length > 0 ? item.exchangeProducts[0].quantity : null, // Cantidad cambiada
+        exchangeProducts: item.exchangeProducts.map(exchange => ({
+          idProduct: exchange.productId,
+          quantity: exchange.quantity
+        }))
+      }))
+    };
+
+    try {
+      const response = await fetch('http://localhost:3000/devolution', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        Swal.fire('Éxito', 'Devolución procesada correctamente', 'success');
+        navigate('/admin/sales');
+      } else {
+        const errorData = await response.json();
+        Swal.fire('Error', errorData.message || 'Error al procesar la devolución', 'error');
+      }
+    } catch (error) {
+      Swal.fire('Error', 'No se pudo procesar la devolución', 'error');
+      console.error("Error:", error);
+    }
   };
 
   if (!saleDetails) return <div>Cargando...</div>;
