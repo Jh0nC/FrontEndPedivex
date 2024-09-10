@@ -12,6 +12,7 @@ function userCreate() {
     document: '',
     address: '',
     phoneNumber: '',
+    state: 1,
     idRole: ''
   });
 
@@ -94,121 +95,131 @@ function userCreate() {
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <h2 className='mx-3'>Crear Nuevo Usuario</h2>
-      <form onSubmit={handleSubmit}>
-        <div className='m-3'>
-          <label htmlFor="email" className="form-label">Correo:</label>
-          <input
-            id="email"
-            className='form-control'
-            type="email"
-            name="mail"
-            value={formData.mail}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className='m-3'>
-          <label htmlFor="password" className="form-label">Contraseña</label>
-          <input
-            id="password"
-            aria-describedby="emailHelp"
-            className='form-control'
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className='m-3'>
-          <label htmlFor="firstName" className="form-label">Nombre</label>
-          <input
-            id="firstName"
-            aria-describedby="emailHelp"
-            className='form-control'
-            type="text"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className='m-3'>
-          <label htmlFor="lastName" className="form-label">Apellido</label>
-          <input
-            id="lastName"
-            aria-describedby="emailHelp"
-            className='form-control'
-            type="text"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className='m-3'>
-          <label htmlFor="document" className="form-label">Documento</label>
-          <input
-            id="document"
-            aria-describedby="emailHelp"
-            className='form-control'
-            type="text"
-            name="document"
-            value={formData.document}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className='m-3'>
-          <label htmlFor="address" className="form-label">Dirección</label>
-          <input
-            id="address"
-            aria-describedby="emailHelp"
-            className='form-control'
-            type="text"
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className='m-3'>
-          <label htmlFor="phoneNumber" className="form-label">Teléfono</label>
-          <input
-            id="phoneNumber"
-            aria-describedby="emailHelp"
-            className='form-control'
-            type="text"
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className='m-3'>
-          <label htmlFor="role" className="form-label">Rol:</label>
-          <select
-            id="role"
-            className='form-control'
-            name="idRole" // Cambiado a "idRole" para que coincida con el estado
-            value={formData.idRole}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Seleccione un rol</option>
-            {roles.map((role) => (
-              <option key={role.id} value={role.id}>
-                {role.role}
-              </option>
-            ))}
-          </select>
-        </div>
-        <button type="submit" className='btn btn-success rounded-5 m-3'>Registrar</button>
-        <Link to={"/admin/users"} className='btn btn-secondary rounded-5'>Regresar</Link>
-      </form>
-      {success && <p className="text-success m-3">{success}</p>}
-      {error && <p className="text-danger m-3">{error}</p>}
+      <div className="mass-form-container border rounded-4 mx-auto my-3 p-3">
+        <h2 className='mx-3'>Crear Nuevo Usuario</h2>
+        <form onSubmit={handleSubmit} className='mt-3'>
+          <div className="row mb-3">
+            <div className='col-sm'>
+              <label htmlFor="email" className="form-label">Correo:</label>
+              <input
+                id="email"
+                className='form-control'
+                type="email"
+                name="mail"
+                value={formData.mail}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className='col-sm'>
+              <label htmlFor="password" className="form-label">Contraseña</label>
+              <input
+                id="password"
+                aria-describedby="emailHelp"
+                className='form-control'
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+          <div className="row mb-3">
+            <div className='col-sm'>
+              <label htmlFor="firstName" className="form-label">Nombre</label>
+              <input
+                id="firstName"
+                aria-describedby="emailHelp"
+                className='form-control'
+                type="text"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className='col-sm'>
+              <label htmlFor="lastName" className="form-label">Apellido</label>
+              <input
+                id="lastName"
+                aria-describedby="emailHelp"
+                className='form-control'
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+          <div className="row mb-3">
+            <div className='col-sm'>
+              <label htmlFor="document" className="form-label">Documento</label>
+              <input
+                id="document"
+                aria-describedby="emailHelp"
+                className='form-control'
+                type="text"
+                name="document"
+                value={formData.document}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className='col-sm'>
+              <label htmlFor="address" className="form-label">Dirección</label>
+              <input
+                id="address"
+                aria-describedby="emailHelp"
+                className='form-control'
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+          <div className="row mb-3">
+            <div className='col-sm'>
+              <label htmlFor="phoneNumber" className="form-label">Teléfono</label>
+              <input
+                id="phoneNumber"
+                aria-describedby="emailHelp"
+                className='form-control'
+                type="text"
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className='col-sm'>
+              <label htmlFor="role" className="form-label">Rol:</label>
+              <select
+                id="role"
+                className='form-control'
+                name="idRole" // Cambiado a "idRole" para que coincida con el estado
+                value={formData.idRole}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Seleccione un rol</option>
+                {roles.map((role) => (
+                  <option key={role.id} value={role.id}>
+                    {role.role}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="d-flex justify-content-end gap-2">
+            <Link to={"/admin/users"} className='btn btn-secondary rounded-5'>Regresar</Link>
+            <button type="submit" className='btn btn-success rounded-5'>Registrar</button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
