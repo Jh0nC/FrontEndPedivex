@@ -5,7 +5,8 @@ import Swal from 'sweetalert2';
 function roleCreate() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    role: ''
+    role: '',
+    state: 1
   });
 
   const [permissions, setPermissions] = useState([]); // Estado para almacenar los permisos obtenidos de la API
@@ -107,45 +108,49 @@ function roleCreate() {
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <h2 className='mx-3'>Crear Nuevo Rol</h2>
-      <form onSubmit={handleSubmit}>
-        <div className='m-3'>
-          <label htmlFor="exampleInputEmail1" className="form-label">Rol:</label>
-          <input
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
-            className='form-control'
-            type="text"
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className='m-3'>
-          <p>Permisos:</p>
-          {permissions.map((permission) => (
-            <div key={permission.id}>
+      <div className="mass-form-container border rounded-4 mx-auto my-3 p-3">
+        <h2 className='mx-3'>Crear Nuevo Rol</h2>
+        <form onSubmit={handleSubmit} className='mt-3'>
+          <div className='row mb-3'>
+            <div className="col-sm">
+              <label htmlFor="exampleInputEmail1" className="form-label">Rol:</label>
               <input
-                id={permission.permission}
-                className='btn-check'
-                name="permission"
-                value={permission.id}
-                onChange={handlePermissionChange}
-                type='checkbox'
-                autoComplete='off'
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                className='form-control'
+                type="text"
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                required
               />
-              <label htmlFor={permission.permission} className="btn btn-outline-success rounded-5 mt-1">
-                {permission.permission}
-              </label>
             </div>
-          ))}
-        </div>
-        <button type="submit" className='btn btn-success rounded-5 m-3'>Registrar</button>
-        <Link to={"/admin/roles"} className='btn btn-secondary rounded-5'>Regresar</Link>
-      </form>
-      {/* {success && <p className="text-success m-3">{success}</p>} */}
-      {/* {error && <p className="text-danger m-3">{error}</p>} */}
+          </div>
+          <div className='m-3'>
+            <p>Permisos:</p>
+            {permissions.map((permission) => (
+              <div key={permission.id}>
+                <input
+                  id={permission.permission}
+                  className='btn-check'
+                  name="permission"
+                  value={permission.id}
+                  onChange={handlePermissionChange}
+                  type='checkbox'
+                  autoComplete='off'
+                />
+                <label htmlFor={permission.permission} className="btn btn-outline-success rounded-5 mt-1">
+                  {permission.permission}
+                </label>
+              </div>
+            ))}
+          </div>
+          <div className="d-flex justify-content-end gap-2">
+            <Link to={"/admin/roles"} className='btn btn-secondary rounded-5'>Regresar</Link>
+            <button type="submit" className='btn btn-success rounded-5'>Registrar</button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
