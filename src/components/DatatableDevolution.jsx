@@ -29,7 +29,6 @@ function Datatables({ data }) {
               <td>{item.idSale}</td>
               <td>{item.date}</td>
               <td>{item.state}</td>
-              <td>{item.motiveDevolution.name}</td>
               <td className='d-flex gap-2'>
                 <button className='btn btn-warning'>Editar</button>
                 <button className='btn btn-outline-danger'>Ver Detalle</button>
