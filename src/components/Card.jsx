@@ -1,13 +1,17 @@
+import { useEffect, useState } from "react";
 import dummyImg from "../../public/assets/1140x696.jpg";
 import { useNavigate } from "react-router-dom";
 
 function Card({ data }) {
+  const [datasheetDetails, setDatasheetDetails] = useState(data.datasheet.datasheetDetails || []);
+
   const {
-    id, name, stock, price, state, productCategory,
-    datasheet: { mass }
+    id, name, stock, price, state, productCategory, datasheet: { mass }
   } = data;
 
   console.log(data);
+
+  let datasheetDetailIndex = 1;
 
   const navigate = useNavigate();
 
@@ -40,9 +44,11 @@ function Card({ data }) {
             <b>Estado: </b>
             {state === 1 ? (
               <span className="badge opacity-50 text-bg-success text-uppercase">activo</span>
-            ) : (
-              <span className="badge opacity-50 text-bg-danger text-uppercase">inactivo</span>
-            )}
+            ) : state === 2 ? (
+              <span className="badge opacity-50 text-bg-secondary text-uppercase">inactivo</span>
+            ) : state === 5 ? (
+              <span className="badge opacity-50 text-bg-danger text-uppercase">agotado</span>
+            ): (<></>)}
           </p>
         </div>
         <div className="card-footer d-flex justify-content-between">
@@ -61,7 +67,7 @@ function Card({ data }) {
             onClick={handleEditClick}
           >
             Editar
-            <i className="bi bi-pencil-square"></i>   
+            <i className="bi bi-pencil-square"></i>
           </button>
         </div>
       </div>
@@ -98,17 +104,34 @@ function Card({ data }) {
                   <p>
                     <b>Moje: </b> {mass.id}
                   </p>
-                  <p>
-                    <b>Cantidad total: </b> {mass.massDetails.reduce((total, item) => total + item.amount, 0)}
-                  </p>
-                  <p>
-                    <b>Unidad: </b> {mass.massDetails[0].unit}
-                  </p>
                 </div>
               </div>
-              <hr className="mx-3"/>
-              <div className="row">
-
+              <hr className="mx-3" />
+              <div className="row p-4">
+                <table className="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Insumo</th>
+                      <th>Cantidad</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {datasheetDetails.length > 0 ? (
+                      datasheetDetails.map((detail) => (
+                        <tr key={detail.id}>
+                          <td>{datasheetDetailIndex++}</td>
+                          <td className="text-capitalize">{detail.supply.name}</td>
+                          <td>{detail.amount + ' ' + detail.unit}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="3" className="text-center">No hay detalles disponibles</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
               </div>
             </div>
             <div className="modal-footer">
@@ -124,6 +147,7 @@ function Card({ data }) {
 }
 
 export default Card;
+
 
 
 

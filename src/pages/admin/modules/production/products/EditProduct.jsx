@@ -3,15 +3,13 @@ import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
 
 function EditProduct() {
-  const { id } = useParams(); // Para obtener el ID del producto a editar
+  const { id } = useParams(); 
   const [categories, setCategories] = useState([]);
   const [masses, setMasses] = useState([]);
   const [supplies, setSupplies] = useState([]);
   const [details, setDetails] = useState([{ idSupplie: "", amount: "", unit: "gr" }]);
-
-  // para rellenar
-  const [stock, setStock] = useState([]);
-
+  
+  // Estado del producto
   const [product, setProduct] = useState({
     idCategorie: "",
     name: "",
@@ -19,6 +17,7 @@ function EditProduct() {
     idMass: "",
     stock: 0,
     image: "",
+    state: 1, 
     datasheet: { idMass: "", details: [] },
   });
 
@@ -34,7 +33,7 @@ function EditProduct() {
           idSupplie: detail.idSupplie,
           amount: detail.amount,
           unit: detail.unit,
-          name: detail.supply.name, // El nombre del insumo
+          name: detail.supply.name, 
         }));
         setDetails(mappedDetails);
       });
@@ -80,15 +79,16 @@ function EditProduct() {
       ...product,
       datasheet: {
         idMass: product.idMass,
-        details: details.map((detail) => ({
+        details: [details.map((detail) => ({
           idSupplie: detail.idSupplie,
           amount: detail.amount,
           unit: detail.unit,
-        })),
+        }))],
       },
     };
 
     try {
+      console.log(updatedProduct);
       const response = await fetch(`http://localhost:3000/product/${id}`, {
         method: "PUT",
         headers: {
@@ -188,9 +188,7 @@ function EditProduct() {
 
           <div className="row mb-3">
             <div className="col-sm">
-              <label htmlFor="stock" className="form-label">
-                Stock
-              </label>
+              <label htmlFor="stock" className="form-label">Stock</label>
               <input
                 type="number"
                 className="form-control"
@@ -202,20 +200,46 @@ function EditProduct() {
               />
             </div>
             <div className="col-sm">
-              <label htmlFor="" className="form-label">
-                Estado
-              </label>
+              <label htmlFor="state" className="form-label">Estado</label>
               <div className="d-flex w-100 h-50 align-items-center justify-content-center gap-5">
                 <div className="form-check">
-                  <input className="form-check-input" type="radio" name="status" id="active" />
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="state"
+                    id="active"
+                    checked={product.state === 1}
+                    onChange={() => setProduct({ ...product, state: 1 })}
+                  />
                   <label className="form-check-label" htmlFor="active">
                     Activo
                   </label>
                 </div>
                 <div className="form-check">
-                  <input className="form-check-input" type="radio" name="status" id="inactive" />
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="state"
+                    id="inactive"
+                    checked={product.state === 0}
+                    onChange={() => setProduct({ ...product, state: 2 })}
+                  />
                   <label className="form-check-label" htmlFor="inactive">
                     Inactivo
+                  </label>
+                </div>
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="state"
+                    id="inactive"
+                    checked={product.state === 0}
+                    onChange={() => setProduct({ ...product, state: 5 })}
+                    disabled
+                  />
+                  <label className="form-check-label" htmlFor="inactive">
+                    Agotado
                   </label>
                 </div>
               </div>
@@ -243,35 +267,38 @@ function EditProduct() {
                 <input
                   type="number"
                   className="form-control"
-                  placeholder="Cantidad"
                   value={detail.amount}
                   onChange={(e) => handleDetailChange(index, "amount", e.target.value)}
+                  placeholder="Cantidad"
                   required
                 />
                 <select
                   className="form-control"
                   value={detail.unit}
                   onChange={(e) => handleDetailChange(index, "unit", e.target.value)}
-                  required
                 >
-                  <option value="gr">Gramos</option>
-                  <option value="ml">Mililitros</option>
-                  <option value="lb">Libras</option>
+                  <option value="gr">gr</option>
+                  <option value="kg">kg</option>
+                  <option value="ml">ml</option>
+                  <option value="L">L</option>
                 </select>
                 <button
                   type="button"
-                  className="btn btn-secondary rounded-4"
+                  className="btn btn-secondary  rounded-4"
                   onClick={() => handleRemoveDetail(index)}
                 >
                   <i className="bi bi-dash"></i>
                 </button>
               </div>
             ))}
-            <button type="button" className="btn btn-info rounded-4" onClick={handleAddDetail}>
+            <button
+              type="button"
+              className="btn btn-info  rounded-4"
+              onClick={handleAddDetail}
+            >
               <i className="bi bi-plus-lg"></i>
             </button>
           </div>
-
           <div className="d-flex justify-content-end gap-2">
             <button
               type="button"

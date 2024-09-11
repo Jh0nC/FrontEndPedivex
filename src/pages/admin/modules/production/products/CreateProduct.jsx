@@ -83,7 +83,7 @@ function CreateProducts() {
           icon: "success",
           confirmButtonText: "Ok",
         }).then(() => {
-          navigate("admin/products");
+          navigate("/admin/products");
         });
       } else {
         throw new Error("Error al crear el producto");
