@@ -21,13 +21,15 @@ function Supplies() {
     fetchDatos();
   }, []);
 
-  // Función para cambiar el estado del insumo a '2'
-  const handleStateChange = async (id) => {
+  // Función para cambiar el estado del insumo entre 1 y 2
+  const handleStateChange = async (id, currentState) => {
+    const newState = currentState === 1 ? 2 : 1; // Cambia entre 1 y 2
+
     try {
       const response = await fetch(`http://localhost:3000/supplie/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ state: 2 })
+        body: JSON.stringify({ state: newState })
       });
       if (!response.ok) {
         throw new Error('Error al cambiar el estado');
@@ -35,7 +37,7 @@ function Supplies() {
 
       // Actualiza el estado en la tabla después de la petición exitosa
       setDatos(prevDatos => prevDatos.map(item => (
-        item.id === id ? { ...item, state: 2 } : item
+        item.id === id ? { ...item, state: newState } : item
       )));
     } catch (error) {
       console.error("Error al cambiar el estado del insumo:", error);
@@ -48,7 +50,7 @@ function Supplies() {
     colNames: ["Id", "Nombre", "Stock", "Unidad", "Estado", "Acciones"],
     content: datos.map(item => ({
       ...item,
-      handleStateChange: () => handleStateChange(item.id) // Añade la función para cada insumo
+      handleStateChange: () => handleStateChange(item.id, item.state) // Pasa el estado actual
     }))
   };
 
