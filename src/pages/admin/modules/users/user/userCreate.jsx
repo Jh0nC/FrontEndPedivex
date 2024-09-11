@@ -1,21 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 
-function userCreate() {
+function UserCreate() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    mail: '',
-    password: '',
-    firstName: '',
-    lastName: '',
-    document: '',
-    address: '',
-    phoneNumber: '',
-    state: 1,
-    idRole: ''
-  });
-
+  const { register, formState: { errors }, handleSubmit, reset } = useForm();
   const [roles, setRoles] = useState([]);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -38,20 +28,11 @@ function userCreate() {
     fetchRoles(); // Llamar a la función cuando el componente se monta
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
+  const onSubmit = async (data) => {
     const formDataToSend = {
-      ...formData,
-      idRole: parseInt(formData.idRole, 10) // Asegúrate de que "idRole" sea un número
+      ...data,
+      state: 1,
+      idRole: parseInt(data.idRole, 10) // Asegúrate de que "idRole" sea un número
     };
 
     try {
@@ -70,7 +51,6 @@ function userCreate() {
       const result = await response.json();
       setSuccess('Usuario creado con éxito');
       setError(null);
-      setFormData({ mail: '', password: '', firstName: '', lastName: '', document: '', address: '', phoneNumber: '', idRole: '' }); // Limpiar formulario
 
       Swal.fire({
         icon: 'success',
@@ -97,7 +77,7 @@ function userCreate() {
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
       <div className="mass-form-container border rounded-4 mx-auto my-3 p-3">
         <h2 className='mx-3'>Crear Nuevo Usuario</h2>
-        <form onSubmit={handleSubmit} className='mt-3'>
+        <form onSubmit={handleSubmit(onSubmit)} className='mt-3'>
           <div className="row mb-3">
             <div className='col-sm'>
               <label htmlFor="email" className="form-label">Correo:</label>
@@ -105,24 +85,29 @@ function userCreate() {
                 id="email"
                 className='form-control'
                 type="email"
-                name="mail"
-                value={formData.mail}
-                onChange={handleChange}
-                required
+                {...register("mail", { required: true, pattern:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ })}
               />
+              {errors.mail?.type==='required' && (
+                <div className="alert alert-danger p-1 col mt-2">Este campo es obligatorio</div>
+              )}
+              {errors.mail?.type==='pattern' && (
+                <div className="alert alert-danger p-1 col mt-2">Introduzca un correo electronico valido</div>
+              )}
             </div>
             <div className='col-sm'>
               <label htmlFor="password" className="form-label">Contraseña</label>
               <input
                 id="password"
-                aria-describedby="emailHelp"
                 className='form-control'
                 type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                required
+                {...register('password', { required: true, pattern:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/  })}
               />
+              {errors.password?.type==='required' && (
+                <div className="alert alert-danger p-1 col mt-2">Este campo es obligatorio</div>
+              )}
+              {errors.password?.type==='pattern' && (
+                <div className="alert alert-danger p-1 col mt-2">La contraseña debe tener mínimo 8 caracteres, un número y un carácter especial</div>
+              )}
             </div>
           </div>
           <div className="row mb-3">
@@ -130,27 +115,25 @@ function userCreate() {
               <label htmlFor="firstName" className="form-label">Nombre</label>
               <input
                 id="firstName"
-                aria-describedby="emailHelp"
                 className='form-control'
                 type="text"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                required
+                {...register('firstName', { required: true })}
               />
+              {errors.firstName?.type==='required' && (
+                <div className="alert alert-danger p-1 col mt-2">Este campo es obligatorio</div>
+              )}
             </div>
             <div className='col-sm'>
               <label htmlFor="lastName" className="form-label">Apellido</label>
               <input
                 id="lastName"
-                aria-describedby="emailHelp"
                 className='form-control'
                 type="text"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                required
+                {...register('lastName', { required: true })}
               />
+              {errors.lastName?.type==='required' && (
+                <div className="alert alert-danger p-1 col mt-2">Este campo es obligatorio</div>
+              )}
             </div>
           </div>
           <div className="row mb-3">
@@ -158,27 +141,31 @@ function userCreate() {
               <label htmlFor="document" className="form-label">Documento</label>
               <input
                 id="document"
-                aria-describedby="emailHelp"
                 className='form-control'
                 type="text"
-                name="document"
-                value={formData.document}
-                onChange={handleChange}
-                required
+                {...register('document', { required: true, minLength:8, maxLength:11 })}
               />
+              {errors.document?.type==='required' && (
+                <div className="alert alert-danger p-1 col mt-2">Este campo es obligatorio</div>
+              )}
+              {errors.document?.type==='minLength' && (
+                <div className="alert alert-danger p-1 col mt-2">El documento debe tener mínimo 8 números</div>
+              )}
+              {errors.document?.type==='maxLength' && (
+                <div className="alert alert-danger p-1 col mt-2">El documento debe tener máximo 11 números</div>
+              )}
             </div>
             <div className='col-sm'>
               <label htmlFor="address" className="form-label">Dirección</label>
               <input
                 id="address"
-                aria-describedby="emailHelp"
                 className='form-control'
                 type="text"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                required
+                {...register('address', { required: true })}
               />
+              {errors.address?.type==='required' && (
+                <div className="alert alert-danger p-1 col mt-2">Este campo es obligatorio</div>
+              )}
             </div>
           </div>
           <div className="row mb-3">
@@ -186,24 +173,26 @@ function userCreate() {
               <label htmlFor="phoneNumber" className="form-label">Teléfono</label>
               <input
                 id="phoneNumber"
-                aria-describedby="emailHelp"
                 className='form-control'
                 type="text"
-                name="phoneNumber"
-                value={formData.phoneNumber}
-                onChange={handleChange}
-                required
+                {...register('phoneNumber', { required: true, minLength:7, maxLength:10 })}
               />
+              {errors.phoneNumber?.type==='required' && (
+                <div className="alert alert-danger p-1 col mt-2">Este campo es obligatorio</div>
+              )}
+              {errors.phoneNumber?.type==='minLength' && (
+                <div className="alert alert-danger p-1 col mt-2">El teléfono debe tener mínimo 7 números</div>
+              )}
+              {errors.phoneNumber?.type==='maxLength' && (
+                <div className="alert alert-danger p-1 col mt-2">El teléfono debe tener máximo 10 números</div>
+              )}
             </div>
             <div className='col-sm'>
               <label htmlFor="role" className="form-label">Rol:</label>
               <select
                 id="role"
                 className='form-control'
-                name="idRole" // Cambiado a "idRole" para que coincida con el estado
-                value={formData.idRole}
-                onChange={handleChange}
-                required
+                {...register('idRole', { required: true })}
               >
                 <option value="">Seleccione un rol</option>
                 {roles.map((role) => (
@@ -212,6 +201,9 @@ function userCreate() {
                   </option>
                 ))}
               </select>
+              {errors.idRole?.type==='required' && (
+                <div className="alert alert-danger p-1 col mt-2">Este campo es obligatorio</div>
+              )}
             </div>
           </div>
           <div className="d-flex justify-content-end gap-2">
@@ -224,4 +216,4 @@ function userCreate() {
   );
 }
 
-export default userCreate;
+export default UserCreate;
