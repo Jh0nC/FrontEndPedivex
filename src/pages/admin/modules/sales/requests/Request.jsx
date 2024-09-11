@@ -1,13 +1,13 @@
-import Datatable from "../../../../../components/DatatableProductionOrder";
+import Datatable from "../../../../../components/DatatablesRequest"; // Adaptado para pedidos
 import React, { useState, useEffect } from 'react';
 
-function ProductionOrder() {
+function Request() {
   const [datos, setDatos] = useState([]);
 
   useEffect(() => {
     const fetchDatos = async () => {
       try {
-        const response = await fetch("http://localhost:3000/productionOrder"); // Cambiar de puerto en caso de ser necesario
+        const response = await fetch("http://localhost:3000/request"); // URL de la API para pedidos
         if (!response.ok) {
           throw new Error("Network response was not ok " + response.statusText);
         }
@@ -22,14 +22,15 @@ function ProductionOrder() {
   }, []);
 
   const data = {
-    module: "OrdenProduccion",
-    title: "Ordenes de Producción",
-    colNames: ["Id", "Fecha", "Notas", "Empleado", "Estado", "Fecha Entrega", "Acciones"],
+    module: "Pedidos",
+    title: "Gestión de Pedidos",
+    colNames: ["Id", "Fecha Creación", "Usuario", "Total", "Estado", "Fecha Límite", "Acciones"],
     content: datos.map(item => ({
       ...item,
-      date: item.date.split('T')[0]
+      date: item.date ? item.date.split('T')[0] : "Fecha no disponible"
     }))
   };
+  
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
@@ -38,4 +39,4 @@ function ProductionOrder() {
   );
 }
 
-export default ProductionOrder;
+export default Request;

@@ -15,8 +15,55 @@ function Datatables({ data }) {
           <input type="search" placeholder="Buscar" />
           <i className="bi bi-search" id="search"></i>
         </div>
+<<<<<<< HEAD
 
         <button className="btn btn-success rounded-5">
+=======
+      </div>
+      <table className="datatable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Correo Electrónico</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Documento</th>
+            <th>Dirección</th>
+            <th>Teléfono</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.length > 0 ? (
+            data.map((item, index) => (
+              <tr key={index}>
+                <td>{item.id}</td>
+                <td>{item.mail}</td>
+                <td>{item.firstName}</td>
+                <td>{item.lastName}</td>
+                <td>{item.document}</td>
+                <td>{item.address}</td>
+                <td>{item.phoneNumber}</td>
+                <td className="d-flex gap-2">
+                  <Link className="btn btn-warning rounded-5" to={`edit/${item.id}`}>
+                    Editar
+                    <i className="bi bi-pencil-square"></i>
+                  </Link>
+                  
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              
+            </tr>
+          )}
+        </tbody>
+      </table>
+      <div className="datatable_fotter d-flex justify-content-between align-items-center">
+        <p>Total de filas: {data.length}</p>
+        <button className="btn btn-outline-success rounded-5">
+>>>>>>> bcf06e7e0432bcb730099314c948c28b11d31dbb
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"

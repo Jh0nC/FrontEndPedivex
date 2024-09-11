@@ -34,9 +34,15 @@ import UsersEdit from "./pages/admin/modules/users/user/userEdit";
 
 import Devolutions from "./pages/admin/modules/sales/Devolutions";
 
+
 import ProductionOrder from "./pages/admin/modules/production/ProductionOrders/ProductionOrder"
 import ProductionOrderCreate from "./pages/admin/modules/production/ProductionOrders/ProductionOrderCreate";
 import ProductionOrderUpdate from "./pages/admin/modules/production/ProductionOrders/ProductionOrderUpdate";
+
+import Request  from "./pages/admin/modules/sales/requests/Request";
+import RequestCreate  from "./pages/admin/modules/sales/requests/RequestCreate";
+import RequestUpdate  from "./pages/admin/modules/sales/requests/RequestUpdate";
+
 
 
 import Masses from "./pages/admin/modules/production/masses/Masses";
@@ -66,6 +72,7 @@ import Employees from "./pages/admin/modules/employees/Employees";
 
 
 import CreateReturn from "./pages/admin/modules/sales/createReturn";
+import EditProduct from "./pages/admin/modules/production/products/EditProduct";
 
 
 ReactDOM.createRoot(document.querySelector('#root')).render(
@@ -104,6 +111,9 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
             <Route path="productCategory/create" element={<CreateCategory />} />
 
             <Route path='products' element={<Products />} />
+            <Route path='products/create' element={<CreateProducts />} />
+            <Route path='products/edit/:id' element={<EditProduct />} />
+            <Route path='products' element={<Products />} />
 
 
             <Route path='boughts' element={<Boughts />} />
@@ -116,7 +126,6 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
             <Route path='users/edit/:id' element={<UsersEdit />} />
 
             <Route path='supplies-create' element={<SuppliesCreate />} />
-            <Route path='products/create' element={<CreateProducts />} />
 
             <Route path='supplies' element={<Supplies />} />
 
@@ -129,6 +138,13 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
             <Route path='productionOrder' element={<ProductionOrder />} />
             <Route path='production-order-create' element={<ProductionOrderCreate />} />
             <Route path='production-order-update/:id' element={<ProductionOrderUpdate />} />
+
+            <Route path='request' element={<Request />} />
+            <Route path='request-create' element={<RequestCreate/>} />
+            <Route path='request-update/:id' element={<RequestUpdate />} />
+
+
+
 
 
             <Route path='devolutions' element={<Devolutions />} />

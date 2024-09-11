@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from "react";
 
-function ProductionOrderDetailsModal({ show, onClose, details }) {
+function RequestDetailsModal({ show, onClose, details }) {
+  const [users, setUsers] = useState([]);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
+    // Fetch para obtener usuarios
+    fetch("http://localhost:3000/user")
+      .then((response) => response.json())
+      .then((data) => setUsers(data))
+      .catch((error) => console.error("Error al obtener usuarios:", error));
+
     // Fetch para obtener productos
     fetch("http://localhost:3000/product")
       .then((response) => response.json())
@@ -30,23 +37,26 @@ function ProductionOrderDetailsModal({ show, onClose, details }) {
 
   if (!show) return null;
 
-  // Mapeo de estados
-  const stateNames = {
-    1: "Pendiente",
-    2: "En producción",
-    3: "Terminado",
-    4: "Cancelado"
+  // Helper functions to get names
+  const getUserNameById = (id) => {
+    const user = users.find((user) => user.id === id);
+    return user ? `${user.firstName} ${user.lastName}` : "Desconocido";
   };
 
-  // Helper function to get product name by ID
   const getProductNameById = (id) => {
     const product = products.find((product) => product.id === id);
     return product ? product.name : "Desconocido";
   };
 
-  // Helper function to get state name by number
-  const getStateNameByNumber = (number) => {
-    return stateNames[number] || "Desconocido";
+  // Helper function to get state name by ID
+  const getStateNameById = (id) => {
+    const states = {
+      1: "Pendiente",
+      2: "En producción",
+      3: "Terminado",
+      4: "Cancelado",
+    };
+    return states[id] || "Desconocido";
   };
 
   return (
@@ -57,7 +67,7 @@ function ProductionOrderDetailsModal({ show, onClose, details }) {
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">Detalles de la Orden de Producción</h5>
+            <h5 className="modal-title">Detalles del Pedido</h5>
             <button
               type="button"
               className="btn-close"
@@ -65,14 +75,26 @@ function ProductionOrderDetailsModal({ show, onClose, details }) {
             ></button>
           </div>
           <div className="modal-body">
-            {details.productionOrderDetails.map((detail) => (
-              <div key={detail.id}>
-                <p>Número de Orden: {detail.idProductionOrder}</p>
-                <p>Producto: {getProductNameById(detail.idProduct)}</p>
-                <p>Cantidad: {detail.amount}</p>
-                <p>Estado: {getStateNameByNumber(detail.state)}</p>
-              </div>
-            ))}
+            <p>Número de Pedido: {details.id}</p>
+            <p>Usuario: {getUserNameById(details.idUser)}</p>
+            <p>Total: {details.total}</p>
+            <p>Estado: {getStateNameById(details.state)}</p>
+            <p>Fecha de Creación: {details.creationDate}</p>
+            <p>Fecha Límite: {details.deadLine}</p>
+            <p>Fecha de Estado: {details.stateDate}</p>
+            
+            {details.requestDetails && details.requestDetails.length > 0 ? (
+              details.requestDetails.map((detail) => (
+                <div key={detail.idProduct}>
+                  <p>Producto: {getProductNameById(detail.idProduct)}</p>
+                  <p>Cantidad: {detail.quantity}</p>
+                  <p>Subtotal: {detail.subtotal}</p>
+                  <p>Total: {detail.total}</p>
+                </div>
+              ))
+            ) : (
+              <p>No hay detalles disponibles.</p>
+            )}
           </div>
           <div className="modal-footer">
             <button
@@ -89,4 +111,4 @@ function ProductionOrderDetailsModal({ show, onClose, details }) {
   );
 }
 
-export default ProductionOrderDetailsModal;
+export default RequestDetailsModal;

@@ -1,16 +1,79 @@
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
+import Swal from 'sweetalert2';
 import '../../public/css/datatableStyles.css';
 
 function Datatables({ data }) {
   const navigate = useNavigate();
   const [selectedRoleId, setSelectedRoleId] = useState(null);
 
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
+
+  const filteredData = data.content.filter(item =>
+    Object.values(item).some(
+      val => val.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   const handleEditClick = (id) => {
-    setSelectedRoleId(id); // Guardar el ID en el estado local (esto es opcional si no lo necesitas)
-    navigate(`/admin/roleEdit/${id}`); // Redirigir a la página de edición con el ID en la URL
+    setSelectedRoleId(id); 
+    navigate(`/admin/roleEdit/${id}`);
   };
 
+  const handleChangeStateClick = async (id, currentState, role) => {
+    const newState = currentState === 1 ? 2 : 1;
+    const actionText = newState === 2 ? 'desactivar' : 'activar';
+
+    const result = await Swal.fire({
+      title: `¿Estás seguro de ${actionText} el rol "${role}"?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No'
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const response = await fetch(`http://localhost:3000/role/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ state: newState, role })
+        });
+
+        if (response.ok) {
+          Swal.fire({
+            title: 'Cambio exitoso',
+            text: `El rol ha sido ${newState === 2 ? 'desactivado' : 'activado'} correctamente.`,
+            icon: 'success'
+          }).then(()=>{
+            location.reload()
+          });
+        } else {
+          Swal.fire({
+            title: 'Error',
+            text: 'No se pudo cambiar el estado del rol.',
+            icon: 'error'
+          });
+        }
+      } catch (error) {
+        Swal.fire({
+          title: 'Error',
+          text: 'Ocurrió un error al intentar cambiar el estado.',
+          icon: 'error'
+        });
+      }
+    }
+  };
 
   return (
     <div className="datatable-container border rounded-4 mx-auto my-3">
@@ -21,11 +84,19 @@ function Datatables({ data }) {
           className="btn btn-success rounded-5 d-flex gap-2 align-items-center"
         >
           Agregar {data.module}
-          <i class="bi bi-plus-circle"></i>
+          <i className="bi bi-plus-circle"></i>
         </Link>
 
         <div className="input_search">
-          <input type="search" placeholder="Buscar" />
+          <input
+            type="search"
+            placeholder="Buscar"
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1);
+            }}
+          />
           <i className="bi bi-search" id="search"></i>
         </div>
 
@@ -44,8 +115,8 @@ function Datatables({ data }) {
             />
           </svg>
         </button>
-
       </div>
+
       <table className="datatable">
         <thead>
           <tr>
@@ -57,41 +128,54 @@ function Datatables({ data }) {
           </tr>
         </thead>
         <tbody>
-          {data.content && data.content.map((item, index) => (
+          {currentItems.map((item, index) => (
             <tr key={index}>
               <td>{item.id}</td>
               <td>{item.role}</td>
-              <td>
+              <td className='d-flex align-items-center gap-2'>
                 <button 
                   className='btn btn-warning rounded-5' 
                   onClick={() => handleEditClick(item.id)}
                 >
                   Editar
                 </button>
+                {item.state === 1 ? (
+                  <button
+                    className='btn btn-success rounded-5 h-50'
+                    onClick={() => handleChangeStateClick(item.id, item.state, item.role)}
+                  >Activado</button>) : (
+                  <button
+                    className='btn btn-danger rounded-5 h-50'
+                    onClick={() => handleChangeStateClick(item.id, item.state, item.role)}
+                  >Desativado</button>)}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
       <div className="datatable_fotter d-flex justify-content-between align-items-center">
         <p>Total de filas: {data.content.length}</p>
-
-        <button className="btn btn-outline-success rounded-5">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            className="bi bi-filetype-pdf"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fillRule="evenodd"
-              d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.6 11.85H0v3.999h.791v-1.342h.803q.43 0 .732-.173.305-.175.463-.474a1.4 1.4 0 0 0 .161-.677q0-.375-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179m.545 1.333a.8.8 0 0 1-.085.38.57.57 0 0 1-.238.241.8.8 0 0 1-.375.082H.788V12.48h.66q.327 0 .512.181.185.183.185.522m1.217-1.333a.8.8 0 0 1-.085.38.57.57 0 0 1-.238.241.8.8 0 0 1-.375.082H.788V12.48h.66q.327 0 .512.181.185.183.185.522m1.217-1.333v3.999h1.46q.602 0 .998-.237a1.45 1.45 0 0 0 .595-.689q.196-.45.196-1.084 0-.63-.196-1.075a1.43 1.43 0 0 0-.589-.68q-.396-.234-1.005-.234zm.791.645h.563q.371 0 .609.152a.9.9 0 0 1 .354.454q.118.302.118.753a2.3 2.3 0 0 1-.068.592 1.1 1.1 0 0 1-.196.422.8.8 0 0 1-.334.252 1.3 1.3 0 0 1-.483.082h-.563zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638z"
-            />
-          </svg>
-          Generar Excel
-        </button>
+        <div className="pagination">
+          {Array.from({ length: Math.ceil(filteredData.length / itemsPerPage) }, (_, index) => (
+            <button
+              key={index + 1}
+              onClick={() => paginate(index + 1)}
+              className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}
+              style={{
+                backgroundColor: currentPage === index + 1 ? '#FFD700' : '#FFFAE0',
+                color: '#000',
+                margin: '0 5px',
+                padding: '8px 12px',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer'
+              }}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
