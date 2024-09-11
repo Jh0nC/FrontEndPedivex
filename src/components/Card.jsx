@@ -7,6 +7,8 @@ function Card({ data }) {
     datasheet: { mass }
   } = data;
 
+  console.log(data);
+
   const navigate = useNavigate();
 
   const handleEditClick = () => {
@@ -46,7 +48,7 @@ function Card({ data }) {
         <div className="card-footer d-flex justify-content-between">
           <button
             type="button"
-            className="btn rounded-5 btn-secondary d-flex gap-2"
+            className="btn rounded-4 btn-secondary d-flex gap-2"
             data-bs-toggle="modal"
             data-bs-target={`#modalCard${id}`}
           >
@@ -55,11 +57,11 @@ function Card({ data }) {
           </button>
           <button
             type="button"
-            className="btn rounded-5 btn-warning d-flex gap-2"
+            className="btn rounded-4 btn-warning d-flex gap-2"
             onClick={handleEditClick}
           >
             Editar
-            <i className="bi bi-pencil-square"></i>
+            <i className="bi bi-pencil-square"></i>   
           </button>
         </div>
       </div>
@@ -73,7 +75,7 @@ function Card({ data }) {
         aria-hidden="true"
       >
         <div className="modal-dialog modal-lg modal-dialog-centered">
-          <div className="modal-content">
+          <div className="modal-content rounded-4">
             <div className="modal-header">
               <h1 className="modal-title fs-5">
                 {productCategory.name} - {name}
@@ -103,6 +105,10 @@ function Card({ data }) {
                     <b>Unidad: </b> {mass.massDetails[0].unit}
                   </p>
                 </div>
+              </div>
+              <hr className="mx-3"/>
+              <div className="row">
+
               </div>
             </div>
             <div className="modal-footer">
