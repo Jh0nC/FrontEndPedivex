@@ -68,6 +68,17 @@ function Datatables({ data }) {
     return product ? product.name : "Desconocido";
   };
 
+  // Helper function to get state name
+  const getStateName = (stateId) => {
+    const states = {
+      1: "Pendiente",
+      2: "En producción",
+      3: "Terminado",
+      4: "Cancelado"
+    };
+    return states[stateId] || "Desconocido";
+  };
+
   return (
     <div className="datatable-container border rounded-4 mx-auto my-3">
       <div className="datatable_header">
@@ -124,7 +135,7 @@ function Datatables({ data }) {
                 <td>{item.date}</td>
                 <td>{item.notes}</td>
                 <td>{getUserNameById(item.idUser)}</td>
-                <td>{item.state}</td>
+                <td>{getStateName(item.state)}</td>
                 <td>{item.targetDate}</td>
                 <td>
                   <button

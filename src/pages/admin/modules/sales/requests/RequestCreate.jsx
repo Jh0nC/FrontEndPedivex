@@ -7,7 +7,7 @@ function RequestCreate({ onSave, onClose, initialData = {} }) {
     notes: initialData.notes || "",
     idUser: initialData.idUser || "",
     total: initialData.total || "",
-    state: initialData.state || "",
+    state: initialData.state || 1, // Valor por defecto para el estado
     creationDate: new Date().toISOString(),
     deadLine: initialData.deadLine || "",
     stateDate: initialData.stateDate || "",
@@ -29,6 +29,18 @@ function RequestCreate({ onSave, onClose, initialData = {} }) {
       .then((data) => setUsers(data))
       .catch((error) => console.error("Error fetching users:", error));
   }, []);
+
+  // Mapeo de estados
+  const stateNames = {
+    1: "Pendiente",
+    2: "En producción",
+    3: "Terminado",
+    4: "Cancelado"
+  };
+
+  const getStateNameByNumber = (number) => {
+    return stateNames[number] || "Desconocido";
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -117,16 +129,7 @@ function RequestCreate({ onSave, onClose, initialData = {} }) {
       <div className="order-form-container border rounded-4 mx-auto my-3 p-3">
         <h2>{initialData.id ? "Editar Pedido" : "Crear Pedido"}</h2>
         <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label className="form-label">Notas:</label>
-            <textarea
-              className="form-control"
-              name="notes"
-              value={formData.notes}
-              onChange={handleChange}
-              required
-            ></textarea>
-          </div>
+          
           <div className="mb-3">
             <label className="form-label">Usuario:</label>
             <select
@@ -161,9 +164,8 @@ function RequestCreate({ onSave, onClose, initialData = {} }) {
               type="text"
               className="form-control"
               name="state"
-              value={formData.state}
-              onChange={handleChange}
-              required
+              value={getStateNameByNumber(formData.state)}
+              readOnly
             />
           </div>
           <div className="mb-3">

@@ -48,6 +48,17 @@ function RequestDetailsModal({ show, onClose, details }) {
     return product ? product.name : "Desconocido";
   };
 
+  // Helper function to get state name by ID
+  const getStateNameById = (id) => {
+    const states = {
+      1: "Pendiente",
+      2: "En producción",
+      3: "Terminado",
+      4: "Cancelado",
+    };
+    return states[id] || "Desconocido";
+  };
+
   return (
     <div
       className="modal fade show d-block"
@@ -67,7 +78,7 @@ function RequestDetailsModal({ show, onClose, details }) {
             <p>Número de Pedido: {details.id}</p>
             <p>Usuario: {getUserNameById(details.idUser)}</p>
             <p>Total: {details.total}</p>
-            <p>Estado: {details.state}</p>
+            <p>Estado: {getStateNameById(details.state)}</p>
             <p>Fecha de Creación: {details.creationDate}</p>
             <p>Fecha Límite: {details.deadLine}</p>
             <p>Fecha de Estado: {details.stateDate}</p>

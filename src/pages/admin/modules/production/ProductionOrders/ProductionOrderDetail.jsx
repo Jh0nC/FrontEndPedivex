@@ -30,10 +30,23 @@ function ProductionOrderDetailsModal({ show, onClose, details }) {
 
   if (!show) return null;
 
+  // Mapeo de estados
+  const stateNames = {
+    1: "Pendiente",
+    2: "En producción",
+    3: "Terminado",
+    4: "Cancelado"
+  };
+
   // Helper function to get product name by ID
   const getProductNameById = (id) => {
     const product = products.find((product) => product.id === id);
     return product ? product.name : "Desconocido";
+  };
+
+  // Helper function to get state name by number
+  const getStateNameByNumber = (number) => {
+    return stateNames[number] || "Desconocido";
   };
 
   return (
@@ -57,7 +70,7 @@ function ProductionOrderDetailsModal({ show, onClose, details }) {
                 <p>Número de Orden: {detail.idProductionOrder}</p>
                 <p>Producto: {getProductNameById(detail.idProduct)}</p>
                 <p>Cantidad: {detail.amount}</p>
-                <p>Estado: {detail.state}</p>
+                <p>Estado: {getStateNameByNumber(detail.state)}</p>
               </div>
             ))}
           </div>

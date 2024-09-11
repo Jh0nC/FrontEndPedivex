@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../public/css/datatableStyles.css";
 import { Link } from "react-router-dom";
 import RequestDetailsModal from "../pages/admin/modules/sales/requests/RequestDetail";
+import * as XLSX from "xlsx"; // Asegúrate de importar XLSX si estás usando esta librería
 
 function Datatables({ data }) {
   const [showModal, setShowModal] = useState(false);
@@ -68,6 +69,17 @@ function Datatables({ data }) {
     return product ? product.name : "Desconocido";
   };
 
+  // Helper function to get state name by ID
+  const getStateNameById = (id) => {
+    const states = {
+      1: "Pendiente",
+      2: "En producción",
+      3: "Terminado",
+      4: "Cancelado",
+    };
+    return states[id] || "Desconocido";
+  };
+
   return (
     <div className="datatable-container border rounded-4 mx-auto my-3">
       <div className="datatable_header">
@@ -125,7 +137,7 @@ function Datatables({ data }) {
                 <td>{item.creationDate}</td>
                 <td>{getUserNameById(item.idUser)}</td>
                 <td>{item.total}</td>
-                <td>{item.state}</td>
+                <td>{getStateNameById(item.state)}</td>
                 <td>{item.deadLine}</td>
                 <td>
                   <button
