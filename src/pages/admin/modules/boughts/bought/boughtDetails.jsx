@@ -44,7 +44,7 @@ function boughtDetails({ show, onClose, details }) {
                     <p>Unidad: {detail.unit}</p>
                     <p>Costo Unidad: {detail.costUnit}</p>
                     <p>Subtotal: {detail.subtotal}</p>
-                    <p>Estado: {detail.state}</p>
+                    {/* <p>Estado: {detail.state}</p> */}
                   </div>
                 </div>
               </div>

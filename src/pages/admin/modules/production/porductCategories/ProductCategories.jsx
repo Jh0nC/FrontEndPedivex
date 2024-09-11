@@ -19,6 +19,6 @@ function ProductCategories() {
       </div>
     </>
   );
-}
+} 
 
 export default ProductCategories;

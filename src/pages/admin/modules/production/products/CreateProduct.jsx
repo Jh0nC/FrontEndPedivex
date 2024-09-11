@@ -135,7 +135,6 @@ function CreateProducts() {
               />
             </div>
           </div>
-
           <div className="row mb-3">
             <div className="col-sm">
               <label htmlFor="price" className="form-label">Precio</label>
@@ -168,7 +167,7 @@ function CreateProducts() {
               </select>
             </div>
           </div>
-            <hr className="mx-3"/>
+          <hr className="mx-3" />
           <div className="mb-3">
             <h5>Detalles de Insumos</h5>
             {details.map((detail, index) => (
@@ -240,6 +239,7 @@ function CreateProducts() {
               Guardar
             </button>
           </div>
+
         </form>
       </div>
     </div>
