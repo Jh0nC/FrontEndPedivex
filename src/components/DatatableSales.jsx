@@ -68,7 +68,7 @@ function Datatable({ data }) {
                   <button className='btn btn-info rounded-5 d-flex gap-2 align-items-center'>Ver Detalle</button>
                 </Link>
                 <Link to={`/admin/sales-return/${item.id}`}>
-                  <button className='btn btn-danger'>Realizar Devolución</button>
+                  <button className='btn btn-success'>Realizar Devolución</button>
                 </Link>
               </td>
             </tr>

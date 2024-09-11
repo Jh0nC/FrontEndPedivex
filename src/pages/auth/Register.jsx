@@ -89,6 +89,7 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validaciones de todos los campos al enviar
     const usernameError = validateUsername(form.username);
     const emailError = validateEmail(form.email);
     const passwordError = validatePassword(form.password);
@@ -101,32 +102,38 @@ function Register() {
       confirmPassword: confirmPasswordError
     });
 
-    if (!usernameError && !emailError && !passwordError && !confirmPasswordError) {
-      try {
-        const response = await fetch('http://localhost:', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            username: form.username,
-            mail: form.email,
-            password: form.password,
-          }),
-        });
+    // Si hay errores, no proceder con la solicitud
+    if (usernameError || emailError || passwordError || confirmPasswordError) {
+      return;
+    }
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error('Error al registrarse:', errorData.error);
-          return;
-        }
+    try {
+      const response = await fetch('http://localhost:3000/auth/register', { // Asegúrate de que esta URL sea la correcta
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: form.username,
+          mail: form.email,
+          password: form.password,
+        }),
+      });
 
-        const data = await response.json();
-        console.log('Usuario registrado:', data);
-        // Redireccionar o informar al usuario sobre el éxito
-      } catch (error) {
-        console.error('Error en la solicitud:', error);
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error al registrarse:', errorData.message);
+        alert(errorData.message || 'Error al registrarse');
+        return;
       }
+
+      const data = await response.json();
+      alert('Usuario registrado con éxito');
+      console.log('Usuario registrado:', data);
+      // Aquí podrías redireccionar o hacer alguna acción adicional
+    } catch (error) {
+      console.error('Error en la solicitud:', error);
+      alert('Error en la solicitud. Inténtalo de nuevo más tarde.');
     }
   };
 

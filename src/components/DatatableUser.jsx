@@ -179,7 +179,6 @@ function Datatables({ data }) {
             </button>
           ))}
         </div>
-
       </div>
     </div>
   );

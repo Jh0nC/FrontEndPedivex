@@ -25,14 +25,28 @@ function Login() {
     return '';
   };
 
+  const validatePassword = (value) => {
+    if (value.trim() === '') {
+      return 'La contraseña no puede estar vacía.';
+    }
+    return '';
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
 
     let errorMessage = '';
 
-    if (name === 'email') {
-      errorMessage = validateEmail(value);
+    switch (name) {
+      case 'email':
+        errorMessage = validateEmail(value);
+        break;
+      case 'password':
+        errorMessage = validatePassword(value);
+        break;
+      default:
+        break;
     }
 
     setErrors({ ...errors, [name]: errorMessage });
@@ -41,16 +55,18 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validaciones
     const emailError = validateEmail(form.email);
+    const passwordError = validatePassword(form.password);
 
     setErrors({
-      ...errors,
       email: emailError,
+      password: passwordError,
     });
 
-    if (!emailError && form.password) {
+    if (!emailError && !passwordError) {
       try {
-        const response = await fetch('http://localhost:3000/login', {
+        const response = await fetch('http://localhost:3000/auth/login', { // Asegúrate de que esta URL sea la correcta
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -63,7 +79,7 @@ function Login() {
 
         if (!response.ok) {
           const errorData = await response.json();
-          setErrors({ ...errors, email: errorData.error || 'Credenciales incorrectas.' });
+          setErrors({ ...errors, email: errorData.message || 'Credenciales incorrectas.' });
           return;
         }
 
@@ -71,8 +87,10 @@ function Login() {
         localStorage.setItem('token', data.token); // Guarda el token en localStorage
         console.log('Login exitoso:', data);
         // Redireccionar o hacer otra acción después del login
+        window.location.href = '/'; // Ejemplo de redirección
       } catch (error) {
         console.error('Error en la solicitud:', error);
+        alert('Error en la solicitud. Inténtalo de nuevo más tarde.');
       }
     }
   };
@@ -112,7 +130,7 @@ function Login() {
             </div>
 
             <button className="login-button" type="submit">Entrar</button>
-            <a href="/PasswordRecovery" className="login-link">¿Olvidaste tu contraseña?</a>
+            <Link to="/password-recovery" className="login-link">¿Olvidaste tu contraseña?</Link>
           </form>
         </div>
 
@@ -126,6 +144,6 @@ function Login() {
       </div>
     </div>
   );
-}     
+}
 
 export default Login;
