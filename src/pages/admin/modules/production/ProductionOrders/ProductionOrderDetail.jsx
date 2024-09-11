@@ -1,11 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 function ProductionOrderDetailsModal({ show, onClose, details }) {
+  const [products, setProducts] = useState([]);
+
   useEffect(() => {
+    // Fetch para obtener productos
+    fetch("http://localhost:3000/product")
+      .then((response) => response.json())
+      .then((data) => setProducts(data))
+      .catch((error) => console.error("Error al obtener productos:", error));
+
     // Crear un enlace para el CDN de Bootstrap
     const link = document.createElement("link");
     link.href =
       "https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css";
+    link.id = "bootstrap-css"; // Añadido id para limpiar después
 
     // Agregar el enlace al documento
     document.head.appendChild(link);
@@ -20,6 +29,25 @@ function ProductionOrderDetailsModal({ show, onClose, details }) {
   }, []);
 
   if (!show) return null;
+
+  // Mapeo de estados
+  const stateNames = {
+    1: "Pendiente",
+    2: "En producción",
+    3: "Terminado",
+    4: "Cancelado"
+  };
+
+  // Helper function to get product name by ID
+  const getProductNameById = (id) => {
+    const product = products.find((product) => product.id === id);
+    return product ? product.name : "Desconocido";
+  };
+
+  // Helper function to get state name by number
+  const getStateNameByNumber = (number) => {
+    return stateNames[number] || "Desconocido";
+  };
 
   return (
     <div
@@ -39,15 +67,13 @@ function ProductionOrderDetailsModal({ show, onClose, details }) {
           <div className="modal-body">
             {details.productionOrderDetails.map((detail) => (
               <div key={detail.id}>
-                <p>ID: {detail.id}</p>
-                <p>Orden de Producción ID: {detail.idProductionOrder}</p>
-                <p>Producto ID: {detail.idProduct}</p>
+                <p>Número de Orden: {detail.idProductionOrder}</p>
+                <p>Producto: {getProductNameById(detail.idProduct)}</p>
                 <p>Cantidad: {detail.amount}</p>
-                <p>Estado: {detail.state}</p>
+                <p>Estado: {getStateNameByNumber(detail.state)}</p>
               </div>
             ))}
           </div>
-
           <div className="modal-footer">
             <button
               type="button"

@@ -27,6 +27,12 @@ function Sidenav() {
             <Link to={'/admin/users'} className="d-block">
               Usuarios
             </Link>
+            <Link to={'/admin/clients'} >
+              Clientes
+            </Link>
+            <Link to={'/admin/employees'} >
+              Empleados
+            </Link>
           </div>
         </li>
         <li className="list-group-item list-group-item-action">
@@ -87,12 +93,6 @@ function Sidenav() {
             <i className="bi bi-chevron-down"></i>
           </a>
           <div className="collapse submenu-sidenav" id="submenu-sales">
-            <Link to={'/admin/clients'} >
-              Clientes
-            </Link>
-            <Link to={'/admin/employees'} >
-              Empleados
-            </Link>
             <Link to={'/admin/catalogue'} >
               Catálogo
             </Link>

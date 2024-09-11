@@ -1,13 +1,12 @@
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
+import { useForm } from 'react-hook-form';
 
 function roleCreate() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    role: '',
-    state: 1
-  });
+
+  const { register, formState: { errors }, handleSubmit, reset } = useForm();
 
   const [permissions, setPermissions] = useState([]); // Estado para almacenar los permisos obtenidos de la API
   const [selectedPermissions, setSelectedPermissions] = useState([]); // Estado para almacenar los permisos seleccionados
@@ -32,14 +31,6 @@ function roleCreate() {
     fetchPermissions(); // Llamar a la función cuando el componente se monta
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
   const handlePermissionChange = (e) => {
     const { value, checked } = e.target;
     setSelectedPermissions((prevPermissions) =>
@@ -49,17 +40,16 @@ function roleCreate() {
     );
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
+  const enviarFormulario = async (formData) => {
     try {
       // Crear el rol
+      const dataToSend = { ...formData, state: 1 }
       const response = await fetch('http://localhost:3000/role', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(dataToSend),
       });
 
       if (!response.ok) {
@@ -68,7 +58,7 @@ function roleCreate() {
 
       const result = await response.json();
       const roleId = result.id; // Asumimos que el ID del rol está en 'result.id'
-      
+
       // Crear rolePermission para cada permiso seleccionado
       for (let permissionId of selectedPermissions) {
         await fetch('http://localhost:3000/rolePermission', {
@@ -82,7 +72,8 @@ function roleCreate() {
 
       setSuccess('Rol creado con éxito');
       setError(null);
-      setFormData({ role: '' });
+      reset(); // Limpiar el formulario después de enviar
+
       setSelectedPermissions([]); // Limpiar los permisos seleccionados
 
       Swal.fire({
@@ -110,7 +101,7 @@ function roleCreate() {
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
       <div className="mass-form-container border rounded-4 mx-auto my-3 p-3">
         <h2 className='mx-3'>Crear Nuevo Rol</h2>
-        <form onSubmit={handleSubmit} className='mt-3'>
+        <form onSubmit={handleSubmit(enviarFormulario)} className='mt-3'>
           <div className='row mb-3'>
             <div className="col-sm">
               <label htmlFor="exampleInputEmail1" className="form-label">Rol:</label>
@@ -119,14 +110,20 @@ function roleCreate() {
                 aria-describedby="emailHelp"
                 className='form-control'
                 type="text"
-                name="role"
-                value={formData.role}
-                onChange={handleChange}
-                required
+                {...register("role", { required: true, maxLength: 25, pattern: /^[A-Za-z\s]+$/ })}
               />
             </div>
           </div>
-          <div className='m-3'>
+          {errors.role?.type === "required" && (
+            <div className="alert alert-danger p-1 col">Ingrese el rol</div>
+          )}
+          {errors.role?.type === "maxLength" && (
+            <div className="alert alert-danger p-1 col">Solo se puede ingresar maximo 25 letras</div>
+          )}
+          {errors.role?.type === "pattern" && (
+            <div className="alert alert-danger p-1 col">No se puede ingresar numeros o caracteres especiales</div>
+          )}
+          <div className=''>
             <p>Permisos:</p>
             {permissions.map((permission) => (
               <div key={permission.id}>

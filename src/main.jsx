@@ -41,7 +41,7 @@ import ProductionOrderUpdate from "./pages/admin/modules/production/ProductionOr
 
 import Request  from "./pages/admin/modules/sales/requests/Request";
 import RequestCreate  from "./pages/admin/modules/sales/requests/RequestCreate";
-//import RequestUpdate  from "./pages/admin/modules/sales/requests/RequestUpdate";
+import RequestUpdate  from "./pages/admin/modules/sales/requests/RequestUpdate";
 
 
 
@@ -57,11 +57,10 @@ import CreateCategory from "./pages/admin/modules/production/porductCategories/C
 import Sales from "./pages/admin/modules/sales/Sales";
 
 import Clients from "./pages/admin/modules/clients/Clients";
-// import ClientCreate from "./pages/admin/modules/clients/ClientCreate";
-// import ClientEdit from "./pages/admin/modules/clients/ClientEdit";
+import ClientsEdit from "./pages/admin/modules/clients/ClientEdit";
 
 import Employees from "./pages/admin/modules/employees/Employees";
-// import EmployeeCreate from "./pages/admin/modules/employees/EmployeeCreate";
+
 // import EmployeeEdit from "./pages/admin/modules/employees/EmployeeEdit";
 import EditCategorie from "./pages/admin/modules/production/porductCategories/EditCategorie";
 
@@ -128,7 +127,7 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
             <Route path='roleEdit/:id' element={<RoleEdit />} />
             <Route path='users' element={<Users />} />
             <Route path='userCreate' element={<UsersCreate />} />
-            <Route path='userEdit/:id' element={<UsersEdit />} />
+            <Route path='users/edit/:id' element={<UsersEdit />} />
 
             <Route path='supplies-create' element={<SuppliesCreate />} />
 
@@ -146,7 +145,7 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
 
             <Route path='request' element={<Request />} />
             <Route path='request-create' element={<RequestCreate/>} />
-            {/* <Route path='request-update' element={<RequestUpdate />} /> */}  
+            <Route path='request-update/:id' element={<RequestUpdate />} />
 
 
 
@@ -156,6 +155,7 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
 
             {/* Dm */}
             <Route path='clients' element={<Clients />} />
+            {/* <Route path='clientsEdit/:id' element={<ClientsEdit />} /> */}
             {/* <Route path='clientCreate' element={<ClientCreate />} /> */}
             {/* <Route path='clientEdit' element={<ClientEdit />} /> */}
 

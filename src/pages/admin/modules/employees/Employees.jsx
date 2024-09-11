@@ -1,23 +1,40 @@
-import Datatable from "../../../../components/DatatableEmployees";
-import { useEffect, useState } from 'react';
+import Datatable from "../../../../../src/components/DatatableEmployees"; 
+import React, { useState, useEffect } from 'react';
 
-function Employees() {
-  const [data, setData] = useState([]);
+function Clients() {
+  const [datos, setDatos] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/employee')
-      .then(response => response.json())
-      .then(data => setData(data))
-      .catch(error => console.error('Error fetching masses:', error));
+    const fetchDatos = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/employee"); 
+        if (!response.ok) {
+          throw new Error("Network response was not ok " + response.statusText);
+        }
+        const data = await response.json();
+        setDatos(data);
+      } catch (error) {
+        console.error("There was a problem with the fetch operation:", error);
+      }
+    };
+
+    fetchDatos();
   }, []);
 
+  const data = {
+    module: "Empleados", 
+    title: "Empleados",  
+    colNames: ["Id", "Nombre", "Documento", "Dirección", "Teléfono",  "Acciones"],
+    content: datos.map(item => ({
+      ...item
+    }))
+  };
+
   return (
-    <>
-      <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-        <Datatable data={data} />
-      </div>
-    </>
+    <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
+      <Datatable data={data} />
+    </div>
   );
 }
 
-export default Employees;
+export default Clients;

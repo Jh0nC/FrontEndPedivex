@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../public/css/datatableStyles.css";
 import { Link } from "react-router-dom";
 import ProductionOrderDetailsModal from "../pages/admin/modules/production/ProductionOrders/ProductionOrderDetail";
@@ -9,9 +9,25 @@ function Datatables({ data }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5); // Mostrar 5 registros por página
+  const [users, setUsers] = useState([]);
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    // Fetch para obtener usuarios
+    fetch("http://localhost:3000/user")
+      .then((response) => response.json())
+      .then((data) => setUsers(data))
+      .catch((error) => console.error("Error al obtener usuarios:", error));
+
+    // Fetch para obtener productos
+    fetch("http://localhost:3000/product")
+      .then((response) => response.json())
+      .then((data) => setProducts(data))
+      .catch((error) => console.error("Error al obtener productos:", error));
+  }, []);
 
   const handleDetailsClick = (item) => {
-    console.log("Detalles clickeados:", item); // Verifica si el botón está llamando a esta función
+    console.log("Detalles clickeados:", item);
     setSelectedDetails(item);
     setShowModal(true);
   };
@@ -33,14 +49,34 @@ function Datatables({ data }) {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Función para exportar los datos a un archivo Excel
   const exportToExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(filteredData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Ordenes de Producción");
 
-    // Generar un archivo Excel
     XLSX.writeFile(workbook, "ProductionOrders_list.xlsx");
+  };
+
+  // Helper functions to get full names
+  const getUserNameById = (id) => {
+    const user = users.find((user) => user.id === id);
+    return user ? `${user.firstName} ${user.lastName}` : "Desconocido";
+  };
+
+  const getProductNameById = (id) => {
+    const product = products.find((product) => product.id === id);
+    return product ? product.name : "Desconocido";
+  };
+
+  // Helper function to get state name
+  const getStateName = (stateId) => {
+    const states = {
+      1: "Pendiente",
+      2: "En producción",
+      3: "Terminado",
+      4: "Cancelado"
+    };
+    return states[stateId] || "Desconocido";
   };
 
   return (
@@ -98,8 +134,8 @@ function Datatables({ data }) {
                 <td>{item.id}</td>
                 <td>{item.date}</td>
                 <td>{item.notes}</td>
-                <td>{item.idUser}</td>
-                <td>{item.state}</td>
+                <td>{getUserNameById(item.idUser)}</td>
+                <td>{getStateName(item.state)}</td>
                 <td>{item.targetDate}</td>
                 <td>
                   <button
