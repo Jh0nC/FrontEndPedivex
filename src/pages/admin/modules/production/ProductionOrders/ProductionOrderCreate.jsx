@@ -2,12 +2,20 @@ import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
+// Definir los estados posibles
+const OrderStates = {
+  PENDING: 'Pendiente',
+  IN_PROGRESS: 'En producción',
+  COMPLETED: 'Terminado',
+  CANCELLED: 'Cancelado'
+};
+
 function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
   const [formData, setFormData] = useState({
     date: initialData.date || new Date().toISOString(),
     notes: initialData.notes || "",
     idUser: initialData.idUser || "",
-    state: initialData.state || "",
+    state: OrderStates.PENDING, // Estado predeterminado
     targetDate: initialData.targetDate || "",
     details: initialData.details || [{ idProduct: "", amount: "", state: "" }],
   });
@@ -17,12 +25,12 @@ function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:3000/product") // uerreele para loh productoh
+    fetch("http://localhost:3000/product") // URL para los productos
       .then((response) => response.json())
       .then((data) => setProducts(data))
       .catch((error) => console.error("Error fetching products:", error));
 
-    fetch("http://localhost:3000/user") // Uerreele para user
+    fetch("http://localhost:3000/user") // URL para los usuarios
       .then((response) => response.json())
       .then((data) => setUsers(data))
       .catch((error) => console.error("Error fetching users:", error));
@@ -68,6 +76,7 @@ function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
     const updatedFormData = {
       ...formData,
       date: formattedDate,
+      state: OrderStates.PENDING, // Asegurarse de que el estado siempre sea "Pendiente"
     };
 
     fetch("http://localhost:3000/productionOrder", {
@@ -118,14 +127,12 @@ function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label className="form-label">Fecha:</label>
+            <label className="form-label">Fecha de Creación:</label>
             <input
-              type="date"
+              type="text"
               className="form-control"
-              name="date"
-              value={formData.date.split("T")[0]}
-              onChange={handleChange}
-              required
+              value={formData.date.split("T")[0]} // Mostrar solo la fecha sin la hora
+              readOnly // Campo solo lectura
             />
           </div>
           <div className="mb-3">
@@ -160,10 +167,8 @@ function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
             <input
               type="text"
               className="form-control"
-              name="state"
-              value={formData.state}
-              onChange={handleChange}
-              required
+              value={OrderStates.PENDING} // Mostrar el estado como "Pendiente"
+              readOnly
             />
           </div>
           <div className="mb-3">
@@ -239,17 +244,17 @@ function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
               </button>
             </div>
             <div className="m-1 d-flex gap-3">
-            <button
-              type="button"
-              className="btn btn-secondary rounded-5"
-              onClick={handleCancel}
-            >
-              Cancelar
-            </button>
-            <button type="submit" className="btn btn-success rounded-5">
-              {initialData.id ? "Actualizar" : "Guardar"}
-            </button>
-          </div>
+              <button
+                type="button"
+                className="btn btn-secondary rounded-5"
+                onClick={handleCancel}
+              >
+                Cancelar
+              </button>
+              <button type="submit" className="btn btn-success rounded-5">
+                {initialData.id ? "Actualizar" : "Guardar"}
+              </button>
+            </div>
           </div>
           
         </form>
