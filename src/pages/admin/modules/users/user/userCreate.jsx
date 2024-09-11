@@ -143,7 +143,7 @@ function UserCreate() {
                 id="document"
                 className='form-control'
                 type="text"
-                {...register('document', { required: true, minLength:8, maxLength:11 })}
+                {...register('document', { required: true, minLength:8, maxLength:10 })}
               />
               {errors.document?.type==='required' && (
                 <div className="alert alert-danger p-1 col mt-2">Este campo es obligatorio</div>
@@ -152,7 +152,7 @@ function UserCreate() {
                 <div className="alert alert-danger p-1 col mt-2">El documento debe tener mínimo 8 números</div>
               )}
               {errors.document?.type==='maxLength' && (
-                <div className="alert alert-danger p-1 col mt-2">El documento debe tener máximo 11 números</div>
+                <div className="alert alert-danger p-1 col mt-2">El documento debe tener máximo 10 números</div>
               )}
             </div>
             <div className='col-sm'>
