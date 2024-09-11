@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
-import * as XLSX from 'xlsx';
+import Swal from 'sweetalert2';
 import '../../public/css/datatableStyles.css';
 
 function Datatables({ data }) {
@@ -24,10 +24,56 @@ function Datatables({ data }) {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const handleEditClick = (id) => {
-    setSelectedRoleId(id); // Guardar el ID en el estado local (esto es opcional si no lo necesitas)
-    navigate(`/admin/roleEdit/${id}`); // Redirigir a la página de edición con el ID en la URL
+    setSelectedRoleId(id); 
+    navigate(`/admin/roleEdit/${id}`);
   };
 
+  const handleChangeStateClick = async (id, currentState, role) => {
+    const newState = currentState === 1 ? 2 : 1;
+    const actionText = newState === 2 ? 'desactivar' : 'activar';
+
+    const result = await Swal.fire({
+      title: `¿Estás seguro de ${actionText} el rol "${role}"?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No'
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const response = await fetch(`http://localhost:3000/role/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ state: newState, role })
+        });
+
+        if (response.ok) {
+          Swal.fire({
+            title: 'Cambio exitoso',
+            text: `El rol ha sido ${newState === 2 ? 'desactivado' : 'activado'} correctamente.`,
+            icon: 'success'
+          }).then(()=>{
+            location.reload()
+          });
+        } else {
+          Swal.fire({
+            title: 'Error',
+            text: 'No se pudo cambiar el estado del rol.',
+            icon: 'error'
+          });
+        }
+      } catch (error) {
+        Swal.fire({
+          title: 'Error',
+          text: 'Ocurrió un error al intentar cambiar el estado.',
+          icon: 'error'
+        });
+      }
+    }
+  };
 
   return (
     <div className="datatable-container border rounded-4 mx-auto my-3">
@@ -43,13 +89,13 @@ function Datatables({ data }) {
 
         <div className="input_search">
           <input
-              type="search"
-              placeholder="Buscar"
-              value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                setCurrentPage(1);
-              }}
+            type="search"
+            placeholder="Buscar"
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1);
+            }}
           />
           <i className="bi bi-search" id="search"></i>
         </div>
@@ -69,8 +115,8 @@ function Datatables({ data }) {
             />
           </svg>
         </button>
-
       </div>
+
       <table className="datatable">
         <thead>
           <tr>
@@ -86,18 +132,28 @@ function Datatables({ data }) {
             <tr key={index}>
               <td>{item.id}</td>
               <td>{item.role}</td>
-              <td>
+              <td className='d-flex align-items-center gap-2'>
                 <button 
                   className='btn btn-warning rounded-5' 
                   onClick={() => handleEditClick(item.id)}
                 >
                   Editar
                 </button>
+                {item.state === 1 ? (
+                  <button
+                    className='btn btn-success rounded-5 h-50'
+                    onClick={() => handleChangeStateClick(item.id, item.state, item.role)}
+                  >Activado</button>) : (
+                  <button
+                    className='btn btn-danger rounded-5 h-50'
+                    onClick={() => handleChangeStateClick(item.id, item.state, item.role)}
+                  >Desativado</button>)}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
       <div className="datatable_fotter d-flex justify-content-between align-items-center">
         <p>Total de filas: {data.content.length}</p>
         <div className="pagination">
@@ -120,7 +176,6 @@ function Datatables({ data }) {
             </button>
           ))}
         </div>
-        
       </div>
     </div>
   );
