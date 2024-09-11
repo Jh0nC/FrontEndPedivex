@@ -361,19 +361,26 @@ a {
 /* admin */
 .admin-card {
 
+  transition-duration: .3s;
+
   .card-head {
     overflow: hidden;
 
-    img {
+    /* img {
       transition-duration: .3s;
-    }
+    } */
 
-    img:hover {
+    /* img:hover {
       transform: scale(1.06, 1.06) rotate(1.5deg);
-    }
+    } */
 
   }
 
+}
+
+.admin-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 20px 2px #87878737;
 }
 
 
