@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import * as XLSX from 'xlsx';
 import '../../public/css/datatableStyles.css';
@@ -8,7 +8,13 @@ function Datatables({ data }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
 
-  const filteredData = data.content.filter(item =>
+  const [supplies, setSupplies] = useState(data.content);
+
+  useEffect(() => {
+    setSupplies(data.content);
+  }, [data.content]);
+
+  const filteredData = supplies.filter(item =>
     Object.values(item).some(
       val => val.toString().toLowerCase().includes(searchTerm.toLowerCase())
     )
@@ -26,6 +32,51 @@ function Datatables({ data }) {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Insumos");
     XLSX.writeFile(workbook, "supplies_list.xlsx");
   };
+
+  // Función para manejar el cambio de estado
+  const handleStateChange = async (id, currentState) => {
+    const newState = currentState === 1 ? 2 : 1;
+    try {
+      const response = await fetch(`http://localhost:3000/supplie/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ state: newState })
+      });
+      if (!response.ok) {
+        throw new Error('Error al cambiar el estado');
+      }
+      // Actualiza el estado en la tabla después de la petición exitosa
+      setSupplies(prevSupplies =>
+        prevSupplies.map(item =>
+          item.id === id ? { ...item, state: newState } : item
+        )
+      );
+    } catch (error) {
+      console.error("Error al cambiar el estado del insumo:", error);
+    }
+  };
+
+  const footerStyle = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '10px'
+  };
+
+  const paginationStyle = {
+    display: 'flex',
+    justifyContent: 'center'
+  };
+
+  const pageItemStyle = (isActive) => ({
+    backgroundColor: isActive ? '#FFD700' : '#FFFAE0',
+    color: '#000',
+    margin: '0 5px',
+    padding: '8px 12px',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer'
+  });
 
   return (
     <div className="datatable-container border rounded-4 mx-auto my-3">
@@ -69,41 +120,38 @@ function Datatables({ data }) {
               <td>{item.name}</td>
               <td>{item.stock}</td>
               <td>{item.unit}</td>
-              <td>{item.state}</td>
+              <td>
+                <div className="form-check form-switch">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                    id={`switch-${item.id}`}
+                    checked={item.state === 1}
+                    onChange={() => handleStateChange(item.id, item.state)}
+                  />
+                </div>
+              </td>
               <td className="d-flex gap-2">
                 <Link className="btn btn-warning rounded-5" to={`/admin/supplies-update/${item.id}`}>
                   Editar
                   <i className="bi bi-pencil-square"></i>
                 </Link>
-                <button 
-                  className="btn btn-secondary rounded-5"
-                  onClick={item.handleStateChange}
-                >
-                  Cambiar Estado
-                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <div className="datatable_footer d-flex justify-content-between align-items-center">
-        <p>Total de filas: {filteredData.length}</p>
-        <div className="pagination">
+      <div className="datatable_footer" style={footerStyle}>
+        <p className="total-rows" style={{ margin: 0 }}>Total de filas: {filteredData.length}</p>
+        <div className="pagination" style={paginationStyle}>
           {Array.from({ length: Math.ceil(filteredData.length / itemsPerPage) }, (_, index) => (
             <button
               key={index + 1}
               onClick={() => paginate(index + 1)}
               className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}
-              style={{
-                backgroundColor: currentPage === index + 1 ? '#FFD700' : '#FFFAE0',
-                color: '#000',
-                margin: '0 5px',
-                padding: '8px 12px',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer'
-              }}
+              style={pageItemStyle(currentPage === index + 1)}
             >
               {index + 1}
             </button>

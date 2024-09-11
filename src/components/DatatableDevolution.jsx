@@ -30,7 +30,6 @@ function Datatables({ data }) {
               <td>{item.date}</td>
               <td>{item.state}</td>
               <td className='d-flex gap-2'>
-                <button className='btn btn-warning'>Editar</button>
                 <button className='btn btn-outline-danger'>Ver Detalle</button>
               </td>
             </tr>

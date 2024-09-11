@@ -62,6 +62,8 @@ import ClientsEdit from "./pages/admin/modules/clients/ClientEdit";
 import Employees from "./pages/admin/modules/employees/Employees";
 
 // import EmployeeEdit from "./pages/admin/modules/employees/EmployeeEdit";
+import EditCategorie from "./pages/admin/modules/production/porductCategories/EditCategorie";
+
 
 
 
@@ -99,6 +101,7 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
 
           <Route path='admin' element={<AdminPage />}>
 
+
             <Route path=""  element={<OutletPage />} />
 
             <Route path='dashboard' element={<Dashboard />} />
@@ -107,8 +110,9 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
             <Route path='masses/create' element={<CreateMass />} />
             <Route path="masses/edit/:id" element={<EditMass />} />
 
-            <Route path="productCategory" element={<ProductCategories />} />
-            <Route path="productCategory/create" element={<CreateCategory />} />
+            <Route path="productCategories" element={<ProductCategories />} />
+            <Route path="productCategories/create" element={<CreateCategory />} />
+          <Route path="productCategories/edit/:id" element={<EditCategorie />} />
 
             <Route path='products' element={<Products />} />
             <Route path='products/create' element={<CreateProducts />} />
@@ -162,6 +166,8 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
             <Route path='sales' element={<Sales />} />
             <Route path="sales-return/:id" element={<CreateReturn />} />
 
+
+   
 
           </Route>
 
