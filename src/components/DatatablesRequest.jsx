@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../public/css/datatableStyles.css";
 import { Link } from "react-router-dom";
 import RequestDetailsModal from "../pages/admin/modules/sales/requests/RequestDetail";
@@ -9,6 +9,22 @@ function Datatables({ data }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
+  const [users, setUsers] = useState([]);
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    // Fetch para obtener usuarios
+    fetch("http://localhost:3000/user")
+      .then((response) => response.json())
+      .then((data) => setUsers(data))
+      .catch((error) => console.error("Error al obtener usuarios:", error));
+
+    // Fetch para obtener productos
+    fetch("http://localhost:3000/product")
+      .then((response) => response.json())
+      .then((data) => setProducts(data))
+      .catch((error) => console.error("Error al obtener productos:", error));
+  }, []);
 
   const handleDetailsClick = (item) => {
     console.log("Detalles clickeados:", item);
@@ -39,6 +55,17 @@ function Datatables({ data }) {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Pedidos");
 
     XLSX.writeFile(workbook, "Request_list.xlsx");
+  };
+
+  // Helper functions to get full names
+  const getUserNameById = (id) => {
+    const user = users.find((user) => user.id === id);
+    return user ? `${user.firstName} ${user.lastName}` : "Desconocido";
+  };
+
+  const getProductNameById = (id) => {
+    const product = products.find((product) => product.id === id);
+    return product ? product.name : "Desconocido";
   };
 
   return (
@@ -96,7 +123,7 @@ function Datatables({ data }) {
               <tr key={index}>
                 <td>{item.id}</td>
                 <td>{item.creationDate}</td>
-                <td>{item.idUser}</td>
+                <td>{getUserNameById(item.idUser)}</td>
                 <td>{item.total}</td>
                 <td>{item.state}</td>
                 <td>{item.deadLine}</td>

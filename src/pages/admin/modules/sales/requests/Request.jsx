@@ -27,9 +27,10 @@ function Request() {
     colNames: ["Id", "Fecha Creación", "Usuario", "Total", "Estado", "Fecha Límite", "Acciones"],
     content: datos.map(item => ({
       ...item,
-      date: item.date.split('T')[0]
+      date: item.date ? item.date.split('T')[0] : "Fecha no disponible"
     }))
   };
+  
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">

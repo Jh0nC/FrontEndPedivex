@@ -41,7 +41,7 @@ import ProductionOrderUpdate from "./pages/admin/modules/production/ProductionOr
 
 import Request  from "./pages/admin/modules/sales/requests/Request";
 import RequestCreate  from "./pages/admin/modules/sales/requests/RequestCreate";
-//import RequestUpdate  from "./pages/admin/modules/sales/requests/RequestUpdate";
+import RequestUpdate  from "./pages/admin/modules/sales/requests/RequestUpdate";
 
 
 
@@ -142,7 +142,7 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
 
             <Route path='request' element={<Request />} />
             <Route path='request-create' element={<RequestCreate/>} />
-            {/* <Route path='request-update' element={<RequestUpdate />} /> */}  
+            <Route path='request-update/:id' element={<RequestUpdate />} />
 
 
 
