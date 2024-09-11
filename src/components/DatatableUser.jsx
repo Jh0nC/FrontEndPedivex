@@ -7,8 +7,6 @@ function Datatables({ data }) {
   const navigate = useNavigate();
   const [selectedUserId, setSelectedUserId] = useState(null);
 
-<<<<<<< HEAD
-=======
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
@@ -76,7 +74,6 @@ function Datatables({ data }) {
       }
     }
   };
->>>>>>> bcf06e7e0432bcb730099314c948c28b11d31dbb
 
   return (
     <div className="datatable-container border rounded-4 mx-auto my-3">
@@ -139,15 +136,6 @@ function Datatables({ data }) {
               <td>{item.address}</td>
               <td>{item.phoneNumber}</td>
               <td>{item.role.role}</td>
-<<<<<<< HEAD
-              <td>
-                <Link
-                  className='btn btn-warning rounded-5'
-                  to={`edit/${item.id}`}
-                >
-                  Editar
-                </Link>
-=======
               <td className='d-flex justify-content-center align-items-center gap-2'>
                 <button
                   className='btn btn-warning rounded-5 h-50'
@@ -164,16 +152,12 @@ function Datatables({ data }) {
                     className='btn btn-danger rounded-5 h-50'
                     onClick={() => handleChangeStateClick(item.id, item.state, item.firstName)}
                   >Desativado</button>)}
->>>>>>> bcf06e7e0432bcb730099314c948c28b11d31dbb
               </td>
             </tr>
           ))}
         </tbody>
       </table>
       <div className="datatable_fotter d-flex justify-content-between align-items-center">
-<<<<<<< HEAD
-        <p>Total de filas : {data.content.lenght || 0}</p>
-=======
         <p>Total de filas : 05</p>
         <div className="pagination">
           {Array.from({ length: Math.ceil(filteredData.length / itemsPerPage) }, (_, index) => (
@@ -195,8 +179,6 @@ function Datatables({ data }) {
             </button>
           ))}
         </div>
-
->>>>>>> bcf06e7e0432bcb730099314c948c28b11d31dbb
       </div>
     </div>
   );

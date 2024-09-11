@@ -2,7 +2,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 
-function EmployeeEdit() { 
+function EmployeeEdit() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [formData, setFormData] = useState({
@@ -16,7 +16,7 @@ function EmployeeEdit() {
     idRole: ''
   });
 
-  const [employee, setEmployee] = useState({}); 
+  const [employee, setEmployee] = useState({});
   const [roles, setRoles] = useState([]);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -35,9 +35,9 @@ function EmployeeEdit() {
       }
     };
 
-    const fetchEmployee = async () => { 
+    const fetchEmployee = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/employee/${id}`); 
+        const response = await fetch(`http://localhost:3000/user/${id}`);
         if (!response.ok) {
           throw new Error('Error al obtener el empleado');
         }
@@ -82,7 +82,7 @@ function EmployeeEdit() {
     };
   
     try {
-      const response = await fetch(`http://localhost:3000/employee/${id}`, { 
+      const response = await fetch(`http://localhost:3000/user/${id}`, { 
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -104,7 +104,7 @@ function EmployeeEdit() {
         title: 'Éxito',
         text: 'Empleado editado con éxito.',
       }).then(() => {
-        navigate('/admin/employees');
+        navigate('/admin/employees'); 
       });
 
       console.log('Response:', result);
@@ -122,7 +122,7 @@ function EmployeeEdit() {
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <h2 className='mx-3'>Editar Empleado</h2> 
+      <h2 className='mx-3'>Editar Cliente</h2>
       <form onSubmit={handleSubmit}>
         <div className='m-3'>
           <label htmlFor="email" className="form-label">Correo:</label>
@@ -216,7 +216,7 @@ function EmployeeEdit() {
         </div>
         <button type="submit" className='btn btn-success rounded-5 m-3'>Editar</button>
         <Link to={'/PasswordRecovery'} className='btn btn-warning rounded-5 me-3'>Recuperar Contraseña</Link>
-        <Link to={"/admin/employees"} className='btn btn-secondary rounded-5'>Regresar</Link> 
+        <Link to={"/admin/employees"} className='btn btn-secondary rounded-5'>Regresar</Link>
       </form>
       {success && <p className="text-success m-3">{success}</p>}
       {error && <p className="text-danger m-3">{error}</p>}
@@ -225,3 +225,4 @@ function EmployeeEdit() {
 }
 
 export default EmployeeEdit;
+      
