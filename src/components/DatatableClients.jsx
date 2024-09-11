@@ -15,10 +15,6 @@ function Datatables({ data }) {
           <input type="search" placeholder="Buscar" />
           <i className="bi bi-search" id="search"></i>
         </div>
-<<<<<<< HEAD
-
-        <button className="btn btn-success rounded-5">
-=======
       </div>
       <table className="datatable">
         <thead>
@@ -63,7 +59,6 @@ function Datatables({ data }) {
       <div className="datatable_fotter d-flex justify-content-between align-items-center">
         <p>Total de filas: {data.length}</p>
         <button className="btn btn-outline-success rounded-5">
->>>>>>> bcf06e7e0432bcb730099314c948c28b11d31dbb
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
