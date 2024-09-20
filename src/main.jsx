@@ -127,7 +127,7 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
             <Route path='roleEdit/:id' element={<RoleEdit />} />
             <Route path='users' element={<Users />} />
             <Route path='userCreate' element={<UsersCreate />} />
-            <Route path='users/edit/:id' element={<UsersEdit />} />
+            <Route path='userEdit/:id' element={<UsersEdit />} />
 
             <Route path='supplies-create' element={<SuppliesCreate />} />
 
