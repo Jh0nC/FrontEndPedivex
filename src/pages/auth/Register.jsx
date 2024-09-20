@@ -1,173 +1,157 @@
-import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import Swal from 'sweetalert2';
 import '../../../public/css/authRegister.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
-function Register() {
-  const [form, setForm] = useState({
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-  });
+function UserCreate() {
+  const navigate = useNavigate();
+  const { register, formState: { errors }, handleSubmit, watch } = useForm();
+  const [roles, setRoles] = useState([]);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
-  const [errors, setErrors] = useState({
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-  });
+  const password = watch('password', '');
+  const confirmPassword = watch('confirmPassword', '');
 
-  const validateUsername = (value) => {
-    const validUsernamePattern = /^[a-zA-Z0-9_]+$/;
-    if (value.trim() === '') {
-      return 'El nombre de usuario no puede estar vacío.';
-    }
-    if (value.includes(' ')) {
-      return 'El nombre de usuario no puede contener espacios.';
-    }
-    if (!validUsernamePattern.test(value)) {
-      return 'El nombre de usuario solo puede contener letras, números y guiones bajos.';
-    }
-    return '';
-  };
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/role');
+        if (!response.ok) {
+          throw new Error('Error al obtener los roles');
+        }
+        const data = await response.json();
+        setRoles(data);
+      } catch (error) {
+        setError('Error al cargar roles: ' + error.message);
+      }
+    };
 
-  const validateEmail = (value) => {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (value.trim() === '') {
-      return 'El correo electrónico no puede estar vacío.';
-    }
-    if (!emailPattern.test(value)) {
-      return 'El correo electrónico no es válido.';
-    }
-    return '';
-  };
+    fetchRoles();
+  }, []);
 
-  const validatePassword = (value) => {
-    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    if (value.trim() === '') {
-      return 'La contraseña no puede estar vacía.';
-    }
-    if (!passwordPattern.test(value)) {
-      return 'La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un dígito y un carácter especial.';
-    }
-    return '';
-  };
-
-  const validateConfirmPassword = (value, password) => {
-    if (value !== password) {
-      return 'Las contraseñas no coinciden.';
-    }
-    return '';
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
-
-    let errorMessage = '';
-
-    switch (name) {
-      case 'username':
-        errorMessage = validateUsername(value);
-        break;
-      case 'email':
-        errorMessage = validateEmail(value);
-        break;
-      case 'password':
-        errorMessage = validatePassword(value);
-        break;
-      case 'confirmPassword':
-        errorMessage = validateConfirmPassword(value, form.password);
-        break;
-      default:
-        break;
-    }
-
-    setErrors({ ...errors, [name]: errorMessage });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Validaciones de todos los campos al enviar
-    const usernameError = validateUsername(form.username);
-    const emailError = validateEmail(form.email);
-    const passwordError = validatePassword(form.password);
-    const confirmPasswordError = validateConfirmPassword(form.confirmPassword, form.password);
-
-    setErrors({
-      username: usernameError,
-      email: emailError,
-      password: passwordError,
-      confirmPassword: confirmPasswordError
-    });
-
-    // Si hay errores, no proceder con la solicitud
-    if (usernameError || emailError || passwordError || confirmPasswordError) {
-      return;
-    }
+  const onSubmit = async (data) => {
+    const formDataToSend = {
+      ...data,
+      state: 1,
+      idRole: 1 // El rol será siempre 1
+    };
 
     try {
-      const response = await fetch('http://localhost:3000/auth/register', { // Asegúrate de que esta URL sea la correcta
+      const response = await fetch('http://localhost:3000/user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          username: form.username,
-          mail: form.email,
-          password: form.password,
-        }),
+        body: JSON.stringify(formDataToSend),
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Error al registrarse:', errorData.message);
-        alert(errorData.message || 'Error al registrarse');
-        return;
+        throw new Error('Error en la solicitud');
       }
 
-      const data = await response.json();
-      alert('Usuario registrado con éxito');
-      console.log('Usuario registrado:', data);
-      // Aquí podrías redireccionar o hacer alguna acción adicional
-    } catch (error) {
-      console.error('Error en la solicitud:', error);
-      alert('Error en la solicitud. Inténtalo de nuevo más tarde.');
+      const result = await response.json();
+      setSuccess('Usuario creado con éxito');
+      setError(null);
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Éxito',
+        text: 'Usuario creado con éxito.',
+      }).then(() => {
+        navigate('/admin/users');
+      });
+
+      console.log('Response:', result);
+    } catch (err) {
+      setError(err.message);
+      setSuccess(null);
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un problema al crear el usuario.',
+      });
     }
   };
 
   return (
     <div className="register-container">
       <div className="register-box">
-        <h2 className="register-title">Regístrate</h2>
-        <p className="register-subtitle">Crea tu cuenta</p>
-
-        <form onSubmit={handleSubmit}>
+        <h2 className="register-title">Crear Nuevo Usuario</h2>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="input-container">
             <i className="fas fa-user"></i>
             <input
               type="text"
-              name="username"
-              placeholder="Nombre de usuario"
+              name="firstName"
+              placeholder="Nombre"
               className="register-input"
-              value={form.username}
-              onChange={handleChange}
+              {...register('firstName', { required: 'El nombre es obligatorio' })}
             />
-            {errors.username && <span className="error-message">{errors.username}</span>}
+            <span className="error-message-container">{errors.firstName?.message}</span>
+          </div>
+
+          <div className="input-container">
+            <i className="fas fa-user"></i>
+            <input
+              type="text"
+              name="lastName"
+              placeholder="Apellido"
+              className="register-input"
+              {...register('lastName', { required: 'El apellido es obligatorio' })}
+            />
+            <span className="error-message-container">{errors.lastName?.message}</span>
           </div>
 
           <div className="input-container">
             <i className="fas fa-envelope"></i>
             <input
               type="email"
-              name="email"
+              name="mail"
               placeholder="Correo electrónico"
               className="register-input"
-              value={form.email}
-              onChange={handleChange}
+              {...register('mail', { required: 'El correo electrónico es obligatorio', pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'El correo electrónico no es válido' } })}
             />
-            {errors.email && <span className="error-message">{errors.email}</span>}
+            <span className="error-message-container">{errors.mail?.message}</span>
+          </div>
+
+          <div className="input-container">
+            <i className="fas fa-id-card"></i>
+            <input
+              type="text"
+              name="document"
+              placeholder="Documento"
+              className="register-input"
+              {...register('document', { required: 'El documento es obligatorio', minLength: { value: 8, message: 'El documento debe tener mínimo 8 caracteres' }, maxLength: { value: 10, message: 'El documento debe tener máximo 10 caracteres' } })}
+            />
+            <span className="error-message-container">{errors.document?.message}</span>
+          </div>
+
+          <div className="input-container">
+            <i className="fas fa-home"></i>
+            <input
+              type="text"
+              name="address"
+              placeholder="Dirección"
+              className="register-input"
+              {...register('address', { required: 'La dirección es obligatoria' })}
+            />
+            <span className="error-message-container">{errors.address?.message}</span>
+          </div>
+
+          <div className="input-container">
+            <i className="fas fa-phone"></i>
+            <input
+              type="text"
+              name="phoneNumber"
+              placeholder="Teléfono"
+              className="register-input"
+              {...register('phoneNumber', { required: 'El teléfono es obligatorio', minLength: { value: 7, message: 'El teléfono debe tener mínimo 7 caracteres' }, maxLength: { value: 10, message: 'El teléfono debe tener máximo 10 caracteres' } })}
+            />
+            <span className="error-message-container">{errors.phoneNumber?.message}</span>
           </div>
 
           <div className="input-container">
@@ -177,10 +161,9 @@ function Register() {
               name="password"
               placeholder="Contraseña"
               className="register-input"
-              value={form.password}
-              onChange={handleChange}
+              {...register('password', { required: 'La contraseña es obligatoria', pattern: { value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/, message: 'La contraseña debe tener al menos 8 caracteres, un número y un carácter especial' } })}
             />
-            {errors.password && <span className="error-message">{errors.password}</span>}
+            <span className="error-message-container">{errors.password?.message}</span>
           </div>
 
           <div className="input-container">
@@ -188,23 +171,24 @@ function Register() {
             <input
               type="password"
               name="confirmPassword"
-              placeholder="Repite la contraseña"
+              placeholder="Confirmar Contraseña"
               className="register-input"
-              value={form.confirmPassword}
-              onChange={handleChange}
+              {...register('confirmPassword', {
+                validate: value => value === password || 'Las contraseñas no coinciden'
+              })}
             />
-            {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
+            <span className="error-message-container">{errors.confirmPassword?.message}</span>
           </div>
 
-          <button type="submit" className="register-button">Crear Cuenta</button>
+          <button type="submit" className="register-button">Registrar</button>
         </form>
 
         <div className="login-link-container">
-          <a href="/login" className="login-link">¿Ya tienes cuenta? Inicia sesión</a>
+          <Link to="/admin/users" className="login-link">Regresar</Link>
         </div>
       </div>
     </div>
   );
 }
 
-export default Register;
+export default UserCreate;

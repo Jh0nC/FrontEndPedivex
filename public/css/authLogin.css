@@ -52,7 +52,18 @@ html, body {
 
 .login-subtitle {
   margin-bottom: 30px;
-  color: #555;
+  color: #333;
+}
+
+.register-title1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.register-subtitle1 {
+  margin-bottom: 30px;
+  color: #fff;
 }
 
 .input-container {

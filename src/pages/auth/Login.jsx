@@ -130,13 +130,13 @@ function Login() {
             </div>
 
             <button className="login-button" type="submit">Entrar</button>
-            <Link to="/password-recovery" className="login-link">¿Olvidaste tu contraseña?</Link>
+            <Link to="/passwordRecovery" className="login-link">¿Olvidaste tu contraseña?</Link>
           </form>
         </div>
 
         <div className="login-right">
-          <h2 className="login-title">¡Regístrate ahora!</h2>
-          <p className="login-subtitle">Únete a nosotros y disfruta de todos los beneficios al registrarte.</p>
+          <h2 className="register-title1">¡Regístrate ahora!</h2>
+          <p className="register-subtitle1">Únete a nosotros y disfruta de todos los beneficios al registrarte.</p>
           <Link to="/register">
             <button className="register-button">Regístrate Ahora</button>
           </Link>
