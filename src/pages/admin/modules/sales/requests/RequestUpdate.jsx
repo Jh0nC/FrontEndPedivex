@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function RequestUpdate() {
-  const { id } = useParams(); // Para obtener el ID del pedido a editar
+  const { id } = useParams();
   const [users, setUsers] = useState([]);
   const [products, setProducts] = useState([]);
-  const [details, setDetails] = useState([
-    { idProduct: "", quantity: "", subtotal: "", total: "" },
-  ]);
+  const [details, setDetails] = useState([{ idProduct: "", quantity: "", subtotal: "", total: "" }]);
+  
+  // Estado del pedido
   const [request, setRequest] = useState({
     idUser: "",
     total: "",
-    state: "",
+    state: 4, // Estado por defecto al trear el pedido creado
     creationDate: "",
     deadLine: "",
     stateDate: "",
@@ -23,7 +22,6 @@ function RequestUpdate() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch para obtener el pedido a editar
     fetch(`http://localhost:3000/request/${id}`)
       .then((response) => {
         if (!response.ok) {
@@ -37,13 +35,11 @@ function RequestUpdate() {
       })
       .catch((error) => console.error("Error al obtener el pedido:", error));
 
-    // Fetch para usuarios
     fetch("http://localhost:3000/user")
       .then((response) => response.json())
       .then((data) => setUsers(data))
       .catch((error) => console.error("Error al obtener usuarios:", error));
 
-    // Fetch para productos
     fetch("http://localhost:3000/product")
       .then((response) => response.json())
       .then((data) => setProducts(data))
@@ -54,22 +50,46 @@ function RequestUpdate() {
     const updatedDetails = [...details];
     updatedDetails[index][field] = value;
     setDetails(updatedDetails);
+
+    // Actualiza el estado del pedido con los detalles modificados - retirar en caso de chocoleo supremo
+    setRequest((prev) => ({ ...prev, requestDetails: updatedDetails }));
   };
 
   const handleCancelClick = () => {
     navigate(`/admin/request`);
   };
 
+  /*  DESCOMENTAR EN CASO DE CHOCOLEO
   const handleAddDetail = () => {
-    setDetails([
-      ...details,
-      { idProduct: "", quantity: "", subtotal: "", total: "" },
-    ]);
+    setDetails([...details, { idProduct: "", quantity: "", subtotal: "", total: "" }]);
   };
 
   const handleRemoveDetail = (index) => {
     const updatedDetails = details.filter((_, i) => i !== index);
     setDetails(updatedDetails);
+  };
+ */
+
+  // Borrar en caso de chocoleo supremo
+  const handleAddDetail = () => {
+    const newDetail = { idProduct: "", quantity: "", subtotal: "", total: "" };
+    const updatedDetails = [...details, newDetail];
+    setDetails(updatedDetails);
+    
+    // Actualizar el pedido con los nuevos detalles
+    setRequest((prev) => ({ ...prev, requestDetails: updatedDetails }));
+  };
+  
+  const handleRemoveDetail = (index) => {
+    const updatedDetails = details.filter((_, i) => i !== index);
+    setDetails(updatedDetails);
+  
+    // Actualizar el pedido con los detalles restantes
+    setRequest((prev) => ({ ...prev, requestDetails: updatedDetails }));
+  };  
+
+  const handleStateChange = (stateId) => {
+    setRequest({ ...request, state: stateId });
   };
 
   const handleSubmit = async (e) => {
@@ -84,8 +104,7 @@ function RequestUpdate() {
       })),
     };
 
-    console.log("Datos enviados en el PUT:", updatedRequest);
-    console.log("ID del pedido:", id);
+    console.log("Datos del pedido actualizado:", updatedRequest);  //  esto para verificar antes del put
 
     try {
       const response = await fetch(`http://localhost:3000/request/${id}`, {
@@ -95,9 +114,6 @@ function RequestUpdate() {
         },
         body: JSON.stringify(updatedRequest),
       });
-
-      console.log("Estado de la respuesta:", response.status);
-      console.log("Respuesta:", await response.text());
 
       if (response.ok) {
         Swal.fire({
@@ -121,10 +137,9 @@ function RequestUpdate() {
     }
   };
 
-  // Helper function to format dates for input fields
   const formatDateForInput = (date) => {
     const d = new Date(date);
-    if (isNaN(d.getTime())) return ""; // Return empty string if date is invalid
+    if (isNaN(d.getTime())) return "";
     return d.toISOString().slice(0, 16);
   };
 
@@ -135,17 +150,13 @@ function RequestUpdate() {
         <form onSubmit={handleSubmit} className="mt-3">
           <div className="row mb-3">
             <div className="col-sm">
-              <label htmlFor="user" className="form-label">
-                Usuario
-              </label>
+              <label htmlFor="user" className="form-label">Usuario</label>
               <select
                 name="idUser"
                 className="form-select"
                 id="user"
                 value={request.idUser}
-                onChange={(e) =>
-                  setRequest({ ...request, idUser: e.target.value })
-                }
+                onChange={(e) => setRequest({ ...request, idUser: e.target.value })}
                 required
               >
                 <option value="">Selecciona un usuario</option>
@@ -157,18 +168,14 @@ function RequestUpdate() {
               </select>
             </div>
             <div className="col-sm">
-              <label htmlFor="total" className="form-label">
-                Total
-              </label>
+              <label htmlFor="total" className="form-label">Total</label>
               <input
                 type="number"
                 className="form-control"
                 name="total"
                 id="total"
                 value={request.total}
-                onChange={(e) =>
-                  setRequest({ ...request, total: e.target.value })
-                }
+                onChange={(e) => setRequest({ ...request, total: e.target.value })}
                 required
               />
             </div>
@@ -176,37 +183,38 @@ function RequestUpdate() {
 
           <div className="row mb-3">
             <div className="col-sm">
-              <label htmlFor="state" className="form-label">
-                Estado
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                name="state"
-                id="state"
-                value={request.state}
-                onChange={(e) =>
-                  setRequest({ ...request, state: e.target.value })
-                }
-                required
-              />
+              <label className="form-label">Estado</label>
+              
+              <div>
+                <input
+                  type="radio"
+                  name="state"
+                  value="7"
+                  checked={request.state === 7}
+                  onChange={() => handleStateChange(7)}
+                />
+                <label className="ms-2">Terminado</label>
+              </div>
+              <div>
+                <input
+                  type="radio"
+                  name="state"
+                  value="3"
+                  checked={request.state === 3}
+                  onChange={() => handleStateChange(3)}
+                />
+                <label className="ms-2">Cancelado</label>
+              </div>
             </div>
             <div className="col-sm">
-              <label htmlFor="creationDate" className="form-label">
-                Fecha de Creación
-              </label>
+              <label htmlFor="creationDate" className="form-label">Fecha de Creación</label>
               <input
                 type="datetime-local"
                 className="form-control"
                 name="creationDate"
                 id="creationDate"
                 value={formatDateForInput(request.creationDate)}
-                onChange={(e) =>
-                  setRequest({
-                    ...request,
-                    creationDate: new Date(e.target.value).toISOString(),
-                  })
-                }
+                onChange={(e) => setRequest({ ...request, creationDate: new Date(e.target.value).toISOString() })}
                 required
               />
             </div>
@@ -214,40 +222,26 @@ function RequestUpdate() {
 
           <div className="row mb-3">
             <div className="col-sm">
-              <label htmlFor="deadLine" className="form-label">
-                Fecha Límite
-              </label>
+              <label htmlFor="deadLine" className="form-label">Fecha Límite</label>
               <input
                 type="datetime-local"
                 className="form-control"
                 name="deadLine"
                 id="deadLine"
                 value={formatDateForInput(request.deadLine)}
-                onChange={(e) =>
-                  setRequest({
-                    ...request,
-                    deadLine: new Date(e.target.value).toISOString(),
-                  })
-                }
+                onChange={(e) => setRequest({ ...request, deadLine: new Date(e.target.value).toISOString() })}
                 required
               />
             </div>
             <div className="col-sm">
-              <label htmlFor="stateDate" className="form-label">
-                Fecha de Estado
-              </label>
+              <label htmlFor="stateDate" className="form-label">Fecha de Estado</label>
               <input
                 type="datetime-local"
                 className="form-control"
                 name="stateDate"
                 id="stateDate"
                 value={formatDateForInput(request.stateDate)}
-                onChange={(e) =>
-                  setRequest({
-                    ...request,
-                    stateDate: new Date(e.target.value).toISOString(),
-                  })
-                }
+                onChange={(e) => setRequest({ ...request, stateDate: new Date(e.target.value).toISOString() })}
                 required
               />
             </div>
@@ -261,9 +255,7 @@ function RequestUpdate() {
                 <select
                   className="form-control"
                   value={detail.idProduct}
-                  onChange={(e) =>
-                    handleDetailChange(index, "idProduct", e.target.value)
-                  }
+                  onChange={(e) => handleDetailChange(index, "idProduct", e.target.value)}
                   required
                 >
                   <option value="">Selecciona un producto</option>
@@ -278,9 +270,7 @@ function RequestUpdate() {
                   className="form-control"
                   placeholder="Cantidad"
                   value={detail.quantity}
-                  onChange={(e) =>
-                    handleDetailChange(index, "quantity", e.target.value)
-                  }
+                  onChange={(e) => handleDetailChange(index, "quantity", e.target.value)}
                   required
                 />
                 <input
@@ -288,9 +278,7 @@ function RequestUpdate() {
                   className="form-control"
                   placeholder="Subtotal"
                   value={detail.subtotal}
-                  onChange={(e) =>
-                    handleDetailChange(index, "subtotal", e.target.value)
-                  }
+                  onChange={(e) => handleDetailChange(index, "subtotal", e.target.value)}
                   required
                 />
                 <input
@@ -298,25 +286,19 @@ function RequestUpdate() {
                   className="form-control"
                   placeholder="Total"
                   value={detail.total}
-                  onChange={(e) =>
-                    handleDetailChange(index, "total", e.target.value)
-                  }
+                  onChange={(e) => handleDetailChange(index, "total", e.target.value)}
                   required
                 />
-                <button
-                  type="button"
-                  className="btn btn-secondary rounded-4"
-                  onClick={() => handleRemoveDetail(index)}
-                >
+                <button type="button" 
+                className="btn btn-secondary rounded-4" 
+                onClick={() => handleRemoveDetail(index)}>
                   <i className="bi bi-dash"></i>
                 </button>
               </div>
             ))}
-            <button
-              type="button"
-              className="btn btn-info rounded-4"
-              onClick={handleAddDetail}
-            >
+            <button type="button" 
+            className="btn btn-info rounded-4" 
+            onClick={handleAddDetail}>
               <i className="bi bi-plus-lg"></i>
             </button>
           </div>
@@ -333,6 +315,7 @@ function RequestUpdate() {
               Guardar
             </button>
           </div>
+
         </form>
       </div>
     </div>

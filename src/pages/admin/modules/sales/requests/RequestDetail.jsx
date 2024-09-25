@@ -51,10 +51,9 @@ function RequestDetailsModal({ show, onClose, details }) {
   // Helper function to get state name by ID
   const getStateNameById = (id) => {
     const states = {
-      1: "Pendiente",
-      2: "En producción",
-      3: "Terminado",
-      4: "Cancelado",
+      4: "Pendiente",
+      7: "Terminado",
+      3: "Cancelado",
     };
     return states[id] || "Desconocido";
   };

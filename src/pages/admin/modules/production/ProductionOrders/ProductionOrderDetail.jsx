@@ -32,10 +32,11 @@ function ProductionOrderDetailsModal({ show, onClose, details }) {
 
   // Mapeo de estados
   const stateNames = {
-    1: "Pendiente",
-    2: "En producción",
-    3: "Terminado",
-    4: "Cancelado"
+    4: "Pendiente",
+    6: "En producción",
+    7: "Terminado",
+    3: "Cancelado",
+    1: "Activo"
   };
 
   // Helper function to get product name by ID
