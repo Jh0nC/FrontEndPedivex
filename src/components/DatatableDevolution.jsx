@@ -1,12 +1,10 @@
 import '../../public/css/datatableStyles.css';
 
-function Datatables({ data }) {
+function Datatables({ data, onDetail }) { // Recibe una prop onDetail
   return (
     <div className="datatable-container border rounded-4 mx-auto my-3">
       <div className="datatable_header">
         <h2>{data.title}</h2>
-        {/* <button>Agregar {data.module}</button> */}
-
         <div className="input_search">
           <input type="search" placeholder="Buscar" />
           <i className="bi bi-search" id="search"></i>
@@ -30,7 +28,12 @@ function Datatables({ data }) {
               <td>{item.date}</td>
               <td>{item.state}</td>
               <td className='d-flex gap-2'>
-                <button className='btn btn-outline-danger'>Ver Detalle</button>
+                <button
+                  className='btn btn-outline-danger'
+                  onClick={() => onDetail(item.id)} // Agrega un manejador de click
+                >
+                  Ver Detalle
+                </button>
               </td>
             </tr>
           ))}
@@ -38,9 +41,6 @@ function Datatables({ data }) {
       </table>
       <div className="datatable_footer d-flex justify-content-between align-items-center">
         <p>Total de filas: {data.content.length}</p>
-        {/* <button className="btn btn-outline-success rounded-5">
-          Generar Excel
-        </button> */}
       </div>
     </div>
   );
