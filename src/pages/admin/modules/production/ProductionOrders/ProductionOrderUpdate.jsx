@@ -184,6 +184,16 @@ function ProductionOrderUpdate() {
                 <input
                   type="radio"
                   name="state"
+                  value="6"
+                  checked={formData.state === 6}
+                  onChange={() => handleStateChange(6)}
+                />
+                <label className="ms-2">En Producción</label>
+              </div>
+              <div>
+                <input
+                  type="radio"
+                  name="state"
                   value="7"
                   checked={formData.state === 7}
                   onChange={() => handleStateChange(7)}

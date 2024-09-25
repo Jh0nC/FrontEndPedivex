@@ -33,7 +33,7 @@ function CreateCategory() {
           title: 'Categoría creada',
           text: 'La categoría se ha creado exitosamente',
         }).then(() => {
-          navigate('/admin/productCategory');
+          navigate('/admin/productCategories');
         });
       } else {
         throw new Error('Error al crear la categoría');
