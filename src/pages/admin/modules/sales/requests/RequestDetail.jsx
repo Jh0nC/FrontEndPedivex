@@ -66,7 +66,9 @@ function RequestDetailsModal({ show, onClose, details }) {
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">Detalles del Pedido</h5>
+            <h5 className="modal-title">
+              Detalles del Pedido #{details.id}
+            </h5>
             <button
               type="button"
               className="btn-close"
@@ -74,21 +76,30 @@ function RequestDetailsModal({ show, onClose, details }) {
             ></button>
           </div>
           <div className="modal-body">
-            <p>Número de Pedido: {details.id}</p>
-            <p>Usuario: {getUserNameById(details.idUser)}</p>
-            <p>Total: {details.total}</p>
-            <p>Estado: {getStateNameById(details.state)}</p>
-            <p>Fecha de Creación: {details.creationDate}</p>
-            <p>Fecha Límite: {details.deadLine}</p>
-            <p>Fecha de Estado: {details.stateDate}</p>
-            
+            <p><strong>Usuario:</strong> {getUserNameById(details.idUser)}</p>
+            <p><strong>Total:</strong> {details.total}</p>
+            <p><strong>Estado:</strong> {getStateNameById(details.state)}</p>
+            <p><strong>Fecha de Creación:</strong> {details.creationDate}</p>
+            <p><strong>Fecha Límite:</strong> {details.deadLine}</p>
+            <p><strong>Fecha de Estado:</strong> {details.stateDate}</p>
+
             {details.requestDetails && details.requestDetails.length > 0 ? (
               details.requestDetails.map((detail) => (
-                <div key={detail.idProduct}>
-                  <p>Producto: {getProductNameById(detail.idProduct)}</p>
-                  <p>Cantidad: {detail.quantity}</p>
-                  <p>Subtotal: {detail.subtotal}</p>
-                  <p>Total: {detail.total}</p>
+                <div key={detail.idProduct} className="card mb-3">
+                  <div className="card-body">
+                    <p className="card-text">
+                      <strong>Producto:</strong> {getProductNameById(detail.idProduct)}
+                    </p>
+                    <p className="card-text">
+                      <strong>Cantidad:</strong> {detail.quantity}
+                    </p>
+                    <p className="card-text">
+                      <strong>Subtotal:</strong> {detail.subtotal}
+                    </p>
+                    <p className="card-text">
+                      <strong>Total:</strong> {detail.total}
+                    </p>
+                  </div>
                 </div>
               ))
             ) : (
