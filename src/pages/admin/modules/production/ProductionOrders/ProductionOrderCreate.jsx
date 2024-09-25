@@ -7,9 +7,9 @@ function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
     date: initialData.date || new Date().toISOString(),
     notes: initialData.notes || "",
     idUser: initialData.idUser || "",
-    state: initialData.state || "",
+    state: 4, // Estado por defecto "Pendiente"
     targetDate: initialData.targetDate || "",
-    details: initialData.details || [{ idProduct: "", amount: "", state: "" }],
+    details: initialData.details || [{ idProduct: "", amount: "", state: 1 }], // Estado "Activo" por defecto
   });
 
   const [products, setProducts] = useState([]);
@@ -17,12 +17,12 @@ function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:3000/product") // uerreele para loh productoh
+    fetch("http://localhost:3000/product")
       .then((response) => response.json())
       .then((data) => setProducts(data))
       .catch((error) => console.error("Error fetching products:", error));
 
-    fetch("http://localhost:3000/user") // Uerreele para user
+    fetch("http://localhost:3000/user")
       .then((response) => response.json())
       .then((data) => setUsers(data))
       .catch((error) => console.error("Error fetching users:", error));
@@ -48,7 +48,7 @@ function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
   const handleAddDetail = () => {
     setFormData({
       ...formData,
-      details: [...formData.details, { idProduct: "", amount: "", state: "" }],
+      details: [...formData.details, { idProduct: "", amount: "", state: 1 }], // Estado "Activo" (id 1)
     });
   };
 
@@ -65,9 +65,17 @@ function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
 
     const formattedDate = new Date(formData.date).toISOString();
 
+    // Asegurarse de que cada detalle tenga estado "Activo" (id 1)
+    const updatedDetails = formData.details.map(detail => ({
+      ...detail,
+      state: detail.state || 1, // Estado "Activo" por defecto si no está presente
+    }));
+
     const updatedFormData = {
       ...formData,
       date: formattedDate,
+      state: 4, // Asignar estado "Pendiente" (id 4) antes de enviar
+      details: updatedDetails, // Asegurar los detalles con estado "Activo"
     };
 
     fetch("http://localhost:3000/productionOrder", {
@@ -156,17 +164,6 @@ function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
             </select>
           </div>
           <div className="mb-3">
-            <label className="form-label">Estado:</label>
-            <input
-              type="text"
-              className="form-control"
-              name="state"
-              value={formData.state}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="mb-3">
             <label className="form-label">Fecha de Entrega:</label>
             <input
               type="date"
@@ -209,17 +206,6 @@ function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
                   }
                   required
                 />
-                <input
-                  type="text"
-                  className="form-control w-50"
-                  placeholder="Estado"
-                  name="state"
-                  value={detail.state}
-                  onChange={(e) =>
-                    handleDetailChange(index, "state", e.target.value)
-                  }
-                  required
-                />
                 <button
                   type="button"
                   className="btn btn-outline-secondary"
@@ -239,19 +225,18 @@ function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
               </button>
             </div>
             <div className="m-1 d-flex gap-3">
-            <button
-              type="button"
-              className="btn btn-secondary rounded-5"
-              onClick={handleCancel}
-            >
-              Cancelar
-            </button>
-            <button type="submit" className="btn btn-success rounded-5">
-              {initialData.id ? "Actualizar" : "Guardar"}
-            </button>
+              <button
+                type="button"
+                className="btn btn-secondary rounded-5"
+                onClick={handleCancel}
+              >
+                Cancelar
+              </button>
+              <button type="submit" className="btn btn-success rounded-5">
+                {initialData.id ? "Actualizar" : "Guardar"}
+              </button>
+            </div>
           </div>
-          </div>
-          
         </form>
       </div>
     </div>

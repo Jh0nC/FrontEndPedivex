@@ -7,7 +7,7 @@ function RequestCreate({ onSave, onClose, initialData = {} }) {
     notes: initialData.notes || "",
     idUser: initialData.idUser || "",
     total: initialData.total || "",
-    state: initialData.state || 1, // Valor por defecto para el estado
+    state: initialData.state || 4, // Valor por defecto para el estado
     creationDate: new Date().toISOString(),
     deadLine: initialData.deadLine || "",
     stateDate: initialData.stateDate || "",
@@ -32,10 +32,9 @@ function RequestCreate({ onSave, onClose, initialData = {} }) {
 
   // Mapeo de estados
   const stateNames = {
-    1: "Pendiente",
-    2: "En producción",
-    3: "Terminado",
-    4: "Cancelado"
+    4: "Pendiente",
+    7: "Terminado",
+    3: "Cancelado"
   };
 
   const getStateNameByNumber = (number) => {

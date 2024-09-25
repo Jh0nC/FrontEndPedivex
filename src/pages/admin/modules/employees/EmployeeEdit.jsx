@@ -122,7 +122,7 @@ function EmployeeEdit() {
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <h2 className='mx-3'>Editar Cliente</h2>
+      <h2 className='mx-3'>Editar empleado</h2>
       <form onSubmit={handleSubmit}>
         <div className='m-3'>
           <label htmlFor="email" className="form-label">Correo:</label>

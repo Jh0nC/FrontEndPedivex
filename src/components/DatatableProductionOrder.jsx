@@ -71,10 +71,11 @@ function Datatables({ data }) {
   // Helper function to get state name
   const getStateName = (stateId) => {
     const states = {
-      1: "Pendiente",
-      2: "En producción",
-      3: "Terminado",
-      4: "Cancelado"
+      4: "Pendiente",
+      6: "En producción",
+      7: "Terminado",
+      3: "Cancelado",
+      1: "Activo"
     };
     return states[stateId] || "Desconocido";
   };

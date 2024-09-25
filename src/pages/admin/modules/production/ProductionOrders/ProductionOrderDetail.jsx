@@ -32,10 +32,11 @@ function ProductionOrderDetailsModal({ show, onClose, details }) {
 
   // Mapeo de estados
   const stateNames = {
-    1: "Pendiente",
-    2: "En producción",
-    3: "Terminado",
-    4: "Cancelado"
+    4: "Pendiente",
+    6: "En producción",
+    7: "Terminado",
+    3: "Cancelado",
+    1: "Activo",
   };
 
   // Helper function to get product name by ID
@@ -49,6 +50,11 @@ function ProductionOrderDetailsModal({ show, onClose, details }) {
     return stateNames[number] || "Desconocido";
   };
 
+  // Obtener el número de la orden de producción
+  const orderNumber = details.productionOrderDetails.length
+    ? details.productionOrderDetails[0].idProductionOrder
+    : "Desconocido";
+
   return (
     <div
       className="modal fade show d-block"
@@ -57,7 +63,7 @@ function ProductionOrderDetailsModal({ show, onClose, details }) {
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">Detalles de la Orden de Producción</h5>
+            <h5 className="modal-title">Detalles de la Orden de Producción #{orderNumber}</h5>
             <button
               type="button"
               className="btn-close"
@@ -66,11 +72,18 @@ function ProductionOrderDetailsModal({ show, onClose, details }) {
           </div>
           <div className="modal-body">
             {details.productionOrderDetails.map((detail) => (
-              <div key={detail.id}>
-                <p>Número de Orden: {detail.idProductionOrder}</p>
-                <p>Producto: {getProductNameById(detail.idProduct)}</p>
-                <p>Cantidad: {detail.amount}</p>
-                <p>Estado: {getStateNameByNumber(detail.state)}</p>
+              <div key={detail.id} className="card mb-3">
+                <div className="card-body">
+                  <p className="card-text">
+                    <strong>Producto:</strong> {getProductNameById(detail.idProduct)}
+                  </p>
+                  <p className="card-text">
+                    <strong>Cantidad:</strong> {detail.amount}
+                  </p>
+                  <p className="card-text">
+                    <strong>Estado:</strong> {getStateNameByNumber(detail.state)}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
