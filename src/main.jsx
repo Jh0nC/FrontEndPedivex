@@ -75,6 +75,7 @@ import EditCategorie from "./pages/admin/modules/production/porductCategories/Ed
 
 import CreateReturn from "./pages/admin/modules/sales/createReturn";
 import EditProduct from "./pages/admin/modules/production/products/EditProduct";
+import ClientEdit from "./pages/admin/modules/clients/ClientEdit";
 
 
 ReactDOM.createRoot(document.querySelector('#root')).render(
@@ -157,7 +158,7 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
             <Route path='clients' element={<Clients />} />
             {/* <Route path='clientsEdit/:id' element={<ClientsEdit />} /> */}
             {/* <Route path='clientCreate' element={<ClientCreate />} /> */}
-            {/* <Route path='clientEdit' element={<ClientEdit />} /> */}
+            <Route path='clientEdit' element={<ClientEdit />} /> 
 
             <Route path='Employees' element={<Employees />} />
             {/* <Route path='EmployeeCreate' element={<EmployeeCreate />} /> */}
