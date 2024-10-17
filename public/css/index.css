@@ -45,10 +45,6 @@ a {
 }
 
 .border-type-mid {
-  /* border-bottom: 4px solid var(--own-color-2);
-  border-left: 2px solid var(--own-color-2);
-  border-right: 2px solid var(--own-color-2);
-  border-top: 4px solid var(--own-color-2); */
   border-radius: 1rem;
 }
 
@@ -278,6 +274,7 @@ a {
   width: 600px;
   height: 250px;
   z-index: 2;
+  box-shadow: 0 0 10px 2px #0000002e;
 }
 
 .catalogue-card-title {

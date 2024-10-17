@@ -13,7 +13,7 @@ function Catalogue() {
           <div className="catalogue-card-body">
             <div className="card-content">
               <div className="list">
-                <p> <b>Ingredientes:</b> </p>
+                <p><b>Ingredientes:</b></p>
                 <li>Arequipe</li>
                 <li>Queso mozarella</li>
               </div>
