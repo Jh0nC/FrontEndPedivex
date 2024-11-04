@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 
-function RequestDetailsModal({ show, onClose, details }) {
+function SalesDetailsModal({ show, onClose, details }) {
   const [users, setUsers] = useState([]);
   const [products, setProducts] = useState([]);
+  const [sales, setSales] = useState([]);
 
   useEffect(() => {
     // Fetch para obtener usuarios
@@ -53,10 +54,15 @@ function RequestDetailsModal({ show, onClose, details }) {
     return product ? product.name : "Desconocido";
   };
 
+  const getSaleNameById = (id) => {
+    const sale = sales.find((sale) => sale.id === id);
+    return sale ? sale.name : "Desconocido";
+  };
+
+
   // Helper function to get state name by ID
   const getStateNameById = (id) => {
     const states = {
-      4: "Pendiente",
       7: "Terminado",
       3: "Cancelado",
     };
@@ -72,7 +78,7 @@ function RequestDetailsModal({ show, onClose, details }) {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">
-              Detalles del Pedido #{details.id}
+              Detalles del Venta #{details.id}
             </h5>
             <button
               type="button"
@@ -126,4 +132,4 @@ function RequestDetailsModal({ show, onClose, details }) {
   );
 }
 
-export default RequestDetailsModal;
+export default SalesDetailsModal;
