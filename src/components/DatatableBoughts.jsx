@@ -69,7 +69,7 @@ function Datatables({ data }) {
               <td>{item.nroReceipt}</td>
               <td>{item.date}</td>
               <td>{item.total}</td>
-              <td>{item.state}</td>
+              <td>{item.provider.provider}</td>
               <td>
                   <button
                     className="btn btn-secondary rounded-5 me-1"

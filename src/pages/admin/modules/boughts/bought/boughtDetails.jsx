@@ -42,8 +42,7 @@ function boughtDetails({ show, onClose, details }) {
                     <p>Nombre Insumo: {detail.supplieName}</p>
                     <p>Cantidad: {detail.amount}</p>
                     <p>Unidad: {detail.unit}</p>
-                    <p>Costo Unidad: {detail.costUnit}</p>
-                    <p>Subtotal: {detail.subtotal}</p>
+                    <p>Costo: {detail.cost}</p>
                     {/* <p>Estado: {detail.state}</p> */}
                   </div>
                 </div>
