@@ -6,105 +6,129 @@ function RequestUpdate() {
   const { id } = useParams();
   const [users, setUsers] = useState([]);
   const [products, setProducts] = useState([]);
-  const [details, setDetails] = useState([{ idProduct: "", quantity: "", subtotal: "", total: "" }]);
-  
-  // Estado del pedido
+  const [details, setDetails] = useState([]);
+
   const [request, setRequest] = useState({
     idUser: "",
-    total: "",
-    state: 4, // Estado por defecto al trear el pedido creado
+    total: 0,
+    state: 4,
     creationDate: "",
     deadLine: "",
     stateDate: "",
-    requestDetails: [],
   });
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`http://localhost:3000/request/${id}`)
-      .then((response) => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/request/${id}`);
         if (!response.ok) {
           throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
-        return response.json();
-      })
-      .then((data) => {
-        setRequest(data);
-        setDetails(data.requestDetails);
-      })
-      .catch((error) => console.error("Error al obtener el pedido:", error));
+        const data = await response.json();
 
-    fetch("http://localhost:3000/user")
-      .then((response) => response.json())
-      .then((data) => setUsers(data))
-      .catch((error) => console.error("Error al obtener usuarios:", error));
+        setRequest({
+          ...data,
+          creationDate: data.creationDate ? new Date(data.creationDate).toISOString().slice(0, 16) : "",
+          deadLine: data.deadLine ? new Date(data.deadLine).toISOString().slice(0, 16) : "",
+          stateDate: data.stateDate ? new Date(data.stateDate).toISOString().slice(0, 16) : "",
+        });
 
-    fetch("http://localhost:3000/product")
-      .then((response) => response.json())
-      .then((data) => setProducts(data))
-      .catch((error) => console.error("Error al obtener productos:", error));
+        setDetails(Array.isArray(data.requestDetails) ? data.requestDetails : []);
+
+        const userResponse = await fetch("http://localhost:3000/user");
+        const userData = await userResponse.json();
+        setUsers(Array.isArray(userData) ? userData : []);
+
+        const productResponse = await fetch("http://localhost:3000/product");
+        const productData = await productResponse.json();
+        setProducts(Array.isArray(productData) ? productData : []);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        Swal.fire("Error", "Hubo un problema al cargar los datos.", "error");
+      }
+    };
+
+    fetchData();
   }, [id]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setRequest({
+      ...request,
+      [name]: value,
+    });
+  };
 
   const handleDetailChange = (index, field, value) => {
     const updatedDetails = [...details];
     updatedDetails[index][field] = value;
-    setDetails(updatedDetails);
 
-    // Actualiza el estado del pedido con los detalles modificados - retirar en caso de chocoleo supremo
-    setRequest((prev) => ({ ...prev, requestDetails: updatedDetails }));
-  };
+    if (field === "quantity" || field === "idProduct") {
+      const selectedProduct = products.find(
+        (product) => product.id === parseInt(updatedDetails[index].idProduct, 10)
+      );
+      const price = selectedProduct ? parseFloat(selectedProduct.price) : 0;
+      const quantity = parseFloat(updatedDetails[index].quantity) || 0;
 
-  const handleCancelClick = () => {
-    navigate(`/admin/request`);
-  };
+      updatedDetails[index].subtotal = (price * quantity).toFixed(2);
+      updatedDetails[index].price = price;
+    }
 
-  /*  DESCOMENTAR EN CASO DE CHOCOLEO
-  const handleAddDetail = () => {
-    setDetails([...details, { idProduct: "", quantity: "", subtotal: "", total: "" }]);
-  };
-
-  const handleRemoveDetail = (index) => {
-    const updatedDetails = details.filter((_, i) => i !== index);
     setDetails(updatedDetails);
   };
- */
 
-  // Borrar en caso de chocoleo supremo
+  const calculateTotal = () => {
+    return details.reduce((acc, detail) => {
+      return acc + parseFloat(detail.subtotal || 0);
+    }, 0);
+  };
+
   const handleAddDetail = () => {
-    const newDetail = { idProduct: "", quantity: "", subtotal: "", total: "" };
+    const newDetail = { idProduct: "", quantity: "", price: 0, subtotal: 0 };
     const updatedDetails = [...details, newDetail];
     setDetails(updatedDetails);
-    
-    // Actualizar el pedido con los nuevos detalles
-    setRequest((prev) => ({ ...prev, requestDetails: updatedDetails }));
   };
-  
+
   const handleRemoveDetail = (index) => {
     const updatedDetails = details.filter((_, i) => i !== index);
     setDetails(updatedDetails);
-  
-    // Actualizar el pedido con los detalles restantes
-    setRequest((prev) => ({ ...prev, requestDetails: updatedDetails }));
-  };  
+  };
 
   const handleStateChange = (stateId) => {
     setRequest({ ...request, state: stateId });
   };
 
+  const handleCancel = () => {
+    navigate(`/admin/request`);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const updatedRequest = {
+
+    const formattedCreationDate = request.creationDate ? new Date(request.creationDate).toISOString() : "";
+    const formattedDeadLine = request.deadLine ? new Date(request.deadLine).toISOString() : "";
+    const formattedStateDate = request.stateDate ? new Date(request.stateDate).toISOString() : "";
+
+    const total = calculateTotal();
+
+    const requestData = {
       ...request,
+      creationDate: formattedCreationDate,
+      deadLine: formattedDeadLine,
+      stateDate: formattedStateDate,
+      total: total,
       requestDetails: details.map((detail) => ({
-        idProduct: detail.idProduct,
-        quantity: detail.quantity,
-        subtotal: detail.subtotal,
-        total: detail.total,
+        id: detail.id,
+        idProduct: parseInt(detail.idProduct, 10),
+        quantity: parseFloat(detail.quantity),
+        price: parseFloat(detail.price),
+        subtotal: parseFloat(detail.subtotal),
       })),
     };
-
-    console.log("Datos del pedido actualizado:", updatedRequest);  //  esto para verificar antes del put
+  
+    console.log('Datos enviados al backend:', requestData);
 
     try {
       const response = await fetch(`http://localhost:3000/request/${id}`, {
@@ -112,21 +136,34 @@ function RequestUpdate() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(updatedRequest),
+        body: JSON.stringify({
+          ...request,
+          creationDate: formattedCreationDate,
+          deadLine: formattedDeadLine,
+          stateDate: formattedStateDate,
+          total: total,
+          requestDetails: details.map((detail) => ({
+            id: detail.id,
+            idProduct: parseInt(detail.idProduct, 10),
+            quantity: parseFloat(detail.quantity),
+            price: parseFloat(detail.price),
+            subtotal: parseFloat(detail.subtotal),
+          })),
+        }),
       });
 
-      if (response.ok) {
-        Swal.fire({
-          title: "¡Pedido actualizado!",
-          text: "El pedido ha sido actualizado exitosamente.",
-          icon: "success",
-          confirmButtonText: "Ok",
-        }).then(() => {
-          navigate("/admin/request");
-        });
-      } else {
+      if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
+
+      Swal.fire({
+        title: "¡Pedido actualizado!",
+        text: "El pedido ha sido actualizado exitosamente.",
+        icon: "success",
+        confirmButtonText: "Ok",
+      }).then(() => {
+        navigate("/admin/request");
+      });
     } catch (error) {
       Swal.fire({
         title: "Error",
@@ -137,11 +174,7 @@ function RequestUpdate() {
     }
   };
 
-  const formatDateForInput = (date) => {
-    const d = new Date(date);
-    if (isNaN(d.getTime())) return "";
-    return d.toISOString().slice(0, 16);
-  };
+  
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
@@ -150,13 +183,15 @@ function RequestUpdate() {
         <form onSubmit={handleSubmit} className="mt-3">
           <div className="row mb-3">
             <div className="col-sm">
-              <label htmlFor="user" className="form-label">Usuario</label>
+              <label htmlFor="user" className="form-label">
+                Usuario
+              </label>
               <select
                 name="idUser"
                 className="form-select"
                 id="user"
                 value={request.idUser}
-                onChange={(e) => setRequest({ ...request, idUser: e.target.value })}
+                onChange={handleChange}
                 required
               >
                 <option value="">Selecciona un usuario</option>
@@ -168,15 +203,16 @@ function RequestUpdate() {
               </select>
             </div>
             <div className="col-sm">
-              <label htmlFor="total" className="form-label">Total</label>
+              <label htmlFor="total" className="form-label">
+                Total
+              </label>
               <input
                 type="number"
                 className="form-control"
                 name="total"
                 id="total"
-                value={request.total}
-                onChange={(e) => setRequest({ ...request, total: e.target.value })}
-                required
+                value={calculateTotal()}
+                readOnly
               />
             </div>
           </div>
@@ -184,7 +220,6 @@ function RequestUpdate() {
           <div className="row mb-3">
             <div className="col-sm">
               <label className="form-label">Estado</label>
-              
               <div>
                 <input
                   type="radio"
@@ -207,14 +242,16 @@ function RequestUpdate() {
               </div>
             </div>
             <div className="col-sm">
-              <label htmlFor="creationDate" className="form-label">Fecha de Creación</label>
+              <label htmlFor="creationDate" className="form-label">
+                Fecha de Creación
+              </label>
               <input
                 type="datetime-local"
                 className="form-control"
                 name="creationDate"
                 id="creationDate"
-                value={formatDateForInput(request.creationDate)}
-                onChange={(e) => setRequest({ ...request, creationDate: new Date(e.target.value).toISOString() })}
+                value={request.creationDate}
+                onChange={handleChange}
                 required
               />
             </div>
@@ -222,26 +259,30 @@ function RequestUpdate() {
 
           <div className="row mb-3">
             <div className="col-sm">
-              <label htmlFor="deadLine" className="form-label">Fecha Límite</label>
+              <label htmlFor="deadLine" className="form-label">
+                Fecha Límite
+              </label>
               <input
                 type="datetime-local"
                 className="form-control"
                 name="deadLine"
                 id="deadLine"
-                value={formatDateForInput(request.deadLine)}
-                onChange={(e) => setRequest({ ...request, deadLine: new Date(e.target.value).toISOString() })}
+                value={request.deadLine}
+                onChange={handleChange}
                 required
               />
             </div>
             <div className="col-sm">
-              <label htmlFor="stateDate" className="form-label">Fecha de Estado</label>
+              <label htmlFor="stateDate" className="form-label">
+                Fecha de Estado
+              </label>
               <input
                 type="datetime-local"
                 className="form-control"
                 name="stateDate"
                 id="stateDate"
-                value={formatDateForInput(request.stateDate)}
-                onChange={(e) => setRequest({ ...request, stateDate: new Date(e.target.value).toISOString() })}
+                value={request.stateDate}
+                onChange={handleChange}
                 required
               />
             </div>
@@ -278,27 +319,18 @@ function RequestUpdate() {
                   className="form-control"
                   placeholder="Subtotal"
                   value={detail.subtotal}
-                  onChange={(e) => handleDetailChange(index, "subtotal", e.target.value)}
-                  required
+                  readOnly
                 />
-                <input
-                  type="number"
-                  className="form-control"
-                  placeholder="Total"
-                  value={detail.total}
-                  onChange={(e) => handleDetailChange(index, "total", e.target.value)}
-                  required
-                />
-                <button type="button" 
-                className="btn btn-secondary rounded-4" 
-                onClick={() => handleRemoveDetail(index)}>
+                <button
+                  type="button"
+                  className="btn btn-secondary rounded-4"
+                  onClick={() => handleRemoveDetail(index)}
+                >
                   <i className="bi bi-dash"></i>
                 </button>
               </div>
             ))}
-            <button type="button" 
-            className="btn btn-info rounded-4" 
-            onClick={handleAddDetail}>
+            <button type="button" className="btn btn-info rounded-4" onClick={handleAddDetail}>
               <i className="bi bi-plus-lg"></i>
             </button>
           </div>
@@ -307,7 +339,7 @@ function RequestUpdate() {
             <button
               type="button"
               className="btn btn-secondary rounded-5"
-              onClick={handleCancelClick}
+              onClick={handleCancel}
             >
               Cancelar
             </button>
@@ -315,7 +347,6 @@ function RequestUpdate() {
               Guardar
             </button>
           </div>
-
         </form>
       </div>
     </div>
