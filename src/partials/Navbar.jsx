@@ -13,7 +13,7 @@ function Navbar() {
             <li><Link to={"/"} >{"Inicio"}</Link></li>
             <li><Link to={"/catalogue"} >{"Catálogo"}</Link></li>
             <li><Link to={"/aboutUs"} >{"Parcerottis"}</Link></li>
-            <li><Link to={"/admin"} >{"Administrador"}</Link></li>
+            {/* <li><Link to={"/admin"} >{"Administrador"}</Link></li> */}
           </div>
           <div className="navbar-auth">
             <Link to={"/login"}>

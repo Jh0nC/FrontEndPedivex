@@ -7,13 +7,14 @@ function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
     date: initialData.date || new Date().toISOString(),
     notes: initialData.notes || "",
     idUser: initialData.idUser || "",
-    state: 4, // Estado por defecto "Pendiente"
+    state: 4,
     targetDate: initialData.targetDate || "",
-    details: initialData.details || [{ idProduct: "", amount: "", state: 1 }], // Estado "Activo" por defecto
+    details: initialData.details || [{ idProduct: "", amount: "", state: 1 }],
   });
 
   const [products, setProducts] = useState([]);
   const [users, setUsers] = useState([]);
+  const [errors, setErrors] = useState({}); // Estado de errores
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,17 +39,32 @@ function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
 
   const handleDetailChange = (index, field, value) => {
     const updatedDetails = [...formData.details];
-    updatedDetails[index][field] = value;
+    const updatedErrors = { ...errors };
+
+    if (field === "amount") {
+      const parsedValue = parseInt(value, 10);
+      if (!isNaN(parsedValue) && parsedValue > 0 && parsedValue <= 100) {
+        updatedDetails[index][field] = parsedValue;
+        updatedErrors[index] = ""; // No hay error
+      } else {
+        updatedDetails[index][field] = value;
+        updatedErrors[index] = "Cantidad debe ser entre 1 y 100"; // Mensaje de error
+      }
+    } else {
+      updatedDetails[index][field] = value;
+    }
+
     setFormData({
       ...formData,
       details: updatedDetails,
     });
+    setErrors(updatedErrors);
   };
 
   const handleAddDetail = () => {
     setFormData({
       ...formData,
-      details: [...formData.details, { idProduct: "", amount: "", state: 1 }], // Estado "Activo" (id 1)
+      details: [...formData.details, { idProduct: "", amount: "", state: 1 }],
     });
   };
 
@@ -63,19 +79,28 @@ function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const formattedDate = new Date(formData.date).toISOString();
+    const hasErrors = Object.values(errors).some((error) => error !== "");
+    if (hasErrors) {
+      Swal.fire({
+        title: "Error",
+        text: "Por favor, corrige los errores antes de guardar.",
+        icon: "error",
+        confirmButtonText: "Aceptar",
+      });
+      return;
+    }
 
-    // Asegurarse de que cada detalle tenga estado "Activo" (id 1)
-    const updatedDetails = formData.details.map(detail => ({
+    const formattedDate = new Date(formData.date).toISOString();
+    const updatedDetails = formData.details.map((detail) => ({
       ...detail,
-      state: detail.state || 1, // Estado "Activo" por defecto si no está presente
+      state: detail.state || 1,
     }));
 
     const updatedFormData = {
       ...formData,
       date: formattedDate,
-      state: 4, // Asignar estado "Pendiente" (id 4) antes de enviar
-      details: updatedDetails, // Asegurar los detalles con estado "Activo"
+      state: 4,
+      details: updatedDetails,
     };
 
     fetch("http://localhost:3000/productionOrder", {
@@ -197,14 +222,21 @@ function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
                 </select>
                 <input
                   type="number"
-                  className="form-control w-50"
-                  placeholder="Cantidad"
+                  className={`form-control w-50 ${
+                    errors[index] ? "is-invalid" : ""
+                  }`}
+                  placeholder={errors[index] ? errors[index] : "Cantidad"}
                   name="amount"
                   value={detail.amount}
                   onChange={(e) =>
                     handleDetailChange(index, "amount", e.target.value)
                   }
                   required
+                  min="1"
+                  max="100"
+                  style={{
+                    color: errors[index] ? "red" : "inherit", 
+                  }}
                 />
                 <button
                   type="button"
@@ -215,6 +247,7 @@ function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
                 </button>
               </div>
             ))}
+
             <div className="d-flex justify-content-end">
               <button
                 type="button"
@@ -232,7 +265,11 @@ function ProductionOrderCreate({ onSave, onClose, initialData = {} }) {
               >
                 Cancelar
               </button>
-              <button type="submit" className="btn btn-success rounded-5">
+              <button
+                type="submit"
+                className="btn btn-success rounded-5"
+                disabled={Object.values(errors).some((error) => error)}
+              >
                 {initialData.id ? "Actualizar" : "Guardar"}
               </button>
             </div>
