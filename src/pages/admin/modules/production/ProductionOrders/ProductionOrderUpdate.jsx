@@ -6,13 +6,13 @@ function ProductionOrderUpdate() {
   const { id } = useParams();
   const [users, setUsers] = useState([]);
   const [products, setProducts] = useState([]);
-  const [details, setDetails] = useState([{ idProduct: "", amount: "", state: 1 }]); // Estado por defecto "Activo"
+  const [details, setDetails] = useState([]);
 
   const [formData, setFormData] = useState({
     date: "",
     notes: "",
     idUser: "",
-    state: 4, // Estado por defecto 'Pendiente'
+    state: 4,
     targetDate: "",
     details: [],
   });
@@ -27,27 +27,29 @@ function ProductionOrderUpdate() {
           throw new Error("Error fetching data");
         }
         const result = await response.json();
-        
+
         setFormData({
           ...result,
           date: result.date ? new Date(result.date).toISOString().slice(0, 16) : "",
           targetDate: result.targetDate ? new Date(result.targetDate).toISOString().slice(0, 16) : "",
+          details: Array.isArray(result.productionOrderDetails) ? result.productionOrderDetails : [],
         });
-        setDetails(Array.isArray(result.details) ? result.details : []); // Asegúrate de que sea un array
-    
+
+        setDetails(Array.isArray(result.productionOrderDetails) ? result.productionOrderDetails : []);
+
         const userResponse = await fetch("http://localhost:3000/user");
         const userData = await userResponse.json();
-        setUsers(Array.isArray(userData) ? userData : []); // Asegúrate de que sea un array
-    
+        setUsers(Array.isArray(userData) ? userData : []);
+
         const productResponse = await fetch("http://localhost:3000/product");
         const productData = await productResponse.json();
-        setProducts(Array.isArray(productData) ? productData : []); // Asegúrate de que sea un array
+        setProducts(Array.isArray(productData) ? productData : []);
       } catch (error) {
         console.error("Error fetching data:", error);
         Swal.fire("Error", "Hubo un problema al cargar los datos.", "error");
       }
     };
-    
+
     fetchData();
   }, [id]);
 
@@ -63,24 +65,19 @@ function ProductionOrderUpdate() {
     const updatedDetails = [...details];
     updatedDetails[index][field] = value;
     setDetails(updatedDetails);
-    
-    // Actualizar el estado del pedido con los detalles modificados
     setFormData((prev) => ({ ...prev, details: updatedDetails }));
   };
 
   const handleAddDetail = () => {
-    const newDetail = { idProduct: "", amount: "", state: 1 }; // Estado por defecto "Activo"
-    setDetails([...details, newDetail]);
-    
-    // Actualizar el estado del pedido con los nuevos detalles
-    setFormData((prev) => ({ ...prev, details: [...prev.details, newDetail] }));
+    const newDetail = { idProduct: "", amount: "", state: 1 };
+    const updatedDetails = [...details, newDetail];
+    setDetails(updatedDetails);
+    setFormData((prev) => ({ ...prev, details: updatedDetails }));
   };
 
   const handleRemoveDetail = (index) => {
     const updatedDetails = details.filter((_, i) => i !== index);
     setDetails(updatedDetails);
-    
-    // Actualizar el estado del pedido con los detalles restantes
     setFormData((prev) => ({ ...prev, details: updatedDetails }));
   };
 
@@ -108,6 +105,12 @@ function ProductionOrderUpdate() {
           ...formData,
           date: formattedDate,
           targetDate: formattedTargetDate,
+          productionOrderDetails: details.map((detail) => ({
+            id: detail.id,
+            idProduct: detail.idProduct,
+            amount: detail.amount,
+            state: detail.state || 1,
+          })),
         }),
       });
 
@@ -274,18 +277,13 @@ function ProductionOrderUpdate() {
           </div>
 
           <div className="m-1 d-flex gap-3">
-              <button
-                type="button"
-                className="btn btn-secondary rounded-5"
-                onClick={handleCancel}
-              >
-                Cancelar
-              </button>
-              <button type="submit" className="btn btn-success rounded-5">
-                {id ? "Actualizar" : "Guardar"}
-              </button>
-            </div>
-
+            <button type="button" className="btn btn-secondary rounded-5" onClick={handleCancel}>
+              Cancelar
+            </button>
+            <button type="submit" className="btn btn-success rounded-5">
+              {id ? "Actualizar" : "Guardar"}
+            </button>
+          </div>
         </form>
       </div>
     </div>
