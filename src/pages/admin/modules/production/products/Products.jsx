@@ -27,7 +27,6 @@ function Products() {
           <h2>Productos</h2>
           <Link to={'create'} className="btn btn-success rounded-5 d-flex gap-2 align-items-center">
             Crear producto
-            <i className="bi bi-plus-circle"></i>
           </Link>
           <div className="input_search">
             <input type="search" placeholder="Buscar" />
