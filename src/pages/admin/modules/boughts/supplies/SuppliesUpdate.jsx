@@ -146,18 +146,6 @@ function SupplieUpdate() {
             <option value="unit">Unidades</option>
           </select>
         </div>
-        <div className='m-3'>
-          <label htmlFor="state" className="form-label">Estado:</label>
-          <input
-            id="state"
-            className='form-control'
-            type="text"
-            name="state"
-            value={formData.state}
-            onChange={handleChange}
-            required
-          />
-        </div>
         <button type="submit" className='btn btn-warning m-3'>Editar</button>
         <Link to={"/admin/supplies"} className='btn btn-danger m-3'>Regresar</Link>
       </form>

@@ -59,7 +59,6 @@ function Card({ data }) {
             data-bs-target={`#modalCard${id}`}
           >
             Ver detalle
-            <i className="bi bi-eye"></i>
           </button>
           <button
             type="button"
@@ -67,7 +66,6 @@ function Card({ data }) {
             onClick={handleEditClick}
           >
             Editar
-            <i className="bi bi-pencil-square"></i>
           </button>
         </div>
       </div>
@@ -102,7 +100,7 @@ function Card({ data }) {
                     <i>${price}</i>
                   </p>
                   <p>
-                    <b>Moje: </b> {mass.id}
+                    <b>Moje: </b> {mass.name}
                   </p>
                 </div>
               </div>
