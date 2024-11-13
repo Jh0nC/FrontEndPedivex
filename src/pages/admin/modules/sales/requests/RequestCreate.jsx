@@ -2,16 +2,25 @@ import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
-function RequestCreate({ onSave, onClose, initialData = {} }) {
+function RequestCreate({ onSave, initialData = {} }) {
+  const getStateNameByNumber = (number) => {
+    const stateNames = {
+      4: "Pendiente",
+      7: "Terminado",
+      3: "Cancelado",
+    };
+    return stateNames[number] || "Desconocido";
+  };
+
   const [formData, setFormData] = useState({
     notes: initialData.notes || "",
     idUser: initialData.idUser || "",
-    total: initialData.total || "",
-    state: initialData.state || 4, // Valor por defecto para el estado
+    total: initialData.total || 0.0,
+    state: initialData.state || 4,
     creationDate: new Date().toISOString(),
     deadLine: initialData.deadLine || "",
     stateDate: initialData.stateDate || "",
-    details: initialData.details || [{ idProduct: "", quantity: "", subtotal: "", total: "" }],
+    details: initialData.details || [{ idProduct: "", quantity: 0, subtotal: 0.0, price: 0.0 }],
   });
 
   const [products, setProducts] = useState([]);
@@ -30,17 +39,6 @@ function RequestCreate({ onSave, onClose, initialData = {} }) {
       .catch((error) => console.error("Error fetching users:", error));
   }, []);
 
-  // Mapeo de estados
-  const stateNames = {
-    4: "Pendiente",
-    7: "Terminado",
-    3: "Cancelado"
-  };
-
-  const getStateNameByNumber = (number) => {
-    return stateNames[number] || "Desconocido";
-  };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -48,54 +46,77 @@ function RequestCreate({ onSave, onClose, initialData = {} }) {
       [name]: value,
     });
   };
+  
+  const calculateTotal = (details) => {
+    return details.reduce((acc, detail) => acc + parseFloat(detail.subtotal || 0), 0);
+  };
 
   const handleDetailChange = (index, field, value) => {
     const updatedDetails = [...formData.details];
     updatedDetails[index][field] = value;
+
+    if (field === "quantity" || field === "idProduct") {
+      const selectedProduct = products.find(
+        (product) => product.id === parseInt(updatedDetails[index].idProduct)
+      );
+      const price = selectedProduct ? parseFloat(selectedProduct.price) : 0;
+      const quantity = parseFloat(updatedDetails[index].quantity) || 0;
+
+      updatedDetails[index].price = price; // Asigna el precio aquí
+      updatedDetails[index].subtotal = (price * quantity).toFixed(2);
+    }
+
+    const total = calculateTotal(updatedDetails);
     setFormData({
       ...formData,
       details: updatedDetails,
+      total: total.toFixed(2),
     });
   };
 
   const handleAddDetail = () => {
     setFormData({
       ...formData,
-      details: [...formData.details, { idProduct: "", quantity: "", subtotal: "", total: "" }],
+      details: [
+        ...formData.details,
+        { idProduct: "", quantity: 0, subtotal: 0.0, price: 0.0 },
+      ],
     });
   };
 
   const handleRemoveDetail = (index) => {
     const updatedDetails = formData.details.filter((_, i) => i !== index);
+    const total = calculateTotal(updatedDetails);
+
     setFormData({
       ...formData,
       details: updatedDetails,
+      total: total.toFixed(2),
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const formattedDeadLine = new Date(formData.deadLine).toISOString();
-    const formattedStateDate = new Date(formData.stateDate).toISOString();
-
-    const updatedFormData = {
+    const formattedData = {
       ...formData,
-      deadLine: formattedDeadLine,
-      stateDate: formattedStateDate,
+      details: formData.details.map((detail) => ({
+        ...detail,
+        idProduct: parseInt(detail.idProduct, 10), // Convertir a número
+        quantity: parseFloat(detail.quantity),     // Asegurar que sea número
+        subtotal: parseFloat(detail.subtotal),
+        price: parseFloat(detail.price || 0),
+      })),
+      deadLine: new Date(formData.deadLine).toISOString(),
+      stateDate: new Date(formData.stateDate).toISOString(),
     };
 
     fetch("http://localhost:3000/request", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedFormData),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formattedData),
     })
       .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error en la solicitud");
-        }
+        if (!response.ok) throw new Error("Error en la solicitud");
         return response.json();
       })
       .then((data) => {
@@ -103,10 +124,7 @@ function RequestCreate({ onSave, onClose, initialData = {} }) {
           title: "Pedido creado con éxito",
           icon: "success",
           confirmButtonText: "Aceptar",
-        }).then(() => {
-          if (onSave) onSave();
-          navigate("/admin/request");
-        });
+        }).then(() => navigate("/admin/request"));
       })
       .catch((error) => {
         Swal.fire({
@@ -128,7 +146,6 @@ function RequestCreate({ onSave, onClose, initialData = {} }) {
       <div className="order-form-container border rounded-4 mx-auto my-3 p-3">
         <h2>{initialData.id ? "Editar Pedido" : "Crear Pedido"}</h2>
         <form onSubmit={handleSubmit}>
-          
           <div className="mb-3">
             <label className="form-label">Usuario:</label>
             <select
@@ -153,8 +170,7 @@ function RequestCreate({ onSave, onClose, initialData = {} }) {
               className="form-control"
               name="total"
               value={formData.total}
-              onChange={handleChange}
-              required
+              readOnly
             />
           </div>
           <div className="mb-3">
@@ -237,21 +253,7 @@ function RequestCreate({ onSave, onClose, initialData = {} }) {
                   placeholder="Subtotal"
                   name="subtotal"
                   value={detail.subtotal}
-                  onChange={(e) =>
-                    handleDetailChange(index, "subtotal", e.target.value)
-                  }
-                  required
-                />
-                <input
-                  type="number"
-                  className="form-control w-50"
-                  placeholder="Total"
-                  name="total"
-                  value={detail.total}
-                  onChange={(e) =>
-                    handleDetailChange(index, "total", e.target.value)
-                  }
-                  required
+                  readOnly
                 />
                 <button
                   type="button"
