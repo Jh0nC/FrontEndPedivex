@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 import "../../public/css/datatableStyles.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import RequestDetailsModal from "../pages/admin/modules/sales/requests/RequestDetail";
 import * as XLSX from "xlsx";
 
@@ -12,6 +13,7 @@ function Datatables({ data }) {
   const [itemsPerPage] = useState(5);
   const [users, setUsers] = useState([]);
   const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("http://localhost:3000/user")
@@ -28,6 +30,19 @@ function Datatables({ data }) {
   const handleDetailsClick = (item) => {
     setSelectedDetails(item);
     setShowModal(true);
+  };
+
+  const handleEditClick = (item) => {
+    if (item.state === 4) {
+      navigate(`/admin/request-update/${item.id}`);
+    } else {
+      Swal.fire({
+        title: "No se puede editar",
+        text: "Solo se pueden editar pedidos en estado 'Pendiente'.",
+        icon: "warning",
+        confirmButtonText: "Aceptar",
+      });
+    }
   };
 
   const handleCloseModal = () => {
@@ -69,25 +84,25 @@ function Datatables({ data }) {
   };
 
   const footerStyle = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '10px'
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: "10px",
   };
 
   const paginationStyle = {
-    display: 'flex',
-    justifyContent: 'center'
+    display: "flex",
+    justifyContent: "center",
   };
 
   const pageItemStyle = (isActive) => ({
-    backgroundColor: isActive ? '#FFD700' : '#FFFAE0',
-    color: '#000',
-    margin: '0 5px',
-    padding: '8px 12px',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer'
+    backgroundColor: isActive ? "#FFD700" : "#FFFAE0",
+    color: "#000",
+    margin: "0 5px",
+    padding: "8px 12px",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
   });
 
   return (
@@ -145,9 +160,12 @@ function Datatables({ data }) {
                   >
                     Detalles
                   </button>
-                  <Link to={`/admin/request-update/${item.id}`}>
-                    <button className="btn btn-warning me-2">Editar</button>
-                  </Link>
+                  <button
+                    className="btn btn-warning me-2"
+                    onClick={() => handleEditClick(item)}
+                  >
+                    Editar
+                  </button>
                 </td>
               </tr>
             ))}
@@ -166,7 +184,7 @@ function Datatables({ data }) {
                 key={index + 1}
                 onClick={() => paginate(index + 1)}
                 className={`page-item ${
-                  currentPage === index + 1 ? 'active' : ''
+                  currentPage === index + 1 ? "active" : ""
                 }`}
                 style={pageItemStyle(currentPage === index + 1)}
               >
