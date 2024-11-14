@@ -6,7 +6,6 @@ import '../../public/css/datatableStyles.css';
 function Datatables({ data }) {
   const navigate = useNavigate();
   const [selectedUserId, setSelectedUserId] = useState(null);
-
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
@@ -56,7 +55,7 @@ function Datatables({ data }) {
             text: `El usuario ha sido ${newState === 2 ? 'desactivado' : 'activado'} correctamente.`,
             icon: 'success',
           }).then(() => {
-            location.reload()
+            location.reload();
           });
         } else {
           Swal.fire({
@@ -95,7 +94,7 @@ function Datatables({ data }) {
           </div>
 
           <button className="btn btn-success rounded-5 h-50">
-            <i class="bi bi-filetype-xlsx"></i>
+            <i className="bi bi-filetype-xlsx"></i>
           </button>
         </div>
       </div>
@@ -119,7 +118,7 @@ function Datatables({ data }) {
               <td>{item.phoneNumber}</td>
               <td>
                 <button
-                  className='btn btn-warning rounded-5 h-50'
+                  className="btn btn-warning rounded-5 h-50"
                   style={{ marginRight: '5px' }}
                   onClick={() => handleEditClick(item.id)}
                 >
@@ -127,20 +126,20 @@ function Datatables({ data }) {
                 </button>
                 {item.state === 1 ? (
                   <button
-                    className='btn btn-success rounded-5 h-50'
+                    className="btn btn-success rounded-5 h-50"
                     onClick={() => handleChangeStateClick(item.id, item.state, item.firstName)}
                   >Activado</button>) : (
                   <button
-                    className='btn btn-danger rounded-5 h-50'
+                    className="btn btn-danger rounded-5 h-50"
                     onClick={() => handleChangeStateClick(item.id, item.state, item.firstName)}
-                  >Desativado</button>)}
+                  >Desactivado</button>)}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
       <div className="datatable_fotter d-flex justify-content-between align-items-center">
-        <p>Total de filas : 05</p>
+        <p>Total de filas: {data.content.length}</p>
         <div className="pagination">
           {Array.from({ length: Math.ceil(filteredData.length / itemsPerPage) }, (_, index) => (
             <button

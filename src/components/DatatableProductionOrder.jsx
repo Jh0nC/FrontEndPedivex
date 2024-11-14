@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"; 
+import React, { useState, useEffect } from "react";
 import "../../public/css/datatableStyles.css";
 import { Link } from "react-router-dom";
 import ProductionOrderDetailsModal from "../pages/admin/modules/production/ProductionOrders/ProductionOrderDetail";
@@ -15,14 +15,26 @@ function Datatables({ data }) {
 
   useEffect(() => {
     fetch("http://localhost:3000/user")
-      .then((response) => response.json())
-      .then((data) => setUsers(data))
-      .catch((error) => console.error("Error al obtener usuarios:", error));
+      .then((response) => {
+        if (!response.ok) throw new Error("Error en la API de usuarios");
+        return response.json();
+      })
+      .then((data) => setUsers(Array.isArray(data) ? data : []))
+      .catch((error) => {
+        console.error("Error al obtener usuarios:", error);
+        setUsers([]); // Asegura que users sea un array vacío en caso de error
+      });
 
     fetch("http://localhost:3000/product")
-      .then((response) => response.json())
-      .then((data) => setProducts(data))
-      .catch((error) => console.error("Error al obtener productos:", error));
+      .then((response) => {
+        if (!response.ok) throw new Error("Error en la API de productos");
+        return response.json();
+      })
+      .then((data) => setProducts(Array.isArray(data) ? data : []))
+      .catch((error) => {
+        console.error("Error al obtener productos:", error);
+        setProducts([]); // Asegura que products sea un array vacío en caso de error
+      });
   }, []);
 
   const handleDetailsClick = (item) => {
@@ -55,6 +67,7 @@ function Datatables({ data }) {
   };
 
   const getUserNameById = (id) => {
+    if (!Array.isArray(users)) return "Desconocido";
     const user = users.find((user) => user.id === id);
     return user ? `${user.firstName} ${user.lastName}` : "Desconocido";
   };
@@ -101,7 +114,7 @@ function Datatables({ data }) {
           className="btn btn-success rounded-5 d-flex gap-2 align-items-center"
         >
           Agregar {data.module}
-          <i className="bi bi-plus-circle"></i>
+          <i className="bi "></i>
         </Link>
 
         <div className="input_search">

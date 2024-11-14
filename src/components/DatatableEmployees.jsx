@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
+import Swal from 'sweetalert2';
 import '../../public/css/datatableStyles.css';
 
 function Datatables({ data }) {
@@ -54,8 +55,8 @@ function Datatables({ data }) {
             title: 'Cambio exitoso',
             text: `El usuario ha sido ${newState === 2 ? 'desactivado' : 'activado'} correctamente.`,
             icon: 'success',
-          }).then(()=>{
-            location.reload()
+          }).then(() => {
+            location.reload();
           });
         } else {
           Swal.fire({
@@ -98,11 +99,10 @@ function Datatables({ data }) {
             'El empleado ha sido eliminado.',
             'success'
           ).then(() => {
-            fetchCategories(); // Refresca los datos después de eliminar
+            location.reload(); // Recargar los datos después de eliminar
           });
-          console.log('Categoría eliminada con id:', id); // Confirmar la eliminación
         } else {
-          throw new Error('No se pudo eliminar la categoría');
+          throw new Error('No se pudo eliminar el empleado');
         }
       } catch (error) {
         Swal.fire(
@@ -110,7 +110,6 @@ function Datatables({ data }) {
           error.message,
           'error'
         );
-        console.error("Error al eliminar el empleado:", error); // Registrar el error
       }
     }
   };
@@ -135,7 +134,7 @@ function Datatables({ data }) {
           </div>
 
           <button className="btn btn-success rounded-5 h-50">
-            <i class="bi bi-filetype-xlsx"></i>
+            <i className="bi bi-filetype-xlsx"></i>
           </button>
         </div>
       </div>
@@ -158,7 +157,7 @@ function Datatables({ data }) {
               <td>{item.address}</td>
               <td>{item.phoneNumber}</td>
               <td>
-              <button
+                <button
                   className='btn btn-warning rounded-5 h-50'
                   style={{ marginRight: '5px' }}
                   onClick={() => handleEditClick(item.id)}
@@ -173,8 +172,8 @@ function Datatables({ data }) {
                   <button
                     className='btn btn-danger rounded-5 h-50'
                     onClick={() => handleChangeStateClick(item.id, item.state, item.firstName)}
-                  >Desativado</button>)}
-                   <button 
+                  >Desactivado</button>)}
+                <button 
                   className='btn btn-danger rounded-5' 
                   style={{ marginLeft: '5px' }}
                   onClick={() => handleDelete(item.id)}>
@@ -186,7 +185,7 @@ function Datatables({ data }) {
         </tbody>
       </table>
       <div className="datatable_fotter d-flex justify-content-between align-items-center">
-        <p>Total de filas : 05</p>
+        <p>Total de filas: {data.content.length}</p>
         <div className="pagination">
           {Array.from({ length: Math.ceil(filteredData.length / itemsPerPage) }, (_, index) => (
             <button
