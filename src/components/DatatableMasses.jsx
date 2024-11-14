@@ -13,7 +13,7 @@ function Datatable({ data }) {
       <div className="datatable-container border rounded-4 mx-auto my-3">
         <div className="datatable_header">
           <h2>Masas</h2>
-          <Link to={'create'} className='btn btn-warning rounded-5'>Agregar masa</Link>
+          <Link to={'create'} className='btn btn-success rounded-5 d-flex gap-2 align-items-center'>Agregar masa</Link>
           <div className="input_search">
             <input type="search" placeholder="Buscar" />
             <i className="bi bi-search" id="search"></i>

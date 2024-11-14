@@ -87,7 +87,7 @@ function Datatables({ data }) {
           className="btn btn-success rounded-5 d-flex gap-2 align-items-center"
         >
           Agregar {data.module}
-          <i className="bi bi-plus-circle"></i>
+          <i className="bi "></i>
         </Link>
 
         <div className="input_search">
