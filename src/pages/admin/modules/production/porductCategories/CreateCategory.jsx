@@ -4,12 +4,14 @@ import { useNavigate } from 'react-router-dom';
 
 function CreateCategory() {
   const [categoryName, setCategoryName] = useState('');
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (categoryName.trim() === '') {
+      setError('El nombre de la categoría no puede estar vacío');
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -39,6 +41,7 @@ function CreateCategory() {
         throw new Error('Error al crear la categoría');
       }
     } catch (error) {
+      setError(error.message);
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -61,6 +64,7 @@ function CreateCategory() {
                 onChange={(e) => setCategoryName(e.target.value)}
                 placeholder="Nombre de la categoría"
               />
+              {error && <div className="alert alert-danger mt-2">{error}</div>}
             </div>
             <button type="submit" className="btn btn-success rounded-5">
               Agregar

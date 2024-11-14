@@ -3,79 +3,94 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 function EditCategorie() {
-  const { id } = useParams(); // Obtener el ID de la URL
+  const { id } = useParams();
+  const [categoryName, setCategoryName] = useState('');
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const [category, setCategory] = useState({ name: '' });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
 
-  // Obtener la categoría por ID
   useEffect(() => {
     const fetchCategory = async () => {
       try {
         const response = await fetch(`http://localhost:3000/productCategories/${id}`);
-        if (response.ok) {
-          const data = await response.json();
-          setCategory(data);
-          setLoading(false);
-        } else {
-          throw new Error('No se pudo obtener la categoría.');
-        }
+        if (!response.ok) throw new Error('Error al cargar la categoría');
+        const data = await response.json();
+        setCategoryName(data.name);
       } catch (error) {
         setError(error.message);
-        setLoading(false);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error.message,
+        });
       }
     };
     fetchCategory();
   }, [id]);
 
-  // Manejar la actualización del formulario
-  const handleChange = (e) => {
-    setCategory({ ...category, [e.target.name]: e.target.value });
-  };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (categoryName.trim() === '') {
+      setError('El nombre de la categoría no puede estar vacío');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'El nombre de la categoría no puede estar vacío',
+      });
+      return;
+    }
+
     try {
       const response = await fetch(`http://localhost:3000/productCategories/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(category),
+        body: JSON.stringify({ name: categoryName }),
       });
 
       if (response.ok) {
-        Swal.fire('¡Actualizado!', 'La categoría ha sido actualizada.', 'success')
-          .then(() => navigate('/admin/productCategories')); // Redirigir de vuelta
+        Swal.fire({
+          icon: 'success',
+          title: 'Categoría actualizada',
+          text: 'La categoría se ha actualizado exitosamente',
+        }).then(() => {
+          navigate('/admin/productCategories');
+        });
       } else {
-        throw new Error('No se pudo actualizar la categoría');
+        throw new Error('Error al actualizar la categoría');
       }
     } catch (error) {
-      Swal.fire('Error', error.message, 'error');
+      setError(error.message);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error.message,
+      });
     }
   };
 
-  if (loading) return <p>Cargando...</p>;
-  if (error) return <p>Error: {error}</p>;
-
   return (
-    <div className="container">
-      <h2>Editar Categoría</h2>
+    <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
       <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="name" className="form-label">Nombre de la Categoría</label>
-          <input 
-            type="text" 
-            className="form-control" 
-            id="name" 
-            name="name" 
-            value={category.name} 
-            onChange={handleChange} 
-            required 
-          />
+        <div className="row m-2">
+          <h2>Editar Categoría de Producto</h2>
+          <div className="mt-1 col-10 d-flex gap-4">
+            <div className="col-4">
+              <input
+                type="text"
+                className="form-control"
+                value={categoryName}
+                onChange={(e) => setCategoryName(e.target.value)}
+                placeholder="Nombre de la categoría"
+              />
+              {error && <div className="alert alert-danger mt-2">{error}</div>}
+            </div>
+            <button type="submit" className="btn btn-success rounded-5">
+              Guardar
+            </button>
+          </div>
         </div>
-        <button type="submit" className="btn btn-success">Guardar Cambios</button>
       </form>
     </div>
   );
