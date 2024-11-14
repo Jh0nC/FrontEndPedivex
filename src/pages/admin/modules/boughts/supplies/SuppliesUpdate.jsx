@@ -146,8 +146,8 @@ function SupplieUpdate() {
             <option value="unit">Unidades</option>
           </select>
         </div>
-        <button type="submit" className='btn btn-warning m-3'>Editar</button>
-        <Link to={"/admin/supplies"} className='btn btn-danger m-3'>Regresar</Link>
+        <button type="submit" className='btn btn-success rounded-5'>Editar</button>
+        <Link to={"/admin/supplies"} className='btn btn-secondary rounded-5'>Regresar</Link>
       </form>
       {success && <p className="text-success">{success}</p>}
       {error && <p className="text-danger">{error}</p>}

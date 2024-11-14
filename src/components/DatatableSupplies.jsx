@@ -127,7 +127,7 @@ function Datatables({ data }) {
           </div>
 
           <button className="btn btn-success rounded-5 h-50">
-            <i className="bi bi-filetype-xlsx"></i>
+            <i class="bi bi-filetype-xlsx"></i>
           </button>
         </div>
       </div>
@@ -169,7 +169,6 @@ function Datatables({ data }) {
               <td>
                 <Link className="btn btn-warning rounded-5" to={`/admin/supplies-update/${item.id}`}>
                   Editar
-                  <i className="bi"></i>
                 </Link>
               </td>
             </tr>

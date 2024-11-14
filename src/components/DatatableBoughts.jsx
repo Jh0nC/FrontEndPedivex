@@ -90,16 +90,23 @@ function Datatables({ data }) {
           <i className="bi "></i>
         </Link>
 
-        <div className="input_search">
-          <input type="search"
-            placeholder="Buscar"
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setCurrentPage(1);
-            }} 
-          />
-          <i className="bi bi-search" id="search"></i>
+        <div className="d-flex gap-2 align-items-center">
+          <div className="input_search">
+            <input
+              type="search"
+              placeholder="Buscar"
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+            />
+            <i className="bi bi-search" id="search"></i>
+          </div>
+
+          <button className="btn btn-success rounded-5 h-50">
+            <i class="bi bi-filetype-xlsx"></i>
+          </button>
         </div>
 
         <button className="btn btn-success rounded-5">
