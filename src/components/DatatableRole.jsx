@@ -102,7 +102,7 @@ function Datatables({ data }) {
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
-                setCurrentPage(1);
+                setCurrentPage(1);x
               }}
             />
             <i className="bi bi-search" id="search"></i>

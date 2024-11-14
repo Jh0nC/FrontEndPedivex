@@ -150,9 +150,6 @@ function Datatables({ data }) {
             <i class="bi bi-filetype-xlsx"></i>
           </button>
         </div>
-        <button className="btn btn-success rounded-5" onClick={exportToExcel}>
-          <i className="bi bi-file-earmark-excel"></i>
-        </button>
       </div>
 
       <table className="datatable">
@@ -178,13 +175,13 @@ function Datatables({ data }) {
                 <td>{item.targetDate}</td>
                 <td>
                   <button
-                    className="btn btn-secondary me-2"
+                    className="btn btn-secondary me-2 rounded-5"
                     onClick={() => handleDetailsClick(item)}
                   >
                     Detalles
                   </button>
                   <button
-                    className="btn btn-warning me-2"
+                    className="btn btn-warning me-2 rounded-5"
                     onClick={() => handleEditClick(item)}
                   >
                     Editar

@@ -108,11 +108,6 @@ function Datatable({ data, fetchCategories }) {
             <input
               type="search"
               placeholder="Buscar"
-              value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                setCurrentPage(1);
-              }}
             />
             <i className="bi bi-search" id="search"></i>
           </div>
