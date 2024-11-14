@@ -7,7 +7,6 @@ function ProductionOrderUpdate() {
   const [users, setUsers] = useState([]);
   const [products, setProducts] = useState([]);
   const [details, setDetails] = useState([]);
-
   const [formData, setFormData] = useState({
     date: "",
     notes: "",
@@ -81,8 +80,16 @@ function ProductionOrderUpdate() {
     setFormData((prev) => ({ ...prev, details: updatedDetails }));
   };
 
-  const handleStateChange = (stateId) => {
-    setFormData({ ...formData, state: stateId });
+  const handleStateChange = (newState) => {
+    if (formData.state === 7) {
+      Swal.fire("Cambio de Estado no permitido", "La orden de producción ya está en estado 'Terminado' y no se puede cambiar.", "warning");
+      return;
+    }
+    if ((formData.state === 6 || formData.state === 7) && newState === 3) {
+      Swal.fire("Cambio de Estado no permitido", "No se puede cancelar una orden que está en producción o terminada.", "warning");
+      return;
+    }
+    setFormData({ ...formData, state: newState });
   };
 
   const handleCancel = () => {
@@ -215,7 +222,7 @@ function ProductionOrderUpdate() {
               </div>
             </div>
             <div className="col-sm">
-              <label htmlFor="date" className="form-label">Fecha</label>
+              <label htmlFor="date" className="form-label" style={{ display: "none" }}>Fecha</label>
               <input
                 type="datetime-local"
                 className="form-control"
@@ -223,7 +230,7 @@ function ProductionOrderUpdate() {
                 id="date"
                 value={formatDateForInput(formData.date)}
                 onChange={handleChange}
-                required
+                style={{ display: "none" }}
               />
             </div>
             <div className="col-sm">
@@ -276,7 +283,7 @@ function ProductionOrderUpdate() {
             </button>
           </div>
 
-          <div className="m-1 d-flex gap-3">
+          <div className="d-flex justify-content-end gap-2">
             <button type="button" className="btn btn-secondary rounded-5" onClick={handleCancel}>
               Cancelar
             </button>

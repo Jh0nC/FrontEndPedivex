@@ -19,23 +19,28 @@ function RequestCreate({ onSave, initialData = {} }) {
     state: initialData.state || 4,
     creationDate: new Date().toISOString(),
     deadLine: initialData.deadLine || "",
-    stateDate: initialData.stateDate || "",
     details: initialData.details || [{ idProduct: "", quantity: 0, subtotal: 0.0, price: 0.0 }],
   });
 
   const [products, setProducts] = useState([]);
   const [users, setUsers] = useState([]);
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Fetch de productos
     fetch("http://localhost:3000/product")
       .then((response) => response.json())
       .then((data) => setProducts(data))
       .catch((error) => console.error("Error fetching products:", error));
 
+    // Fetch de usuarios filtrando solo clientes
     fetch("http://localhost:3000/user")
       .then((response) => response.json())
-      .then((data) => setUsers(data))
+      .then((data) => {
+        const clientes = data.filter((user) => user.idRole === 2);
+        setUsers(clientes);
+      })
       .catch((error) => console.error("Error fetching users:", error));
   }, []);
 
@@ -45,8 +50,24 @@ function RequestCreate({ onSave, initialData = {} }) {
       ...formData,
       [name]: value,
     });
+
+    if (name === "deadLine") {
+      const selectedDate = new Date(value);
+      const today = new Date();
+      if (selectedDate < today) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          deadLine: "La fecha límite no puede ser anterior a la fecha actual",
+        }));
+      } else {
+        setErrors((prevErrors) => {
+          const { deadLine, ...rest } = prevErrors;
+          return rest;
+        });
+      }
+    }
   };
-  
+
   const calculateTotal = (details) => {
     return details.reduce((acc, detail) => acc + parseFloat(detail.subtotal || 0), 0);
   };
@@ -62,7 +83,19 @@ function RequestCreate({ onSave, initialData = {} }) {
       const price = selectedProduct ? parseFloat(selectedProduct.price) : 0;
       const quantity = parseFloat(updatedDetails[index].quantity) || 0;
 
-      updatedDetails[index].price = price; // Asigna el precio aquí
+      if (quantity <= 0) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [`details.${index}.quantity`]: "La cantidad debe ser mayor a 0",
+        }));
+      } else {
+        setErrors((prevErrors) => {
+          const { [`details.${index}.quantity`]: _, ...rest } = prevErrors;
+          return rest;
+        });
+      }
+
+      updatedDetails[index].price = price;
       updatedDetails[index].subtotal = (price * quantity).toFixed(2);
     }
 
@@ -97,18 +130,27 @@ function RequestCreate({ onSave, initialData = {} }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const formattedData = {
       ...formData,
       details: formData.details.map((detail) => ({
         ...detail,
-        idProduct: parseInt(detail.idProduct, 10), // Convertir a número
-        quantity: parseFloat(detail.quantity),     // Asegurar que sea número
+        idProduct: parseInt(detail.idProduct, 10),
+        quantity: parseFloat(detail.quantity),
         subtotal: parseFloat(detail.subtotal),
         price: parseFloat(detail.price || 0),
       })),
       deadLine: new Date(formData.deadLine).toISOString(),
-      stateDate: new Date(formData.stateDate).toISOString(),
     };
+
+    if (Object.keys(errors).length > 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Por favor, corrige los errores antes de enviar el formulario.",
+      });
+      return;
+    }
 
     fetch("http://localhost:3000/request", {
       method: "POST",
@@ -147,7 +189,7 @@ function RequestCreate({ onSave, initialData = {} }) {
         <h2>{initialData.id ? "Editar Pedido" : "Crear Pedido"}</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label className="form-label">Usuario:</label>
+            <label className="form-label">Cliente:</label>
             <select
               className="form-control"
               name="idUser"
@@ -155,7 +197,7 @@ function RequestCreate({ onSave, initialData = {} }) {
               onChange={handleChange}
               required
             >
-              <option value="">Selecciona un usuario</option>
+              <option value="">Selecciona un cliente</option>
               {users.map((user) => (
                 <option key={user.id} value={user.id}>
                   {`${user.firstName} ${user.lastName}`}
@@ -174,26 +216,6 @@ function RequestCreate({ onSave, initialData = {} }) {
             />
           </div>
           <div className="mb-3">
-            <label className="form-label">Estado:</label>
-            <input
-              type="text"
-              className="form-control"
-              name="state"
-              value={getStateNameByNumber(formData.state)}
-              readOnly
-            />
-          </div>
-          <div className="mb-3">
-            <label className="form-label">Fecha de Creación:</label>
-            <input
-              type="date"
-              className="form-control"
-              name="creationDate"
-              value={formData.creationDate.split("T")[0]}
-              readOnly
-            />
-          </div>
-          <div className="mb-3">
             <label className="form-label">Fecha Límite:</label>
             <input
               type="date"
@@ -203,17 +225,7 @@ function RequestCreate({ onSave, initialData = {} }) {
               onChange={handleChange}
               required
             />
-          </div>
-          <div className="mb-3">
-            <label className="form-label">Fecha de Estado:</label>
-            <input
-              type="date"
-              className="form-control"
-              name="stateDate"
-              value={formData.stateDate.split("T")[0]}
-              onChange={handleChange}
-              required
-            />
+            {errors.deadLine && <div className="alert alert-danger p-1 mt-2">{errors.deadLine}</div>}
           </div>
 
           <div className="mb-3">
@@ -247,6 +259,11 @@ function RequestCreate({ onSave, initialData = {} }) {
                   }
                   required
                 />
+                {errors[`details.${index}.quantity`] && (
+                  <div className="alert alert-danger p-1 mt-2">
+                    {errors[`details.${index}.quantity`]}
+                  </div>
+                )}
                 <input
                   type="number"
                   className="form-control w-50"
@@ -257,23 +274,22 @@ function RequestCreate({ onSave, initialData = {} }) {
                 />
                 <button
                   type="button"
-                  className="btn btn-outline-secondary"
+                  className="btn btn-secondary rounded-4"
                   onClick={() => handleRemoveDetail(index)}
                 >
                   <i className="bi bi-dash"></i>
                 </button>
               </div>
             ))}
-            <div className="d-flex justify-content-end">
-              <button
-                type="button"
-                className="btn btn-outline-info"
-                onClick={handleAddDetail}
-              >
-                <i className="bi bi-plus-lg"></i>
-              </button>
-            </div>
-            <div className="m-1 d-flex gap-3">
+            <button
+              type="button"
+              className="btn btn-info rounded-4"
+              onClick={handleAddDetail}
+            >
+              <i className="bi bi-plus-lg"></i>
+            </button>
+
+            <div className="d-flex justify-content-end gap-2">
               <button
                 type="button"
                 className="btn btn-secondary rounded-5"

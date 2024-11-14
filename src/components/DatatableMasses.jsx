@@ -13,11 +13,25 @@ function Datatable({ data }) {
       <div className="datatable-container border rounded-4 mx-auto my-3">
         <div className="datatable_header">
           <h2>Masas</h2>
-          <Link to={'create'} className='btn btn-warning rounded-5'>Agregar masa</Link>
+          <Link to={'create'} className='btn btn-success rounded-5 d-flex gap-2 align-items-center'>Agregar masa</Link>
+          <div className="d-flex gap-2 align-items-center">
           <div className="input_search">
-            <input type="search" placeholder="Buscar" />
+            <input
+              type="search"
+              placeholder="Buscar"
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+            />
             <i className="bi bi-search" id="search"></i>
           </div>
+
+          <button className="btn btn-success rounded-5 h-50">
+            <i class="bi bi-filetype-xlsx"></i>
+          </button>
+        </div>
         </div>
         <table className="datatable">
           <thead>

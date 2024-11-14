@@ -5,9 +5,23 @@ function Datatables({ data, onDetail }) { // Recibe una prop onDetail
     <div className="datatable-container border rounded-4 mx-auto my-3">
       <div className="datatable_header">
         <h2>{data.title}</h2>
-        <div className="input_search">
-          <input type="search" placeholder="Buscar" />
-          <i className="bi bi-search" id="search"></i>
+        <div className="d-flex gap-2 align-items-center">
+          <div className="input_search">
+            <input
+              type="search"
+              placeholder="Buscar"
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+            />
+            <i className="bi bi-search" id="search"></i>
+          </div>
+
+          <button className="btn btn-success rounded-5 h-50">
+            <i class="bi bi-filetype-xlsx"></i>
+          </button>
         </div>
       </div>
       <table className="datatable">

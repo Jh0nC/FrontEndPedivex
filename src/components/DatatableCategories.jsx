@@ -11,28 +11,49 @@ function Datatable({ data, fetchCategories }) {
   }, [data]);
 
   // Función para manejar el cambio de estado
-  const handleStateChange = async (id, currentState) => {
+  const handleStateChange = async (id, currentState, name) => {
     const newState = currentState === 1 ? 2 : 1;
-    console.log('Cambiando estado de categoría con id:', id, 'Estado actual:', currentState, 'Nuevo estado:', newState); // Ver el cambio de estado
+    const actionText = newState === 2 ? 'desactivar' : 'activar';
 
-    try {
-      const response = await fetch(`http://localhost:3000/productCategories/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ state: newState })
-      });
-      if (!response.ok) {
-        throw new Error('Error al cambiar el estado');
+    const result = await Swal.fire({
+      title: `¿Estás seguro de ${actionText} la categoría "${name}"?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No'
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const response = await fetch(`http://localhost:3000/productCategories/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ state: newState })
+        });
+
+        if (response.ok) {
+          Swal.fire({
+            title: 'Cambio exitoso',
+            text: `La categoría ha sido ${newState === 2 ? 'desactivada' : 'activada'} correctamente.`,
+            icon: 'success'
+          }).then(() => {
+            setCategories(prevCategories =>
+              prevCategories.map(item =>
+                item.id === id ? { ...item, state: newState } : item
+              )
+            );
+          });
+        } else {
+          throw new Error('Error al cambiar el estado');
+        }
+      } catch (error) {
+        Swal.fire({
+          title: 'Error',
+          text: 'Ocurrió un error al intentar cambiar el estado.',
+          icon: 'error'
+        });
+        console.error("Error al cambiar el estado de la categoría:", error);
       }
-      // Actualiza el estado en la tabla después de la petición exitosa
-      setCategories(prevCategories =>
-        prevCategories.map(item =>
-          item.id === id ? { ...item, state: newState } : item
-        )
-      );
-      console.log('Estado cambiado correctamente para la categoría con id:', id); // Confirmación del cambio exitoso
-    } catch (error) {
-      console.error("Error al cambiar el estado de la categoría:", error); // Registrar el error
     }
   };
 
@@ -82,9 +103,23 @@ function Datatable({ data, fetchCategories }) {
       <div className="datatable_header">
         <h2>Categorías de productos</h2>
         <Link to={'create'} className='btn btn-success rounded-5'>Agregar categoría</Link>
-        <div className="input_search">
-          <input type="search" placeholder="Buscar" />
-          <i className="bi bi-search" id="search"></i>
+        <div className="d-flex gap-2 align-items-center">
+          <div className="input_search">
+            <input
+              type="search"
+              placeholder="Buscar"
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+            />
+            <i className="bi bi-search" id="search"></i>
+          </div>
+
+          <button className="btn btn-success rounded-5 h-50">
+            <i class="bi bi-filetype-xlsx"></i>
+          </button>
         </div>
       </div>
       <table className="datatable">
@@ -102,16 +137,21 @@ function Datatable({ data, fetchCategories }) {
               <td>{item.id}</td>
               <td>{item.name}</td>
               <td>
-                <div className="form-check form-switch">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    role="switch"
-                    id={`switch-${item.id}`}
-                    checked={item.state === 1}
-                    onChange={() => handleStateChange(item.id, item.state)}
-                  />
-                </div>
+                {item.state === 1 ? (
+                  <button
+                    className='btn btn-success rounded-5 h-50'
+                    onClick={() => handleStateChange(item.id, item.state, item.name)}
+                  >
+                    Activado
+                  </button>
+                ) : (
+                  <button
+                    className='btn btn-danger rounded-5 h-50'
+                    onClick={() => handleStateChange(item.id, item.state, item.name)}
+                  >
+                    Desactivado
+                  </button>
+                )}
               </td>
               <td className='d-flex gap-2'>
                 <Link className='btn btn-warning rounded-5' to={`edit/${item.id}`}>Editar</Link>
