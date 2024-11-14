@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import '../../../public/css/authLogin.css';
+import { Link, useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import { Link } from 'react-router-dom';
 
 function Login() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     email: '',
     password: '',
@@ -55,7 +55,6 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validaciones
     const emailError = validateEmail(form.email);
     const passwordError = validatePassword(form.password);
 
@@ -66,7 +65,7 @@ function Login() {
 
     if (!emailError && !passwordError) {
       try {
-        const response = await fetch('http://localhost:3000/auth/login', { // Asegúrate de que esta URL sea la correcta
+        const response = await fetch('http://localhost:3000/auth/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -84,13 +83,10 @@ function Login() {
         }
 
         const data = await response.json();
-        localStorage.setItem('token', data.token); // Guarda el token en localStorage
-        console.log('Login exitoso:', data);
-        // Redireccionar o hacer otra acción después del login
-        window.location.href = '/'; // Ejemplo de redirección
+        localStorage.setItem('token', data.token);
+        navigate('/admin'); // Redireccionar a una ruta protegida
       } catch (error) {
-        console.error('Error en la solicitud:', error);
-        alert('Error en la solicitud. Inténtalo de nuevo más tarde.');
+        console.error('Error:', error);
       }
     }
   };
@@ -113,7 +109,7 @@ function Login() {
                 value={form.email}
                 onChange={handleChange}
               />
-              {errors.email && <span className="error-message">{errors.email}</span>}
+              {errors.email && <p className="error-message">{errors.email}</p>}
             </div>
 
             <div className="input-container">
@@ -126,14 +122,14 @@ function Login() {
                 value={form.password}
                 onChange={handleChange}
               />
-              {errors.password && <span className="error-message">{errors.password}</span>}
+              {errors.password && <p className="error-message">{errors.password}</p>}
             </div>
 
             <button className="login-button" type="submit">Entrar</button>
             <Link to="/passwordRecovery" className="login-link">¿Olvidaste tu contraseña?</Link>
+
           </form>
         </div>
-
         <div className="login-right">
           <h2 className="register-title1">¡Regístrate ahora!</h2>
           <p className="register-subtitle1">Únete a nosotros y disfruta de todos los beneficios al registrarte.</p>
