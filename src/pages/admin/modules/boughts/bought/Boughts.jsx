@@ -24,7 +24,7 @@ function Boughts() {
   const data = {
     module: "Compras",
     title: "Compras",
-    colNames: ["Id", "Nro Recibo", "Fecha", "Total", "Estado", "Acciones"],
+    colNames: ["Id", "Nro Recibo", "Fecha", "Total", "Proveedor", "Acciones"],
     content: datos.map(item => ({
       ...item,
       date: item.date.split('T')[0]

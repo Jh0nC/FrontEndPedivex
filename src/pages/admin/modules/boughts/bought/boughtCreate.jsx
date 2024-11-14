@@ -5,21 +5,20 @@ import { useForm, Controller, useFieldArray } from 'react-hook-form';
 
 function BoughtCreate() {
     const navigate = useNavigate();
-    const { register, handleSubmit, control, reset, formState: { errors } } = useForm({
+    const { register, handleSubmit, control, reset, formState: { errors }, setValue, watch } = useForm({
         defaultValues: {
             nroReceipt: '',
             date: '',
             total: '',
             providerName: '',
-            state: 1, // Aseguramos que state esté por defecto en 1
+            state: 1,
             details: [
                 {
                     supplieName: '',
                     amount: '',
-                    unit: 'gr', // Valor por defecto para el campo unit
-                    costUnit: '',
-                    subtotal: '',
-                    state: 1, // State por defecto en 1
+                    unit: '',
+                    cost: '',
+                    state: 1,
                 }
             ]
         }
@@ -30,13 +29,43 @@ function BoughtCreate() {
         name: 'details',
     });
 
+    const [supplies, setSupplies] = useState([]);
     const [proveedores, setProveedor] = useState([]);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
 
+    const detalles = watch("details");
+
+    const selectedSupplieNames = watch("details").map(detail => detail.supplieName);
+
     useEffect(() => {
-        // Función para obtener los proveedores desde la API
-        const fetchRoles = async () => {
+        const calcularTotal = () => {
+            const total = detalles.reduce((acc, item) => {
+                return acc + (parseFloat(item.cost) || 0);
+            }, 0);
+            setValue("total", total.toFixed(2));
+        };
+
+        calcularTotal();
+    }, [detalles, setValue]);
+
+    useEffect(() => {
+        const fetchInsumos = async () => {
+            try {
+              const response = await fetch('http://localhost:3000/supplie');
+              if (!response.ok) {
+                throw new Error('Error al obtener los insumos');
+              }
+              const data = await response.json();
+              setSupplies(data);
+            } catch (error) {
+              setError('Error al cargar insumos: ' + error.message);
+            }
+        };
+
+        fetchInsumos();
+
+        const fetchProveedores = async () => {
             try {
                 const response = await fetch('http://localhost:3000/provider');
                 if (!response.ok) {
@@ -49,11 +78,20 @@ function BoughtCreate() {
             }
         };
 
-        fetchRoles(); // Llamar a la función cuando el componente se monta
+        fetchProveedores();
     }, []);
 
+    // Effect to update unit based on selected supplieName
+    useEffect(() => {
+        detalles.forEach((detalle, index) => {
+            const selectedSupplie = supplies.find(supplie => supplie.name === detalle.supplieName);
+            if (selectedSupplie && selectedSupplie.unit) {
+                setValue(`details.${index}.unit`, selectedSupplie.unit);
+            }
+        });
+    }, [detalles, supplies, setValue]);
+
     const onSubmit = async (data) => {
-        // Convertimos el total a un número antes de enviarlo
         const formDataToSend = {
             ...data,
             total: parseFloat(data.total, 10),
@@ -74,14 +112,14 @@ function BoughtCreate() {
             const result = await response.json();
             setSuccess('Compra creada con éxito');
             setError(null);
-            reset(); // Reseteamos el formulario después de una solicitud exitosa
+            reset();
 
             Swal.fire({
                 icon: 'success',
                 title: 'Éxito',
                 text: 'Compra creada con éxito.',
             }).then(() => {
-                navigate('/admin/boughts'); // Redireccionar después de hacer clic en "OK"
+                navigate('/admin/boughts');
             });
 
             console.log('Response:', result);
@@ -112,7 +150,7 @@ function BoughtCreate() {
                                     type="text"
                                     {...register('nroReceipt', { required: true })}
                                 />
-                                {errors.nroReceipt?.type === 'required' && (
+                                {errors.nroReceipt && (
                                     <div className="alert alert-danger p-1 col mt-2">Este campo es obligatorio</div>
                                 )}
                             </div>
@@ -124,7 +162,7 @@ function BoughtCreate() {
                                     type="date"
                                     {...register('date', { required: true })}
                                 />
-                                {errors.date?.type === 'required' && (
+                                {errors.date && (
                                     <div className="alert alert-danger p-1 col mt-2">Este campo es obligatorio</div>
                                 )}
                             </div>
@@ -136,9 +174,11 @@ function BoughtCreate() {
                                     id="total"
                                     className='form-control'
                                     type="number"
+                                    min={0}
+                                    disabled
                                     {...register('total', { required: 'Este campo es obligatorio' })}
                                 />
-                                {errors.total?.type === 'required' && (
+                                {errors.total && (
                                     <div className="alert alert-danger p-1 col mt-2">Este campo es obligatorio</div>
                                 )}
                             </div>
@@ -156,7 +196,7 @@ function BoughtCreate() {
                                         <option key={proveedor.provider} value={proveedor.provider} />
                                     ))}
                                 </datalist>
-                                {errors.providerName?.type === 'required' && (
+                                {errors.providerName && (
                                     <div className="alert alert-danger p-1 col mt-2">Este campo es obligatorio</div>
                                 )}
                             </div>
@@ -167,12 +207,21 @@ function BoughtCreate() {
                             {fields.map((item, index) => (
                                 <div key={item.id} className="d-flex align-items-center mb-2 gap-2">
                                     <div className="d-flex flex-column">
-                                        <input
+                                        <select
                                             className="form-control"
                                             placeholder='Nombre Insumo'
                                             {...register(`details.${index}.supplieName`, { required: true })}
-                                        />
-                                        {errors?.details?.[index]?.supplieName?.type === 'required' && (
+                                        >
+                                            <option value="">Seleccione un insumo</option>
+                                            {supplies
+                                                .filter(supplie => !selectedSupplieNames.includes(supplie.name) || supplie.name === detalles[index].supplieName)
+                                                .map((supplie) => (
+                                                    <option key={supplie.name} value={supplie.name}>
+                                                        {supplie.name}
+                                                    </option>
+                                            ))}
+                                        </select>
+                                        {errors?.details?.[index]?.supplieName && (
                                             <div className="alert alert-danger p-1 col mt-2">Este campo es obligatorio</div>
                                         )}
                                     </div>
@@ -182,9 +231,10 @@ function BoughtCreate() {
                                             className="form-control"
                                             type="number"
                                             placeholder='Cantidad'
+                                            min={0}
                                             {...register(`details.${index}.amount`, { required: true })}
                                         />
-                                        {errors?.details?.[index]?.amount?.type === 'required' && (
+                                        {errors?.details?.[index]?.amount && (
                                             <div className="alert alert-danger p-1 col mt-2">Este campo es obligatorio</div>
                                         )}
                                     </div>
@@ -192,22 +242,13 @@ function BoughtCreate() {
                                     <div className="d-flex flex-column">
                                         <select
                                             className="form-control"
-                                            {...register(`details.${index}.unit`)}
+                                            {...register(`details.${index}.unit`, { required: true })}
                                         >
                                             <option value="gr">Gramos</option>
                                             <option value="ml">Mililitros</option>
                                             <option value="unit">Unidades</option>
                                         </select>
-                                    </div>
-
-                                    <div className="d-flex flex-column">
-                                        <input
-                                            className="form-control"
-                                            type="number"
-                                            placeholder='Costo Unidad'
-                                            {...register(`details.${index}.costUnit`, { required: true })}
-                                        />
-                                        {errors?.details?.[index]?.costUnit?.type === 'required' && (
+                                        {errors?.details?.[index]?.amount && (
                                             <div className="alert alert-danger p-1 col mt-2">Este campo es obligatorio</div>
                                         )}
                                     </div>
@@ -216,10 +257,11 @@ function BoughtCreate() {
                                         <input
                                             className="form-control"
                                             type="number"
-                                            placeholder='Subtotal'
-                                            {...register(`details.${index}.subtotal`, { required: true })}
+                                            placeholder='Costo'
+                                            min={0}
+                                            {...register(`details.${index}.cost`, { required: true })}
                                         />
-                                        {errors?.details?.[index]?.subtotal?.type === 'required' && (
+                                        {errors?.details?.[index]?.cost && (
                                             <div className="alert alert-danger p-1 col mt-2">Este campo es obligatorio</div>
                                         )}
                                     </div>
@@ -241,10 +283,9 @@ function BoughtCreate() {
                                     append({
                                         supplieName: '',
                                         amount: '',
-                                        unit: 'gr',
-                                        costUnit: '',
-                                        subtotal: '',
-                                        state: 1, // Aseguramos que state esté en 1
+                                        unit: '',
+                                        cost: '',
+                                        state: 1,
                                     })
                                 }
                             >
@@ -252,14 +293,12 @@ function BoughtCreate() {
                             </button>
                         </div>
 
-
                         <div className="d-flex justify-content-end gap-2">
                             <Link to={"/admin/boughts"} className='btn btn-secondary rounded-5'>Cancelar</Link>
                             <button type="submit" className='btn btn-success rounded-5'>Guardar</button>
                         </div>
                     </form>
                 </div>
-
             </div>
         </>
     );
