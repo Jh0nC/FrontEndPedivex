@@ -31,9 +31,7 @@ import Users from "./pages/admin/modules/users/user/users";
 import UsersCreate from "./pages/admin/modules/users/user/userCreate";
 import UsersEdit from "./pages/admin/modules/users/user/userEdit";
 
-
 import Devolutions from "./pages/admin/modules/sales/Devolutions";
-
 
 import ProductionOrder from "./pages/admin/modules/production/ProductionOrders/ProductionOrder"
 import ProductionOrderCreate from "./pages/admin/modules/production/ProductionOrders/ProductionOrderCreate";
@@ -63,19 +61,9 @@ import Employees from "./pages/admin/modules/employees/Employees";
 
 import EditCategorie from "./pages/admin/modules/production/porductCategories/EditCategorie";
 
-
-
-
-
-
-
-
-
-
 import CreateReturn from "./pages/admin/modules/sales/createReturn";
 import EditProduct from "./pages/admin/modules/production/products/EditProduct";
 import ClientEdit from "./pages/admin/modules/clients/ClientEdit";
-
 
 ReactDOM.createRoot(document.querySelector('#root')).render(
 
@@ -92,7 +80,6 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
         <Route path='/register' element={<Register />} />
         <Route path='/PasswordRecovery' element={<PasswordRecovery />} />
 
-
         <Route path='/'>
 
           <Route path='' element={<Landing />} />
@@ -100,7 +87,6 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
           <Route path='catalogue' element={<Catalogue />} />
 
           <Route path='admin' element={<AdminPage />}>
-
 
             <Route path=""  element={<OutletPage />} />
 
@@ -112,7 +98,7 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
 
             <Route path="productCategories" element={<ProductCategories />} />
             <Route path="productCategories/create" element={<CreateCategory />} />
-          <Route path="productCategories/edit/:id" element={<EditCategorie />} />
+            <Route path="productCategories/edit/:id" element={<EditCategorie />} />
 
             <Route path='products' element={<Products />} />
             <Route path='products/create' element={<CreateProducts />} />
