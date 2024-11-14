@@ -42,28 +42,36 @@ function Datatables({ data }) {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`http://localhost:3000/role/${id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ state: newState, role })
-        });
-
-        if (response.ok) {
-          Swal.fire({
-            title: 'Cambio exitoso',
-            text: `El rol ha sido ${newState === 2 ? 'desactivado' : 'activado'} correctamente.`,
-            icon: 'success'
-          }).then(() => {
-            location.reload()
-          });
-        } else {
+        if (role.toLowerCase()=="administrador") {
           Swal.fire({
             title: 'Error',
-            text: 'No se pudo cambiar el estado del rol.',
+            text: 'No se puede cambiar el estado del rol Administrador.',
             icon: 'error'
           });
+        } else {
+          const response = await fetch(`http://localhost:3000/role/${id}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ state: newState })
+          });
+  
+          if (response.ok) {
+            Swal.fire({
+              title: 'Cambio exitoso',
+              text: `El rol ha sido ${newState === 2 ? 'desactivado' : 'activado'} correctamente.`,
+              icon: 'success'
+            }).then(()=>{
+              location.reload()
+            });
+          } else {
+            Swal.fire({
+              title: 'Error',
+              text: 'No se pudo cambiar el estado del rol.',
+              icon: 'error'
+            });
+          }
         }
       } catch (error) {
         Swal.fire({

@@ -98,7 +98,13 @@ function RequestUpdate() {
 
   const handleStateChange = (stateId) => {
     setRequest({ ...request, state: stateId });
+  
+    // Si el estado cambia a "Terminado", realiza la actualización
+    if (stateId === 7) {
+      handleSubmit(); // Llama a la función de envío para registrar los cambios
+    }
   };
+  
 
   const handleCancel = () => {
     navigate(`/admin/request`);
@@ -136,20 +142,7 @@ function RequestUpdate() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          ...request,
-          creationDate: formattedCreationDate,
-          deadLine: formattedDeadLine,
-          stateDate: formattedStateDate,
-          total: total,
-          requestDetails: details.map((detail) => ({
-            id: detail.id,
-            idProduct: parseInt(detail.idProduct, 10),
-            quantity: parseFloat(detail.quantity),
-            price: parseFloat(detail.price),
-            subtotal: parseFloat(detail.subtotal),
-          })),
-        }),
+        body: JSON.stringify(requestData),
       });
 
       if (!response.ok) {
@@ -173,8 +166,6 @@ function RequestUpdate() {
       });
     }
   };
-
-  
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
@@ -241,20 +232,6 @@ function RequestUpdate() {
                 <label className="ms-2">Cancelado</label>
               </div>
             </div>
-            <div className="col-sm">
-              <label htmlFor="creationDate" className="form-label">
-                Fecha de Creación
-              </label>
-              <input
-                type="datetime-local"
-                className="form-control"
-                name="creationDate"
-                id="creationDate"
-                value={request.creationDate}
-                onChange={handleChange}
-                required
-              />
-            </div>
           </div>
 
           <div className="row mb-3">
@@ -268,20 +245,6 @@ function RequestUpdate() {
                 name="deadLine"
                 id="deadLine"
                 value={request.deadLine}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="col-sm">
-              <label htmlFor="stateDate" className="form-label">
-                Fecha de Estado
-              </label>
-              <input
-                type="datetime-local"
-                className="form-control"
-                name="stateDate"
-                id="stateDate"
-                value={request.stateDate}
                 onChange={handleChange}
                 required
               />

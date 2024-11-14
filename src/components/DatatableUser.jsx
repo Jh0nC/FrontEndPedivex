@@ -28,7 +28,7 @@ function Datatables({ data }) {
     navigate(`/admin/userEdit/${id}`);
   };
 
-  const handleChangeStateClick = async (id, currentState, user) => {
+  const handleChangeStateClick = async (id, currentState, user, role) => {
     const newState = currentState === 1 ? 2 : 1;
     const actionText = newState === 2 ? 'desactivar' : 'activar';
 
@@ -42,28 +42,36 @@ function Datatables({ data }) {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`http://localhost:3000/user/${id}`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ state: newState })
-        });
-
-        if (response.ok) {
-          Swal.fire({
-            title: 'Cambio exitoso',
-            text: `El usuario ha sido ${newState === 2 ? 'desactivado' : 'activado'} correctamente.`,
-            icon: 'success',
-          }).then(()=>{
-            location.reload()
-          });
-        } else {
+        if (role.toLowerCase()=="administrador") {
           Swal.fire({
             title: 'Error',
-            text: 'No se pudo cambiar el estado del usuario.',
+            text: 'No se puede cambiar el estado del usuario con el rol de Administrador.',
             icon: 'error'
           });
+        } else {
+          const response = await fetch(`http://localhost:3000/user/${id}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ state: newState })
+          });
+  
+          if (response.ok) {
+            Swal.fire({
+              title: 'Cambio exitoso',
+              text: `El usuario ha sido ${newState === 2 ? 'desactivado' : 'activado'} correctamente.`,
+              icon: 'success',
+            }).then(()=>{
+              location.reload()
+            });
+          } else {
+            Swal.fire({
+              title: 'Error',
+              text: 'No se pudo cambiar el estado del usuario.',
+              icon: 'error'
+            });
+          }
         }
       } catch (error) {
         Swal.fire({
@@ -135,11 +143,11 @@ function Datatables({ data }) {
                 {item.state === 1 ? (
                   <button
                     className='btn btn-success rounded-5 h-50'
-                    onClick={() => handleChangeStateClick(item.id, item.state, item.firstName)}
+                    onClick={() => handleChangeStateClick(item.id, item.state, item.firstName, item.role.role)}
                   >Activado</button>) : (
                   <button
                     className='btn btn-danger rounded-5 h-50'
-                    onClick={() => handleChangeStateClick(item.id, item.state, item.firstName)}
+                    onClick={() => handleChangeStateClick(item.id, item.state, item.firstName, item.role.role)}
                   >Desativado</button>)}
               </td>
             </tr>
@@ -147,7 +155,7 @@ function Datatables({ data }) {
         </tbody>
       </table>
       <div className="datatable_fotter d-flex justify-content-between align-items-center">
-        <p>Total de filas : 05</p>
+        <p>Total de filas: {data.content.length}</p>
         <div className="pagination">
           {Array.from({ length: Math.ceil(filteredData.length / itemsPerPage) }, (_, index) => (
             <button
