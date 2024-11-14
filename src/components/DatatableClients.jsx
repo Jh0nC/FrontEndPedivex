@@ -55,7 +55,7 @@ function Datatables({ data }) {
             title: 'Cambio exitoso',
             text: `El usuario ha sido ${newState === 2 ? 'desactivado' : 'activado'} correctamente.`,
             icon: 'success',
-          }).then(()=>{
+          }).then(() => {
             location.reload()
           });
         } else {
@@ -80,17 +80,23 @@ function Datatables({ data }) {
       <div className="datatable_header">
         <h2>{data.title}</h2>
 
-        <div className="input_search">
-          <input
-            type="search"
-            placeholder="Buscar"
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setCurrentPage(1);
-            }}
-          />
-          <i className="bi bi-search" id="search"></i>
+        <div className="d-flex gap-2 align-items-center">
+          <div className="input_search">
+            <input
+              type="search"
+              placeholder="Buscar"
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+            />
+            <i className="bi bi-search" id="search"></i>
+          </div>
+
+          <button className="btn btn-success rounded-5 h-50">
+            <i class="bi bi-filetype-xlsx"></i>
+          </button>
         </div>
       </div>
       <table className="datatable">
@@ -112,7 +118,7 @@ function Datatables({ data }) {
               <td>{item.address}</td>
               <td>{item.phoneNumber}</td>
               <td>
-              <button
+                <button
                   className='btn btn-warning rounded-5 h-50'
                   style={{ marginRight: '5px' }}
                   onClick={() => handleEditClick(item.id)}
