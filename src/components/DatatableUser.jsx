@@ -166,7 +166,7 @@ function Datatables({ data }) {
         </tbody>
       </table>
       <div className="datatable_fotter d-flex justify-content-between align-items-center">
-        <p>Total de filas : 05</p>
+        <p>Total de filas: {data.content.length}</p>
         <div className="pagination">
           {Array.from({ length: Math.ceil(filteredData.length / itemsPerPage) }, (_, index) => (
             <button
