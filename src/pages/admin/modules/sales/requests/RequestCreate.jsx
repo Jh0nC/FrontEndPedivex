@@ -257,23 +257,23 @@ function RequestCreate({ onSave, initialData = {} }) {
                 />
                 <button
                   type="button"
-                  className="btn btn-outline-secondary"
+                  className="btn btn-secondary rounded-4"
                   onClick={() => handleRemoveDetail(index)}
                 >
                   <i className="bi bi-dash"></i>
                 </button>
               </div>
             ))}
-            <div className="d-flex justify-content-end">
+            
               <button
                 type="button"
-                className="btn btn-outline-info"
+                className="btn btn-info rounded-4"
                 onClick={handleAddDetail}
               >
                 <i className="bi bi-plus-lg"></i>
               </button>
-            </div>
-            <div className="m-1 d-flex gap-3">
+            
+            <div className="d-flex justify-content-end gap-2">
               <button
                 type="button"
                 className="btn btn-secondary rounded-5"
