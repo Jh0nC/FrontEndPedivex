@@ -24,7 +24,7 @@ function ProductionOrder() {
   const data = {
     module: "OrdenProduccion",
     title: "Ordenes de Producción",
-    colNames: ["Id", "Fecha", "Notas", "Empleado", "Estado", "Fecha Entrega", "Acciones"],
+    colNames: ["Id", "Fecha Creación", "Notas", "Empleado", "Estado", "Fecha Entrega", "Acciones"],
     content: datos.map(item => ({
       ...item,
       date: item.date.split('T')[0]
