@@ -51,13 +51,14 @@ import EditCategorie from "./pages/admin/modules/production/porductCategories/Ed
 import CreateReturn from "./pages/admin/modules/sales/createReturn";
 import EditProduct from "./pages/admin/modules/production/products/EditProduct";
 import ClientEdit from "./pages/admin/modules/clients/ClientEdit";
+import Menu from "./menu";
 
 ReactDOM.createRoot(document.querySelector('#root')).render(
   <React.StrictMode>
     <Router>
       <Navbar />
       <Routes>
-        <Route path='*' element={<NotFound />} />
+        <Route path='*' element={<Menu />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/PasswordRecovery' element={<PasswordRecovery />} />
