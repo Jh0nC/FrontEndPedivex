@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { resetPassword } from "../../functions/recoveryService";
+import { validateRecoveryToken } from "../../functions/recoveryService";
 
-const ResetPassword = () => {
+const ValidateToken = () => {
   const [mail, setMail] = useState("");
   const [token, setToken] = useState("");
-  const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
@@ -14,7 +13,7 @@ const ResetPassword = () => {
     setError("");
 
     try {
-      const result = await resetPassword(mail, token, newPassword);
+      const result = await validateRecoveryToken(mail, token);
       setMessage(result.message);
     } catch (err) {
       setError(err.message);
@@ -23,7 +22,7 @@ const ResetPassword = () => {
 
   return (
     <div>
-      <h2>Restablecer Contraseña</h2>
+      <h2>Validar Token</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="email"
@@ -39,14 +38,7 @@ const ResetPassword = () => {
           onChange={(e) => setToken(e.target.value)}
           required
         />
-        <input
-          type="password"
-          placeholder="Nueva contraseña"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Restablecer</button>
+        <button type="submit">Validar</button>
       </form>
       {message && <p style={{ color: "green" }}>{message}</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
@@ -54,4 +46,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default ValidateToken;
