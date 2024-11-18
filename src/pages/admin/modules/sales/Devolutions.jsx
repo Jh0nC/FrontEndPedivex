@@ -90,7 +90,7 @@ function Supplies() {
           </tbody>
         </table>
         <div className="datatable_footer d-flex justify-content-between align-items-center">
-          <p>Total de filas: {data.content.length}</p>
+          <p>Total de filass: {data.content.length}</p>
         </div>
       </div>
 
