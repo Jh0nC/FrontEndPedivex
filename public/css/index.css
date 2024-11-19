@@ -200,16 +200,6 @@ a {
   height: fit-content;
 }
 
-.dashboard-img div {
-  display: flex;
-  margin: auto;
-  transition-duration: .2s;
-}
-
-.dashboard-img div:hover {
-  transform: scale(1.02, 1.02);
-}
-
 
 /* CLient Pages stiles */
 
