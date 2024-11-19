@@ -139,7 +139,7 @@ function RoleEdit() {
         <form onSubmit={handleSubmit(onSubmit)} className='mt-3'>
           <div className="row mb-3">
             <div className='col-sm'>
-              <label htmlFor="role" className="form-label">Rol:</label>
+              <label htmlFor="role" className="form-label">Rol <span style={{ color: 'red' }}>*</span></label>
               <input
                 id="role"
                 className='form-control'
@@ -158,8 +158,8 @@ function RoleEdit() {
           {errors.role?.type === "pattern" && (
             <div className="alert alert-danger p-1 col">No se puede ingresar numeros o caracteres especiales</div>
           )}
-          <div className='m-3'>
-            <p>Permisos:</p>
+          <div className=''>
+            <p>Permisos <span style={{ color: 'red' }}>*</span></p>
             {permissions.map((permission) => (
               <div key={permission.id}>
                 <input
@@ -169,7 +169,7 @@ function RoleEdit() {
                   value={permission.id}
                   onChange={handlePermissionChange}
                   type='checkbox'
-                  checked={selectedPermissions.includes(permission.id)} // Mantenemos los permisos seleccionados
+                  checked={selectedPermissions.includes(permission.id)}
                   autoComplete='off'
                 />
                 <label htmlFor={permission.permission} className="btn btn-outline-success rounded-5 mt-1">

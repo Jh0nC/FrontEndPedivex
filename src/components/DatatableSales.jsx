@@ -1,16 +1,16 @@
-import { useState } from 'react';
-import '../../public/css/datatableStyles.css';
-import { Link } from 'react-router-dom';
-import Swal from 'sweetalert2'; 
+import { useState } from "react";
+import "../../public/css/datatableStyles.css";
+import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 function Datatable({ data }) {
   // Estados para la búsqueda y la paginación
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
 
   // Filtrar los datos según el término de búsqueda
-  const filteredData = data.content.filter(item =>
-    Object.values(item).some(val =>
+  const filteredData = data.content.filter((item) =>
+    Object.values(item).some((val) =>
       val.toString().toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
@@ -22,41 +22,6 @@ function Datatable({ data }) {
 
   // Cambiar de página
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  // Función para manejar el cambio de estado
-  const handleStateChange = async (id, newState) => {
-    try {
-      const response = await fetch(`http://localhost:3000/sales/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ state: newState }),
-      });
-
-      if (response.ok) {
-        Swal.fire({
-          title: 'Cambio exitoso',
-          text: `El estado de la venta ha sido cambiado a ${newState}.`,
-          icon: 'success',
-        }).then(() => {
-          location.reload(); // Recarga la página para ver los cambios
-        });
-      } else {
-        Swal.fire({
-          title: 'Error',
-          text: 'No se pudo cambiar el estado de la venta.',
-          icon: 'error',
-        });
-      }
-    } catch (error) {
-      Swal.fire({
-        title: 'Error',
-        text: 'Ocurrió un error al intentar cambiar el estado.',
-        icon: 'error',
-      });
-    }
-  };
 
   return (
     <div className="datatable-container border rounded-4 mx-auto my-3">
@@ -78,11 +43,12 @@ function Datatable({ data }) {
       <table className="datatable">
         <thead>
           <tr>
-            {data.colNames && data.colNames.map((col, index) => (
-              <th key={index}>
-                {col} <i className="bi bi-chevron-expand"></i>
-              </th>
-            ))}
+            {data.colNames &&
+              data.colNames.map((col, index) => (
+                <th key={index}>
+                  {col} <i className="bi bi-chevron-expand"></i>
+                </th>
+              ))}
           </tr>
         </thead>
         <tbody>
@@ -93,15 +59,21 @@ function Datatable({ data }) {
               <td>{item.total}</td>
               <td>{item.idUser}</td>
               <td>
-                <select
-                  value={item.state}
-                  onChange={(e) => handleStateChange(item.id, e.target.value)}
-                  className="form-select"
-                >
-                  <option value="Finalizada">Finalizada</option>
-                  <option value="Cancelada">Cancelada</option>
-                  <option value="Devuelta">Devuelta</option>
-                </select>
+                {item.state === 8 ? (
+                  <button
+                    className="btn btn-warning rounded-5 h-50"
+                  >
+                    Finalizada
+                  </button>
+                ) : item.state === 9 ? (
+                  <button
+                    className="btn btn-secondary rounded-5 h-50"
+                  >
+                    Devuelto
+                  </button>
+                ) : (
+                  <button className="btn btn-secondary"></button>
+                )}
               </td>
               <td className="d-flex gap-2">
                 {/* Botón de Ver Detalle */}
@@ -112,7 +84,9 @@ function Datatable({ data }) {
                 </Link>
                 {/* Botón de Realizar Devolución */}
                 <Link to={`/admin/sales-return/${item.id}`}>
-                  <button className="btn btn-success">Realizar Devolución</button>
+                  <button className="btn btn-warning rounded-5">
+                    Realizar Devolución
+                  </button>
                 </Link>
               </td>
             </tr>
@@ -129,17 +103,17 @@ function Datatable({ data }) {
                 key={index + 1}
                 onClick={() => paginate(index + 1)}
                 className={`page-item ${
-                  currentPage === index + 1 ? 'active' : ''
+                  currentPage === index + 1 ? "active" : ""
                 }`}
                 style={{
                   backgroundColor:
-                    currentPage === index + 1 ? '#FFD700' : '#FFFAE0', // Amarillo claro
-                  color: '#000', // Color del texto
-                  margin: '0 5px', // Separación entre botones
-                  padding: '8px 12px',
-                  border: 'none',
-                  borderRadius: '5px',
-                  cursor: 'pointer',
+                    currentPage === index + 1 ? "#FFD700" : "#FFFAE0", // Amarillo claro
+                  color: "#000", // Color del texto
+                  margin: "0 5px", // Separación entre botones
+                  padding: "8px 12px",
+                  border: "none",
+                  borderRadius: "5px",
+                  cursor: "pointer",
                 }}
               >
                 {index + 1}

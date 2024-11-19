@@ -22,7 +22,7 @@ function ProductionOrder() {
   }, []);
 
   const data = {
-    module: "OrdenProduccion",
+    module: "Orden de Producción",
     title: "Ordenes de Producción",
     colNames: ["Id", "Fecha Creación", "Notas", "Empleado", "Estado", "Fecha Entrega", "Acciones"],
     content: datos.map(item => ({
