@@ -10,21 +10,21 @@ function Login() {
   const [showAlert, setShowAlert] = useState({ show: false, message: '', type: '' });
 
   const [form, setForm] = useState({
-    email: '',
+    mail: '',
     password: '',
   });
 
   const [errors, setErrors] = useState({
-    email: '',
+    mail: '',
     password: '',
   });
 
-  const validateEmail = (value) => {
-    const emailPattern = /^[a-zA-Z0-9._%+-ñÑ]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const validateMail = (value) => {
+    const mailPattern = /^[a-zA-Z0-9._%+-ñÑ]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (value.trim() === '') {
       return 'El correo electrónico es requerido';
     }
-    if (!emailPattern.test(value)) {
+    if (!mailPattern.test(value)) {
       return 'Por favor ingrese un correo electrónico válido';
     }
     return '';
@@ -47,8 +47,8 @@ function Login() {
 
     let errorMessage = '';
     switch (name) {
-      case 'email':
-        errorMessage = validateEmail(value);
+      case 'mail':
+        errorMessage = validateMail(value);
         break;
       case 'password':
         errorMessage = validatePassword(value);
@@ -63,15 +63,15 @@ function Login() {
     e.preventDefault();
     setIsLoading(true);
 
-    const emailError = validateEmail(form.email);
+    const mailError = validateMail(form.mail);
     const passwordError = validatePassword(form.password);
 
     setErrors({
-      email: emailError,
+      mail: mailError,
       password: passwordError,
     });
 
-    if (!emailError && !passwordError) {
+    if (!mailError && !passwordError) {
       try {
         const response = await fetch('http://localhost:3000/auth/login', {
           method: 'POST',
@@ -79,7 +79,7 @@ function Login() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            mail: form.email,
+            mail: form.mail,
             password: form.password,
           }),
         });
@@ -144,15 +144,15 @@ function Login() {
                           <i className="fas fa-envelope"></i>
                         </span>
                         <input
-                          type="email"
-                          className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-                          name="email"
+                          type="mail"
+                          className={`form-control ${errors.mail ? 'is-invalid' : ''}`}
+                          name="mail"
                           placeholder="Correo electrónico"
-                          value={form.email}
+                          value={form.mail}
                           onChange={handleChange}
                         />
-                        {errors.email && (
-                          <div className="invalid-feedback">{errors.email}</div>
+                        {errors.mail && (
+                          <div className="invalid-feedback">{errors.mail}</div>
                         )}
                       </div>
                     </div>

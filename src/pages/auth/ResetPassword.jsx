@@ -10,10 +10,10 @@ const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   // Simulación del servicio de reseteo
-  const mockResetPassword = (email, token, password) => {
+  const mockResetPassword = (mail, token, password) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        if (email.includes("@") && token.length > 5 && password.length >= 6) {
+        if (mail.includes("@") && token.length > 5 && password.length >= 6) {
           resolve({ message: "Tu contraseña ha sido restablecida exitosamente" });
         } else {
           reject({ message: "Los datos ingresados no son válidos. Por favor verifica la información" });
@@ -65,9 +65,9 @@ const ResetPassword = () => {
 
               {/* Formulario */}
               <form onSubmit={handleSubmit}>
-                {/* Campo de Email */}
+                {/* Campo de mail */}
                 <div className="mb-4">
-                  <label htmlFor="email" className="form-label fw-medium">
+                  <label htmlFor="mail" className="form-label fw-medium">
                     Correo Electrónico
                   </label>
                   <div className="input-group">
@@ -75,14 +75,14 @@ const ResetPassword = () => {
                       <i className="fas fa-at"></i>
                     </span>
                     <input
-                      type="email"
+                      type="mail"
                       className="form-control form-control-lg"
-                      id="email"
+                      id="mail"
                       placeholder="nombre@ejemplo.com"
                       value={mail}
                       onChange={(e) => setMail(e.target.value)}
                       required
-                      autoComplete="email"
+                      autoComplete="mail"
                     />
                   </div>
                 </div>
