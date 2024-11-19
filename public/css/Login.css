@@ -1,0 +1,79 @@
+.login-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  }
+  
+  .card {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+  }
+  
+  .input-group-text {
+    background-color: transparent;
+    border-right: none;
+  }
+  
+  .form-control {
+    border-left: none;
+  }
+  
+  .form-control:focus {
+    box-shadow: none;
+    border-color: #ced4da;
+  }
+  
+  .input-group .btn-outline-secondary {
+    border-left: none;
+  }
+  
+  .input-group .btn-outline-secondary:hover {
+    background-color: transparent;
+  }
+  
+  .btn-primary {
+    padding: 12px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background-color: #fcb900; 
+    border-color: #fcb900;
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    background-color: #e5a900; 
+    border-color: #e5a900; 
+  }
+  
+  .card .bg-primary {
+    background: linear-gradient(135deg, #fcb900 0%, #fcb900 100%) !important; /* Cambié el fondo del gradiente */
+  }
+  
+  /* Animaciones */
+  .alert {
+    animation: slideDown 0.3s ease-out;
+  }
+  
+  @keyframes slideDown {
+    from {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .card {
+      margin: 1rem;
+    }
+    
+    .bg-primary {
+      border-radius: 0 0 15px 15px;
+    }
+  }
+  

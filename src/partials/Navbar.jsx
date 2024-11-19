@@ -60,7 +60,7 @@ function Navbar() {
           <div className="navbar-auth">
             {isLoggedIn ? (
               <li onClick={handleProfileClick} style={{ cursor: "pointer" }}>
-                <i className="bi bi-person-circle"></i> {user?.name || "Perfil"}
+                 {user?.name || "Perfil"}
               </li>
             ) : (
               <Link to={"/login"}>
