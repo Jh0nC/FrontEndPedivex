@@ -1,32 +1,25 @@
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Swal from 'sweetalert2';
+import { useForm } from 'react-hook-form';
 
 function SupplieUpdate() {
-  const { id } = useParams(); // Obtener el id del URL
-  const navigate = useNavigate(); // Hook para redireccionar
-  const [formData, setFormData] = useState({
-    name: '',
-    stock: '',
-    unit: 'gr',
-    state: '1',
-  });
-
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 
   useEffect(() => {
-    // Cargar datos del insumo cuando el componente se monta
     const fetchSupplie = async () => {
       try {
         const response = await fetch(`http://localhost:3000/supplie/${id}`);
         if (!response.ok) {
-          throw new Error("Error en la solicitud de datos");
+          throw new Error('Error en la solicitud de datos');
         }
         const data = await response.json();
-        setFormData(data);
+        Object.keys(data).forEach((key) => {
+          setValue(key, data[key]);
+        });
       } catch (error) {
-        console.error("Error al cargar datos:", error);
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -36,65 +29,30 @@ function SupplieUpdate() {
     };
 
     fetchSupplie();
-  }, [id]);
+  }, [id, setValue]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const validateForm = () => {
-    if (!formData.name || !formData.stock || !formData.unit || !formData.state) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Por favor completa todos los campos.',
-      });
-      return false;
-    }
-    return true;
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
-
+  const onSubmit = async (data) => {
     try {
       const response = await fetch(`http://localhost:3000/supplie/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(data),
       });
 
       if (!response.ok) {
         throw new Error('Error en la solicitud');
       }
 
-      const result = await response.json();
-      setSuccess('Insumo editado con éxito');
-      setError(null);
-
       Swal.fire({
         icon: 'success',
         title: 'Éxito',
         text: 'Insumo editado con éxito.',
       }).then(() => {
-        navigate('/admin/supplies'); // Redireccionar después de hacer clic en "OK"
+        navigate('/admin/supplies');
       });
-
-      console.log('Response:', result);
     } catch (err) {
-      setError(err.message);
-      setSuccess(null);
-
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -106,51 +64,52 @@ function SupplieUpdate() {
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
       <h2 className='mx-3'>Editar Insumo</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className='m-3'>
           <label htmlFor="name" className="form-label">Nombre:</label>
           <input
             id="name"
-            className='form-control'
+            className={`form-control ${errors.name ? 'is-invalid' : ''}`}
             type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
+            {...register("name", {
+              required: "El nombre es obligatorio",
+              maxLength: { value: 50, message: "El nombre debe tener como máximo 50 caracteres" },
+              pattern: { value: /^[A-Za-z\s]+$/, message: "El nombre solo puede contener letras y espacios" },
+            })}
           />
+          {errors.name && <div className="alert alert-danger p-1 col">{errors.name.message}</div>}
         </div>
         <div className='m-3'>
           <label htmlFor="stock" className="form-label">Cantidad en Stock:</label>
           <input
             id="stock"
-            className='form-control'
+            className={`form-control ${errors.stock ? 'is-invalid' : ''}`}
             type="number"
-            name="stock"
-            value={formData.stock}
-            onChange={handleChange}
-            required
+            {...register("stock", {
+              required: "La cantidad en stock es obligatoria",
+              min: { value: 1, message: "La cantidad debe ser mayor a 0" },
+            })}
           />
+          {errors.stock && <div className="alert alert-danger p-1 col">{errors.stock.message}</div>}
         </div>
         <div className='m-3'>
           <label htmlFor="unit" className="form-label">Unidad:</label>
           <select
             id="unit"
-            className='form-control'
-            name="unit"
-            value={formData.unit}
-            onChange={handleChange}
-            required
+            className={`form-control ${errors.unit ? 'is-invalid' : ''}`}
+            {...register("unit", { required: "Seleccione una unidad" })}
           >
             <option value="gr">Gramos</option>
             <option value="ml">Mililitros</option>
             <option value="unit">Unidades</option>
           </select>
+          {errors.unit && <div className="alert alert-danger p-1 col">{errors.unit.message}</div>}
         </div>
-        <button type="submit" className='btn btn-success rounded-5'>Editar</button>
-        <Link to={"/admin/supplies"} className='btn btn-secondary rounded-5'>Regresar</Link>
+        <div className="m-3 d-flex gap-3">
+          <button type="submit" className='btn btn-success rounded-5'>Editar</button>
+          <Link to={"/admin/supplies"} className='btn btn-secondary rounded-5'>Regresar</Link>
+        </div>
       </form>
-      {success && <p className="text-success">{success}</p>}
-      {error && <p className="text-danger">{error}</p>}
     </div>
   );
 }
