@@ -73,7 +73,7 @@ function Login() {
     });
 
     // Si hay errores, no continúa
-    if (emailError || passwordError) {
+    if (mailError || passwordError) {
       setIsLoading(false);
       return;
     }
@@ -86,7 +86,7 @@ function Login() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          mail: form.email,
+          mail: form.mail,
           password: form.password,
         }),
       });
@@ -103,14 +103,26 @@ function Login() {
       }
 
       const data = await response.json();
-      localStorage.setItem('token', data.token);
+      const role = data.role;
+
+      localStorage.setItem('authData', JSON.stringify({
+        token: data.token,
+        user: data.user,
+        role: role
+      }));
       setShowAlert({
         show: true,
         message: '¡Inicio de sesión exitoso!',
         type: 'success',
       });
       setTimeout(() => window.location.reload(), 1600);
-      setTimeout(() => navigate('/admin/dashboard'), 1500);
+      if (role.role == 'Administrador') {
+        setTimeout(() => navigate('/admin/dashboard'), 1500);
+      } else if (role.role == 'Empleado') {
+        setTimeout(() => navigate('/employee'), 1500);
+      } else {
+        setTimeout(() => navigate('/catalogue'), 1500);
+      }
     } catch (error) {
       console.error('Error:', error);
       setShowAlert({
