@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useForm, Controller, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
@@ -10,7 +10,6 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
     handleSubmit,
     control,
     setValue,
-    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -40,7 +39,7 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
     const fetchUsers = async () => {
       const response = await fetch("http://localhost:3000/user");
       const data = await response.json();
-      const empleados = data.filter((user) => user.idRole === 3); // Filter employees
+      const empleados = data.filter((user) => user.idRole === 3); // Filtrar empleados
       setUsers(empleados);
     };
 
@@ -51,18 +50,13 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
   const onSubmit = async (data) => {
     const formattedData = {
       ...data,
-      state: 4, // Estado general de la orden
+      state: 4, // Estado predeterminado
       details: data.details.map((detail) => ({
         idProduct: parseInt(detail.idProduct, 10),
         amount: parseInt(detail.amount, 10),
-        state: 1, // Valor predeterminado o el valor deseado para el campo `state`
+        state: 1, // Estado predeterminado para detalles
       })),
     };
-
-    console.log(
-      "Datos enviados al backend:",
-      JSON.stringify(formattedData, null, 2)
-    );
 
     try {
       const response = await fetch("http://localhost:3000/productionOrder", {
@@ -70,8 +64,8 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formattedData),
       });
-      if (!response.ok)
-        throw new Error(`Error en la solicitud: ${response.status}`);
+
+      if (!response.ok) throw new Error(`Error en la solicitud: ${response.status}`);
 
       Swal.fire({
         icon: "success",
@@ -87,7 +81,6 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
         title: "Error",
         text: `Hubo un problema al crear la orden de producción: ${error.message}`,
       });
-      console.error("Error al enviar datos:", error);
     }
   };
 
@@ -147,9 +140,11 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
             <input
               type="date"
               className="form-control"
-              min={new Date().toISOString().split("T")[0]}
               {...register("targetDate", {
                 required: "Este campo es obligatorio",
+                validate: (value) =>
+                  new Date(value) >= new Date().setHours(0, 0, 0, 0) ||
+                  "La fecha límite no puede ser anterior a la fecha actual.",
               })}
             />
             {errors.targetDate && (
@@ -184,7 +179,7 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
                     min="1"
                     {...register(`details.${index}.amount`, {
                       required: "Este campo es obligatorio",
-                      min: { value: 1, message: "Cantidad debe ser mayor a 0" },
+                      min: { value: 1, message: "La cantidad debe ser mayor a 0" },
                     })}
                   />
                   <button
@@ -195,9 +190,11 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
                     <i className="bi bi-dash"></i>
                   </button>
                 </div>
-                {errors?.details?.[index]?.amount && (
+                {(errors?.details?.[index]?.idProduct ||
+                  errors?.details?.[index]?.amount) && (
                   <div className="alert alert-danger p-1 mt-2">
-                    {errors.details[index].amount.message}
+                    {errors?.details?.[index]?.idProduct?.message ||
+                      errors?.details?.[index]?.amount?.message}
                   </div>
                 )}
               </div>
@@ -210,6 +207,7 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
               <i className="bi bi-plus-lg"></i>
             </button>
           </div>
+
           <div className="d-flex justify-content-end gap-2">
             <button
               type="button"

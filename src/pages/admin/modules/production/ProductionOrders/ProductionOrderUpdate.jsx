@@ -7,14 +7,14 @@ function ProductionOrderUpdate() {
   const [users, setUsers] = useState([]);
   const [products, setProducts] = useState([]);
   const [details, setDetails] = useState([]);
+  const [errors, setErrors] = useState({});
 
   const [formData, setFormData] = useState({
-    // date: "", // Eliminado del estado inicial
-    notes: "",
     idUser: "",
     state: 4,
     targetDate: "",
     details: [],
+    notes: "",
   });
 
   const navigate = useNavigate();
@@ -22,6 +22,7 @@ function ProductionOrderUpdate() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Fetch de la orden de producción
         const response = await fetch(`http://localhost:3000/productionOrder/${id}`);
         if (!response.ok) {
           throw new Error("Error fetching data");
@@ -29,27 +30,33 @@ function ProductionOrderUpdate() {
         const result = await response.json();
 
         setFormData({
-          ...formData,
-          notes: result.notes || "",
           idUser: result.idUser || "",
           state: result.state || 4,
           targetDate: result.targetDate
             ? new Date(result.targetDate).toISOString().slice(0, 16)
             : "",
-          // date: result.date ? new Date(result.date).toISOString().slice(0, 16) : "",
           details: Array.isArray(result.productionOrderDetails)
-            ? result.productionOrderDetails
+            ? result.productionOrderDetails.map((detail) => ({
+                id: detail.id,
+                idProduct: detail.idProduct || "",
+                amount: detail.amount || "",
+                state: detail.state || 1,
+              }))
             : [],
+          notes: result.notes || "",
         });
 
         setDetails(
           Array.isArray(result.productionOrderDetails) ? result.productionOrderDetails : []
         );
 
+        // Fetch de usuarios y filtrado de empleados
         const userResponse = await fetch("http://localhost:3000/user");
         const userData = await userResponse.json();
-        setUsers(Array.isArray(userData) ? userData : []);
+        const empleados = userData.filter((user) => user.idRole === 3);
+        setUsers(Array.isArray(empleados) ? empleados : []);
 
+        // Fetch de productos
         const productResponse = await fetch("http://localhost:3000/product");
         const productData = await productResponse.json();
         setProducts(Array.isArray(productData) ? productData : []);
@@ -68,6 +75,7 @@ function ProductionOrderUpdate() {
       ...formData,
       [name]: value,
     });
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: null })); // Limpiar errores al cambiar
   };
 
   const handleDetailChange = (index, field, value) => {
@@ -75,6 +83,7 @@ function ProductionOrderUpdate() {
     updatedDetails[index][field] = value;
     setDetails(updatedDetails);
     setFormData((prev) => ({ ...prev, details: updatedDetails }));
+    setErrors((prev) => ({ ...prev, details: null })); // Limpiar errores en detalles
   };
 
   const handleAddDetail = () => {
@@ -92,14 +101,45 @@ function ProductionOrderUpdate() {
 
   const handleStateChange = (stateId) => {
     setFormData({ ...formData, state: stateId });
+    setErrors((prevErrors) => ({ ...prevErrors, state: null })); // Limpiar errores
   };
 
   const handleCancel = () => {
     navigate(`/admin/productionOrder`);
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.idUser) {
+      newErrors.idUser = "Selecciona un usuario.";
+    }
+    if (!formData.targetDate) {
+      newErrors.targetDate = "Selecciona una fecha límite.";
+    } else if (new Date(formData.targetDate) < new Date()) {
+      newErrors.targetDate = "La fecha límite no puede ser anterior a hoy.";
+    }
+    if (details.length === 0) {
+      newErrors.details = "Debes agregar al menos un detalle.";
+    } else {
+      details.forEach((detail, index) => {
+        if (!detail.idProduct) {
+          newErrors[`details.${index}.idProduct`] = "Selecciona un producto.";
+        }
+        if (!detail.amount || detail.amount <= 0) {
+          newErrors[`details.${index}.amount`] = "La cantidad debe ser mayor a 0.";
+        }
+      });
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
 
     const formattedDate = new Date().toISOString(); // Asignar fecha actual automáticamente
     const formattedTargetDate = formData.targetDate
@@ -114,7 +154,7 @@ function ProductionOrderUpdate() {
         },
         body: JSON.stringify({
           ...formData,
-          date: formattedDate, // Incluir fecha actual en los datos enviados
+          date: formattedDate,
           targetDate: formattedTargetDate,
           productionOrderDetails: details.map((detail) => ({
             id: detail.id,
@@ -147,12 +187,6 @@ function ProductionOrderUpdate() {
     }
   };
 
-  const formatDateForInput = (date) => {
-    const d = new Date(date);
-    if (isNaN(d.getTime())) return "";
-    return d.toISOString().slice(0, 16);
-  };
-
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
       <div className="mass-form-container border rounded-4 mx-auto my-3 p-3">
@@ -161,7 +195,7 @@ function ProductionOrderUpdate() {
           <div className="row mb-3">
             <div className="col-sm">
               <label htmlFor="user" className="form-label">
-                Usuario
+                Empleado <span className="text-danger">*</span>
               </label>
               <select
                 name="idUser"
@@ -169,7 +203,6 @@ function ProductionOrderUpdate() {
                 id="user"
                 value={formData.idUser}
                 onChange={handleChange}
-                required
               >
                 <option value="">Selecciona un usuario</option>
                 {users.map((user) => (
@@ -178,6 +211,11 @@ function ProductionOrderUpdate() {
                   </option>
                 ))}
               </select>
+              {errors.idUser && (
+                <div className="alert alert-danger p-1 mt-2">
+                  {errors.idUser}
+                </div>
+              )}
             </div>
             <div className="col-sm">
               <label htmlFor="notes" className="form-label">
@@ -190,7 +228,6 @@ function ProductionOrderUpdate() {
                 id="notes"
                 value={formData.notes}
                 onChange={handleChange}
-                required
               />
             </div>
           </div>
@@ -229,68 +266,88 @@ function ProductionOrderUpdate() {
                 <label className="ms-2">Cancelado</label>
               </div>
             </div>
-            {/* Campo "Fecha" eliminado del formulario */}
             <div className="col-sm">
               <label htmlFor="targetDate" className="form-label">
-                Fecha Límite
+                Fecha Límite <span className="text-danger">*</span>
               </label>
               <input
                 type="datetime-local"
                 className="form-control"
                 name="targetDate"
                 id="targetDate"
-                value={formatDateForInput(formData.targetDate)}
+                value={formData.targetDate}
                 onChange={handleChange}
-                required
               />
+              {errors.targetDate && (
+                <div className="alert alert-danger p-1 mt-2">
+                  {errors.targetDate}
+                </div>
+              )}
             </div>
           </div>
 
           <hr className="mx-3" />
           <div className="mb-3">
-            <h5>Detalles del Pedido</h5>
-            {details.map((detail, index) => (
-              <div key={index} className="d-flex align-items-center mb-2 gap-2">
-                <select
-                  className="form-control"
-                  value={detail.idProduct}
-                  onChange={(e) => handleDetailChange(index, "idProduct", e.target.value)}
-                  required
-                >
-                  <option value="">Selecciona un producto</option>
-                  {products.map((product) => (
-                    <option key={product.id} value={product.id}>
-                      {product.name}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  type="number"
-                  className="form-control"
-                  placeholder="Cantidad"
-                  value={detail.amount}
-                  onChange={(e) => handleDetailChange(index, "amount", e.target.value)}
-                  required
-                />
-                <button
-                  type="button"
-                  className="btn btn-secondary rounded-4"
-                  onClick={() => handleRemoveDetail(index)}
-                >
-                  <i className="bi bi-dash"></i>
-                </button>
-              </div>
-            ))}
-            <button
-              type="button"
-              className="btn btn-info rounded-4"
-              onClick={handleAddDetail}
-            >
-              <i className="bi bi-plus-lg"></i>
-            </button>
-          </div>
+  <h5>Detalles del Pedido</h5>
+  {details.map((detail, index) => (
+    <div key={index} className="mb-3">
+      <div className="d-flex align-items-center gap-2">
+        {/* Select para producto */}
+        <select
+          className="form-control"
+          value={detail.idProduct}
+          onChange={(e) => handleDetailChange(index, "idProduct", e.target.value)}
+        >
+          <option value="">Selecciona un producto *</option>
+          {products.map((product) => (
+            <option key={product.id} value={product.id}>
+              {product.name}
+            </option>
+          ))}
+        </select>
 
-          <div className="m-1 d-flex gap-3">
+        {/* Input para cantidad */}
+        <input
+          type="number"
+          className="form-control w-50"
+          placeholder="Cantidad *"
+          value={detail.amount}
+          onChange={(e) => handleDetailChange(index, "amount", e.target.value)}
+        />
+
+        {/* Botón para eliminar detalle */}
+        <button
+          type="button"
+          className="btn btn-secondary rounded-4"
+          onClick={() => handleRemoveDetail(index)}
+        >
+          <i className="bi bi-dash"></i>
+        </button>
+      </div>
+
+      {/* Mensaje de validación único para ambos campos */}
+      {(errors[`details.${index}.idProduct`] || errors[`details.${index}.amount`]) && (
+        <div className="alert alert-danger p-1 mt-2">
+          {errors[`details.${index}.idProduct`] ||
+            errors[`details.${index}.amount`]}
+        </div>
+      )}
+    </div>
+  ))}
+  {errors.details && (
+    <div className="alert alert-danger p-1 mt-2">{errors.details}</div>
+  )}
+  <button
+    type="button"
+    className="btn btn-info rounded-4"
+    onClick={handleAddDetail}
+  >
+    <i className="bi bi-plus-lg"></i>
+  </button>
+</div>
+
+
+          <div className="d-flex justify-content-end gap-2">
             <button
               type="button"
               className="btn btn-secondary rounded-5"
