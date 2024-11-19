@@ -10,7 +10,8 @@ function Navbar() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const data = JSON.parse(localStorage.getItem('authData'));
+    const token = data.token
 
     if (token) {
       try {

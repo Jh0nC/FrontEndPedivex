@@ -82,7 +82,7 @@ const UserCreate = () => {
   const formFields = [
     { name: 'firstName', label: 'Nombre', type: 'text', icon: 'fa-user', required: true },
     { name: 'lastName', label: 'Apellido', type: 'text', icon: 'fa-user', required: true },
-    { name: 'mail', label: 'Correo Electrónico', type: 'email', icon: 'fa-envelope', required: true },
+    { name: 'mail', label: 'Correo Electrónico', type: 'mail', icon: 'fa-envelope', required: true },
     { name: 'document', label: 'Documento', type: 'text', icon: 'fa-id-card', required: true },
     { name: 'address', label: 'Dirección', type: 'text', icon: 'fa-home', required: true },
     { name: 'phoneNumber', label: 'Teléfono', type: 'tel', icon: 'fa-phone', required: true },

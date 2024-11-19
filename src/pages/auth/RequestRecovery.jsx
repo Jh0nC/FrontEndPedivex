@@ -6,10 +6,10 @@ const RequestRecovery = () => {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const mockRequestRecovery = (email) => {
+  const mockRequestRecovery = (mail) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        if (email.includes("@")) {
+        if (mail.includes("@")) {
           resolve({ message: "Se han enviado las instrucciones a tu correo electrónico" });
         } else {
           reject({ message: "Por favor, ingresa un correo electrónico válido" });
@@ -55,7 +55,7 @@ const RequestRecovery = () => {
               {/* Formulario */}
               <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                  <label htmlFor="email" className="form-label fw-medium">
+                  <label htmlFor="mail" className="form-label fw-medium">
                     Correo Electrónico
                   </label>
                   <div className="input-group">
@@ -63,14 +63,14 @@ const RequestRecovery = () => {
                       <i className="fas fa-at"></i>
                     </span>
                     <input
-                      type="email"
+                      type="mail"
                       className="form-control form-control-lg"
-                      id="email"
+                      id="mail"
                       placeholder="nombre@ejemplo.com"
                       value={mail}
                       onChange={(e) => setMail(e.target.value)}
                       required
-                      autoComplete="email"
+                      autoComplete="mail"
                       autoFocus
                     />
                   </div>

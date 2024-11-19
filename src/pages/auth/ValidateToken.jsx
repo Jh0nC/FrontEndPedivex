@@ -8,10 +8,10 @@ const ValidateToken = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Simulación del servicio de validación
-  const mockValidateToken = (email, token) => {
+  const mockValidateToken = (mail, token) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        if (email.includes("@") && token.length > 5) {
+        if (mail.includes("@") && token.length > 5) {
           resolve({ message: "Token validado correctamente. Puedes proceder a cambiar tu contraseña." });
         } else {
           reject({ message: "Token inválido o expirado. Por favor solicita uno nuevo." });
@@ -58,9 +58,9 @@ const ValidateToken = () => {
 
               {/* Formulario */}
               <form onSubmit={handleSubmit}>
-                {/* Campo de Email */}
+                {/* Campo de mail */}
                 <div className="mb-4">
-                  <label htmlFor="email" className="form-label fw-medium">
+                  <label htmlFor="mail" className="form-label fw-medium">
                     Correo Electrónico
                   </label>
                   <div className="input-group">
@@ -68,14 +68,14 @@ const ValidateToken = () => {
                       <i className="fas fa-at"></i>
                     </span>
                     <input
-                      type="email"
+                      type="mail"
                       className="form-control form-control-lg"
-                      id="email"
+                      id="mail"
                       placeholder="nombre@ejemplo.com"
                       value={mail}
                       onChange={(e) => setMail(e.target.value)}
                       required
-                      autoComplete="email"
+                      autoComplete="mail"
                       autoFocus
                     />
                   </div>
