@@ -331,6 +331,16 @@ a {
   }
 }
 
+.details-card-list {
+  height: 10vh;
+  overflow-y: auto;
+}
+
+.button-cart {
+  min-width: 40px;
+  height: 40px;
+}
+
 /* footer */
 .img-footer {
   height: 20vh;
