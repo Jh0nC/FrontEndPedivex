@@ -117,7 +117,7 @@ function UserEdit() {
         <form onSubmit={handleSubmit(onSubmit)} className='mt-3'>
           <div className="row mb-3">
             <div className='col-sm'>
-              <label htmlFor="firstName" className="form-label">Nombre</label>
+              <label htmlFor="firstName" className="form-label">Nombre <span style={{ color: 'red' }}>*</span></label>
               <input
                 id="firstName"
                 className='form-control'
@@ -129,7 +129,7 @@ function UserEdit() {
               )}
             </div>
             <div className='col-sm'>
-              <label htmlFor="lastName" className="form-label">Apellido</label>
+              <label htmlFor="lastName" className="form-label">Apellido <span style={{ color: 'red' }}>*</span></label>
               <input
                 id="lastName"
                 className='form-control'
@@ -143,7 +143,7 @@ function UserEdit() {
           </div>
           <div className="row mb-3">
             <div className='col-sm'>
-              <label htmlFor="document" className="form-label">Documento</label>
+              <label htmlFor="document" className="form-label">Documento <span style={{ color: 'red' }}>*</span></label>
               <input
                 id="document"
                 className='form-control'
@@ -161,7 +161,7 @@ function UserEdit() {
               )}
             </div>
             <div className='col-sm'>
-              <label htmlFor="address" className="form-label">Dirección</label>
+              <label htmlFor="address" className="form-label">Dirección <span style={{ color: 'red' }}>*</span></label>
               <input
                 id="address"
                 className='form-control'
@@ -175,7 +175,7 @@ function UserEdit() {
           </div>
           <div className="row mb-3">
             <div className='col-sm'>
-              <label htmlFor="phoneNumber" className="form-label">Teléfono</label>
+              <label htmlFor="phoneNumber" className="form-label">Teléfono <span style={{ color: 'red' }}>*</span></label>
               <input
                 id="phoneNumber"
                 className='form-control'
@@ -193,7 +193,7 @@ function UserEdit() {
               )}
             </div>
             <div className='col-sm'>
-              <label htmlFor="role" className="form-label">Rol</label>
+              <label htmlFor="role" className="form-label">Rol <span style={{ color: 'red' }}>*</span></label>
               <select
                 id="role"
                 className='form-control'
