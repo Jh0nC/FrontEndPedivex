@@ -28,6 +28,7 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
 
   const [products, setProducts] = useState([]);
   const [users, setUsers] = useState([]);
+  const [supplie, setSupplies] = useState([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -43,33 +44,97 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
       setUsers(empleados);
     };
 
+    const fetchSupplies = async () => {
+      const response = await fetch("http://localhost:3000/supplie");
+      const data = await response.json();
+      setSupplies(data);
+    };
+
     fetchProducts();
     fetchUsers();
+    fetchSupplies();
   }, []);
 
   const onSubmit = async (data) => {
-    const formattedData = {
-      ...data,
-      state: 4, // Estado predeterminado
-      details: data.details.map((detail) => ({
-        idProduct: parseInt(detail.idProduct, 10),
-        amount: parseInt(detail.amount, 10),
-        state: 1, // Estado predeterminado para detalles
-      })),
-    };
-
     try {
+      // Obtener todos los detalles de los productos seleccionados en la orden
+      const productDetails = await Promise.all(
+        data.details.map(async (detail) => {
+          const response = await fetch(`http://localhost:3000/product/${detail.idProduct}`);
+          if (!response.ok) throw new Error(`Error al obtener datos del producto: ${detail.idProduct}`);
+          const product = await response.json();
+          return {
+            ...product,
+            requiredAmount: detail.amount, // Cantidad especificada en la orden
+          };
+        })
+      );
+  
+      // Validar si hay suficientes insumos para todos los productos
+      for (const product of productDetails) {
+        const datasheetDetails = product.datasheet?.datasheetDetails || [];
+        const massDetails = product.datasheet?.mass?.massDetails || [];
+  
+        for (const detail of [...datasheetDetails, ...massDetails]) {
+          const supply = supplie.find((s) => s.id === detail.idSupplie);
+          if (!supply || supply.stock < detail.amount * product.requiredAmount) {
+            throw new Error(
+              `No hay suficiente stock de ${detail.supply.name} para producir ${product.requiredAmount} unidades de ${product.name}.`
+            );
+          }
+        }
+      }
+  
+      // Formatear datos para enviar al backend
+      const formattedData = {
+        ...data,
+        state: 4, // Estado predeterminado
+        details: data.details.map((detail) => ({
+          idProduct: parseInt(detail.idProduct, 10),
+          amount: parseInt(detail.amount, 10),
+          state: 1, // Estado predeterminado para detalles
+        })),
+      };
+  
+      // Crear la orden de producción
       const response = await fetch("http://localhost:3000/productionOrder", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formattedData),
       });
-
+  
       if (!response.ok) throw new Error(`Error en la solicitud: ${response.status}`);
-
+  
+      // Restar los insumos del stock tras crear la orden
+      for (const product of productDetails) {
+        const datasheetDetails = product.datasheet?.datasheetDetails || [];
+        const massDetails = product.datasheet?.mass?.massDetails || [];
+  
+        for (const detail of [...datasheetDetails, ...massDetails]) {
+          const supply = supplie.find((s) => s.id === detail.idSupplie);
+          if (supply) {
+            const usedAmount = detail.amount * product.requiredAmount;
+  
+            // Actualizar el stock del insumo
+            const updateResponse = await fetch(`http://localhost:3000/supplie/${supply.id}`, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ stock: supply.stock - usedAmount }),
+            });
+  
+            if (!updateResponse.ok) {
+              throw new Error(
+                `No se pudo actualizar el stock de ${supply.name}. Error: ${updateResponse.status}`
+              );
+            }
+          }
+        }
+      }
+  
+      // Notificar éxito
       Swal.fire({
         icon: "success",
-        title: "Orden de Producción creada con éxito",
+        title: "Orden de Producción creada y stock actualizado con éxito",
         confirmButtonText: "Aceptar",
       }).then(() => {
         if (onSave) onSave();
@@ -79,10 +144,12 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: `Hubo un problema al crear la orden de producción: ${error.message}`,
+        text: `Hubo un problema: ${error.message}`,
       });
     }
   };
+  
+  
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
