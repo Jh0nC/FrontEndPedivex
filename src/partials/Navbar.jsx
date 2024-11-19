@@ -24,6 +24,7 @@ function Navbar() {
     } else {
       setIsLoggedIn(false);
     }
+
   }, []);
 
   // Función para cerrar sesión
@@ -54,14 +55,12 @@ function Navbar() {
             <li><Link to={"/catalogue"}>Catálogo</Link></li>
             <li><Link to={"/aboutUs"}>Parcerottis</Link></li>
             {isLoggedIn && (
-              <li><Link to={"/admin"}>Admin</Link></li>
+              <li><Link to={"/admin/dashboard"}>Admin</Link></li>
             )}
           </div>
           <div className="navbar-auth">
             {isLoggedIn ? (
-              <li onClick={handleProfileClick} style={{ cursor: "pointer" }}>
-                 {user?.name || "Perfil"}
-              </li>
+              <ProfileModal user={user} onClose={closeProfileModal} onLogout={handleLogout} />
             ) : (
               <Link to={"/login"}>
                 Iniciar sesión
@@ -72,10 +71,6 @@ function Navbar() {
         </div>
       </div>
       <div className="navbar-place"></div>
-
-      {showProfileModal && (
-        <ProfileModal user={user} onClose={closeProfileModal} onLogout={handleLogout} />
-      )}
     </>
   );
 }
