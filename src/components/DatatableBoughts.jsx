@@ -87,7 +87,6 @@ function Datatables({ data }) {
           className="btn btn-success rounded-5 d-flex gap-2 align-items-center"
         >
           Agregar {data.module}
-          <i className="bi "></i>
         </Link>
 
         <div className="d-flex gap-2 align-items-center">

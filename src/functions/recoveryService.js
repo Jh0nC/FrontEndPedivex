@@ -1,7 +1,7 @@
 const API_BASE = "http://localhost:3000";
 
 export const requestRecovery = async (mail) => {
-  const response = await fetch(`${API_BASE}/requestRecovery`, {
+  const response = await fetch(`${API_BASE}/recovery`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -1,194 +1,223 @@
-import { Link, useNavigate } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import Swal from 'sweetalert2';
-import '../../../public/css/authRegister.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-function UserCreate() {
-  const navigate = useNavigate();
-  const { register, formState: { errors }, handleSubmit, watch } = useForm();
-  const [roles, setRoles] = useState([]);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+const UserCreate = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    mail: '',
+    document: '',
+    address: '',
+    phoneNumber: '',
+    password: '',
+    confirmPassword: ''
+  });
+  const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
-  const password = watch('password', '');
-  const confirmPassword = watch('confirmPassword', '');
-
-  useEffect(() => {
-    const fetchRoles = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/role');
-        if (!response.ok) {
-          throw new Error('Error al obtener los roles');
-        }
-        const data = await response.json();
-        setRoles(data);
-      } catch (error) {
-        setError('Error al cargar roles: ' + error.message);
-      }
+  const validateField = (name, value) => {
+    const validations = {
+      firstName: value.length === 0 ? 'El nombre es obligatorio' : null,
+      lastName: value.length === 0 ? 'El apellido es obligatorio' : null,
+      mail: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? 'Correo electrónico inválido' : null,
+      document: value.length < 8 ? 'Documento debe tener al menos 8 caracteres' : null,
+      phoneNumber: !/^\d{7,10}$/.test(value) ? 'Teléfono debe tener entre 7 y 10 dígitos' : null,
+      password: !/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/.test(value) 
+        ? 'La contraseña debe tener al menos 8 caracteres, un número y un carácter especial' : null,
+      confirmPassword: value !== formData.password ? 'Las contraseñas no coinciden' : null
     };
+    return validations[name];
+  };
 
-    fetchRoles();
-  }, []);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    const error = validateField(name, value);
+    setErrors(prev => ({ ...prev, [name]: error }));
+  };
 
-  const onSubmit = async (data) => {
-    const formDataToSend = {
-      ...data,
-      state: 1,
-      idRole: 1 // El rol será siempre 1
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setServerError(null);
+    setSuccessMessage(null);
+
+    // Validate all fields
+    const newErrors = {};
+    Object.keys(formData).forEach(key => {
+      const error = validateField(key, formData[key]);
+      if (error) newErrors[key] = error;
+    });
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      setIsLoading(false);
+      return;
+    }
 
     try {
       const response = await fetch('http://localhost:3000/user', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formDataToSend),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...formData, state: 1, idRole: 1 }),
       });
 
-      if (!response.ok) {
-        throw new Error('Error en la solicitud');
-      }
-
-      const result = await response.json();
-      setSuccess('Usuario creado con éxito');
-      setError(null);
-
-      Swal.fire({
-        icon: 'success',
-        title: 'Éxito',
-        text: 'Usuario creado con éxito.',
-      }).then(() => {
-        navigate('/admin/users');
+      if (!response.ok) throw new Error('Error en el registro');
+      
+      setSuccessMessage('Usuario creado exitosamente');
+      // Reset form
+      setFormData({
+        firstName: '', lastName: '', mail: '', document: '',
+        address: '', phoneNumber: '', password: '', confirmPassword: ''
       });
-
-      console.log('Response:', result);
-    } catch (err) {
-      setError(err.message);
-      setSuccess(null);
-
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Hubo un problema al crear el usuario.',
-      });
+    } catch (error) {
+      setServerError('Error al crear el usuario. Por favor intente nuevamente.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  const formFields = [
+    { name: 'firstName', label: 'Nombre', type: 'text', icon: 'fa-user', required: true },
+    { name: 'lastName', label: 'Apellido', type: 'text', icon: 'fa-user', required: true },
+    { name: 'mail', label: 'Correo Electrónico', type: 'email', icon: 'fa-envelope', required: true },
+    { name: 'document', label: 'Documento', type: 'text', icon: 'fa-id-card', required: true },
+    { name: 'address', label: 'Dirección', type: 'text', icon: 'fa-home', required: true },
+    { name: 'phoneNumber', label: 'Teléfono', type: 'tel', icon: 'fa-phone', required: true },
+    { name: 'password', label: 'Contraseña', type: 'password', icon: 'fa-lock', required: true },
+    { name: 'confirmPassword', label: 'Confirmar Contraseña', type: 'password', icon: 'fa-lock', required: true }
+  ];
+
   return (
-    <div className="register-container">
-      <div className="register-box">
-        <h2 className="register-title">Crear Nuevo Usuario</h2>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="input-container">
-            <i className="fas fa-user"></i>
-            <input
-              type="text"
-              name="firstName"
-              placeholder="Nombre"
-              className="register-input"
-              {...register('firstName', { required: 'El nombre es obligatorio' })}
-            />
-            <span className="error-message-container">{errors.firstName?.message}</span>
+    <div className="container-fluid py-5" style={{ backgroundColor: '#f8f9fa' }}>
+      <div className="row justify-content-center">
+        <div className="col-12 col-md-8 col-lg-6">
+          <div className="card shadow-lg">
+            <div className="card-body p-4">
+              <h2 className="text-center mb-4" style={{ color: '#fcb900' }}>
+                Registro de Usuario
+              </h2>
+              
+              {serverError && (
+                <div className="alert alert-danger d-flex align-items-center" role="alert">
+                  <i className="fas fa-exclamation-circle me-2"></i>
+                  {serverError}
+                </div>
+              )}
+              
+              {successMessage && (
+                <div className="alert alert-success d-flex align-items-center" role="alert">
+                  <i className="fas fa-check-circle me-2"></i>
+                  {successMessage}
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="needs-validation" noValidate>
+                <div className="mb-3">
+                  <small className="text-danger">* Campos obligatorios</small>
+                </div>
+
+                {formFields.map(field => (
+                  <div className="mb-3" key={field.name}>
+                    <label className="form-label">
+                      {field.label}
+                      {field.required && <span className="text-danger ms-1">*</span>}
+                    </label>
+                    <div className="input-group">
+                      <span className="input-group-text" style={{ backgroundColor: '#fcb900', color: 'white' }}>
+                        <i className={`fas ${field.icon}`}></i>
+                      </span>
+                      <input
+                        type={field.type}
+                        name={field.name}
+                        value={formData[field.name]}
+                        onChange={handleChange}
+                        className={`form-control ${errors[field.name] ? 'is-invalid' : ''}`}
+                        placeholder={field.label}
+                        required={field.required}
+                      />
+                      {errors[field.name] && (
+                        <div className="invalid-feedback">
+                          {errors[field.name]}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+
+                <div className="d-grid gap-2">
+                  <button
+                    type="submit"
+                    className="btn btn-lg mb-3"
+                    disabled={isLoading}
+                    style={{ 
+                      backgroundColor: '#fcb900',
+                      color: 'white',
+                      border: 'none'
+                    }}
+                  >
+                    {isLoading ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        Procesando...
+                      </>
+                    ) : (
+                      'Registrar Usuario'
+                    )}
+                  </button>
+
+                  <Link
+                    to="/admin/users"
+                    className="btn btn-lg btn-outline-secondary"
+                  >
+                    Regresar
+                  </Link>
+                </div>
+              </form>
+            </div>
           </div>
-
-          <div className="input-container">
-            <i className="fas fa-user"></i>
-            <input
-              type="text"
-              name="lastName"
-              placeholder="Apellido"
-              className="register-input"
-              {...register('lastName', { required: 'El apellido es obligatorio' })}
-            />
-            <span className="error-message-container">{errors.lastName?.message}</span>
-          </div>
-
-          <div className="input-container">
-            <i className="fas fa-envelope"></i>
-            <input
-              type="email"
-              name="mail"
-              placeholder="Correo electrónico"
-              className="register-input"
-              {...register('mail', { required: 'El correo electrónico es obligatorio', pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'El correo electrónico no es válido' } })}
-            />
-            <span className="error-message-container">{errors.mail?.message}</span>
-          </div>
-
-          <div className="input-container">
-            <i className="fas fa-id-card"></i>
-            <input
-              type="text"
-              name="document"
-              placeholder="Documento"
-              className="register-input"
-              {...register('document', { required: 'El documento es obligatorio', minLength: { value: 8, message: 'El documento debe tener mínimo 8 caracteres' }, maxLength: { value: 10, message: 'El documento debe tener máximo 10 caracteres' } })}
-            />
-            <span className="error-message-container">{errors.document?.message}</span>
-          </div>
-
-          <div className="input-container">
-            <i className="fas fa-home"></i>
-            <input
-              type="text"
-              name="address"
-              placeholder="Dirección"
-              className="register-input"
-              {...register('address', { required: 'La dirección es obligatoria' })}
-            />
-            <span className="error-message-container">{errors.address?.message}</span>
-          </div>
-
-          <div className="input-container">
-            <i className="fas fa-phone"></i>
-            <input
-              type="text"
-              name="phoneNumber"
-              placeholder="Teléfono"
-              className="register-input"
-              {...register('phoneNumber', { required: 'El teléfono es obligatorio', minLength: { value: 7, message: 'El teléfono debe tener mínimo 7 caracteres' }, maxLength: { value: 10, message: 'El teléfono debe tener máximo 10 caracteres' } })}
-            />
-            <span className="error-message-container">{errors.phoneNumber?.message}</span>
-          </div>
-
-          <div className="input-container">
-            <i className="fas fa-lock"></i>
-            <input
-              type="password"
-              name="password"
-              placeholder="Contraseña"
-              className="register-input"
-              {...register('password', { required: 'La contraseña es obligatoria', pattern: { value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/, message: 'La contraseña debe tener al menos 8 caracteres, un número y un carácter especial' } })}
-            />
-            <span className="error-message-container">{errors.password?.message}</span>
-          </div>
-
-          <div className="input-container">
-            <i className="fas fa-lock"></i>
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Confirmar Contraseña"
-              className="register-input"
-              {...register('confirmPassword', {
-                validate: value => value === password || 'Las contraseñas no coinciden'
-              })}
-            />
-            <span className="error-message-container">{errors.confirmPassword?.message}</span>
-          </div>
-
-          <button type="submit" className="register-button">Registrar</button>
-        </form>
-
-        <div className="login-link-container">
-          <Link to="/admin/users" className="login-link">Regresar</Link>
         </div>
       </div>
+
+      <style>
+        {`
+          .btn:hover {
+            opacity: 0.9;
+            transition: opacity 0.2s ease-in-out;
+          }
+          
+          .input-group-text {
+            border: none;
+          }
+          
+          .form-control:focus {
+            border-color: #fcb900;
+            box-shadow: 0 0 0 0.25rem rgba(252, 185, 0, 0.25);
+          }
+          
+          .card {
+            border-radius: 15px;
+            border: none;
+          }
+          
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          
+          .alert {
+            animation: fadeIn 0.3s ease-in-out;
+          }
+
+          .text-danger {
+            color: #dc3545 !important;
+          }
+        `}
+      </style>
     </div>
   );
-}
+};
 
 export default UserCreate;

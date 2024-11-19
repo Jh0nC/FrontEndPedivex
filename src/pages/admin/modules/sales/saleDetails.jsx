@@ -32,11 +32,10 @@ function SaleDetailsModal({ show, onClose, details }) {
 
   // Mapeo de estados
   const stateNames = {
-    4: "Pendiente",
-    6: "En producción",
-    7: "Terminado",
-    3: "Cancelado",
-    1: "Activo",
+    1: "Pendiente",
+    2: "Pagada",
+    3: "Cancelada",
+    4: "Devuelta",
   };
 
   // Helper function to get product name by ID
@@ -45,11 +44,16 @@ function SaleDetailsModal({ show, onClose, details }) {
     return product ? product.name : "Desconocido";
   };
 
-  // Helper function to get state name by number
-  const getStateNameByNumber = (number) => {
-    return stateNames[number] || "Desconocido";
-  };
+  // Obtener el número de la venta
+  const saleNumber = details.saleDetails.length
+    ? details.saleDetails[0].idSale
+    : "Desconocido";
 
+  // Obtener la fecha de venta
+  const saleDate = details.saleDate || "Desconocida";
+
+  // Obtener el cliente
+  const customerName = details.customer || "Desconocido";
 
   return (
     <div
@@ -59,7 +63,7 @@ function SaleDetailsModal({ show, onClose, details }) {
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">Detalles de la venta #{saleNumber}</h5>
+            <h5 className="modal-title">Detalles de la Venta #{saleNumber}</h5>
             <button
               type="button"
               className="btn-close"
@@ -67,7 +71,13 @@ function SaleDetailsModal({ show, onClose, details }) {
             ></button>
           </div>
           <div className="modal-body">
-            {details.productionOrderDetails.map((detail) => (
+            <p>
+              <strong>Cliente:</strong> {customerName}
+            </p>
+            <p>
+              <strong>Fecha de Venta:</strong> {new Date(saleDate).toLocaleDateString()}
+            </p>
+            {details.saleDetails.map((detail) => (
               <div key={detail.id} className="card mb-3">
                 <div className="card-body">
                   <p className="card-text">
@@ -77,7 +87,13 @@ function SaleDetailsModal({ show, onClose, details }) {
                     <strong>Cantidad:</strong> {detail.amount}
                   </p>
                   <p className="card-text">
-                    <strong>Estado:</strong> {getStateNameByNumber(detail.state)}
+                    <strong>Precio Unitario:</strong> ${detail.price.toFixed(2)}
+                  </p>
+                  <p className="card-text">
+                    <strong>Estado:</strong> {stateNames[detail.state] || "Desconocido"}
+                  </p>
+                  <p className="card-text">
+                    <strong>Total:</strong> ${(detail.amount * detail.price).toFixed(2)}
                   </p>
                 </div>
               </div>
