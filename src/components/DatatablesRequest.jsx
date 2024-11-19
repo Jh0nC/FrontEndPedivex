@@ -50,11 +50,25 @@ function Datatables({ data }) {
     setSelectedDetails({});
   };
 
-  const filteredData = data.content.filter((item) =>
-    Object.values(item).some((val) =>
-      val.toString().toLowerCase().includes(searchTerm.toLowerCase())
+  // Definir el orden deseado para los estados
+  const stateOrder = {
+    4: 1, // Pendiente
+    7: 2, // Terminado
+    3: 3, // Cancelado
+  };
+
+  // Filtrar y ordenar los datos
+  const filteredData = data.content
+    .filter((item) =>
+      Object.values(item).some((val) =>
+        val.toString().toLowerCase().includes(searchTerm.toLowerCase())
+      )
     )
-  );
+    .sort((a, b) => {
+      const orderA = stateOrder[a.state] || 99;
+      const orderB = stateOrder[b.state] || 99;
+      return orderA - orderB;
+    });
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -76,11 +90,12 @@ function Datatables({ data }) {
 
   const getStateNameById = (id) => {
     const states = {
-      4: "Pendiente",
-      7: "Terminado",
-      3: "Cancelado",
+      4: { name: "Pendiente", color: "gray" },
+      7: { name: "Terminado", color: "green" },
+      3: { name: "Cancelado", color: "red" },
     };
-    return states[id] || "Desconocido";
+    const state = states[id] || { name: "Desconocido", color: "black" };
+    return <span style={{ color: state.color }}>{state.name}</span>;
   };
 
   const footerStyle = {
@@ -117,18 +132,23 @@ function Datatables({ data }) {
           <i className="bi"></i>
         </Link>
 
-        <div className="input_search">
-          <input
-            type="search"
-            placeholder="Buscar"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <i className="bi bi-search" id="search"></i>
+        <div className="d-flex gap-2 align-items-center">
+          <div className="input_search">
+            <input
+              type="search"
+              placeholder="Buscar"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <i className="bi bi-search" id="search"></i>
+          </div>
+          <button
+            className="btn btn-success rounded-5 h-50"
+            onClick={exportToExcel}
+          >
+            <i className="bi bi-file-earmark-excel"></i>
+          </button>
         </div>
-        <button className="btn btn-success rounded-5" onClick={exportToExcel}>
-          <i className="bi bi-file-earmark-excel"></i>
-        </button>
       </div>
 
       <table className="datatable">
@@ -155,13 +175,13 @@ function Datatables({ data }) {
                 <td>{item.deadLine}</td>
                 <td>
                   <button
-                    className="btn btn-secondary me-2"
+                    className="btn btn-secondary me-2 rounded-5"
                     onClick={() => handleDetailsClick(item)}
                   >
                     Detalles
                   </button>
                   <button
-                    className="btn btn-warning me-2"
+                    className="btn btn-warning me-2 rounded-5"
                     onClick={() => handleEditClick(item)}
                   >
                     Editar

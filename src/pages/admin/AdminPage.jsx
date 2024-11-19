@@ -5,7 +5,7 @@ import Br from "../Br";
 function AdminPage() {
   return (
     <>
-      <div className="container-fluid px-2 d-flex justify-content-between gap-3 mt-3">
+      <div className="container-fluid px-2 d-flex justify-content-between gap-3 mt-3 mb-5">
         
         <Sidenav />
         <Br />

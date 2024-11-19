@@ -130,22 +130,22 @@ function Dashboard() {
   return (
     <>
       <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-        <div className="row d-flex dashboard-img ">
-          <div className="col-sm-6 d-flex flex-column align-items-center">
+        <div className="row d-flex justify-content-center">
+          <div className="col-sm-6 d-block w-75 my-5 flex-column align-items-center">
             {error ? (
               <p>{error}</p>
             ) : (
               <Bar data={dataTopCinco} options={opciones}/>
             )}
           </div>
-          <div className="col-sm-6 d-flex flex-column align-items-center">
+          <div className="col-sm-6 d-block w-75 my-5 flex-column align-items-center">
             {error ? (
               <p>{error}</p>
             ) : (
               <Bar data={dataTopAnual} options={opciones}/>
             )}
           </div>
-          <div className="col-sm-6 d-flex flex-column align-items-center">
+          <div className="col-sm-6 d-block w-75 my-5 flex-column align-items-center">
             {error ? (
               <p>{error}</p>
             ) : (

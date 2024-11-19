@@ -7,6 +7,7 @@ function RequestUpdate() {
   const [users, setUsers] = useState([]);
   const [products, setProducts] = useState([]);
   const [details, setDetails] = useState([]);
+  const [errors, setErrors] = useState({});
 
   const [request, setRequest] = useState({
     idUser: "",
@@ -45,7 +46,10 @@ function RequestUpdate() {
 
         const userResponse = await fetch("http://localhost:3000/user");
         const userData = await userResponse.json();
-        setUsers(Array.isArray(userData) ? userData : []);
+
+        // Filtrar solo clientes (suponiendo que idRole de clientes es 2)
+        const clientes = userData.filter((user) => user.idRole === 2);
+        setUsers(Array.isArray(clientes) ? clientes : []);
 
         const productResponse = await fetch("http://localhost:3000/product");
         const productData = await productResponse.json();
@@ -65,6 +69,7 @@ function RequestUpdate() {
       ...request,
       [name]: value,
     });
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: null })); // Limpiar errores al cambiar
   };
 
   const handleDetailChange = (index, field, value) => {
@@ -83,6 +88,13 @@ function RequestUpdate() {
     }
 
     setDetails(updatedDetails);
+    // Limpiar errores al cambiar
+    setErrors((prevErrors) => {
+      const newErrors = { ...prevErrors };
+      delete newErrors[`details.${index}.idProduct`];
+      delete newErrors[`details.${index}.quantity`];
+      return newErrors;
+    });
   };
 
   const calculateTotal = () => {
@@ -104,14 +116,53 @@ function RequestUpdate() {
 
   const handleStateChange = (stateId) => {
     setRequest({ ...request, state: stateId });
+    setErrors((prevErrors) => ({ ...prevErrors, state: null })); // Limpiar errores
   };
 
   const handleCancel = () => {
     navigate(`/admin/request`);
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!request.idUser) {
+      newErrors.idUser = "Selecciona un usuario.";
+    }
+
+    if (!request.deadLine) {
+      newErrors.deadLine = "Selecciona una fecha límite.";
+    } else if (new Date(request.deadLine) < new Date()) {
+      newErrors.deadLine = "La fecha límite no puede ser anterior a hoy.";
+    }
+
+    if (!request.state) {
+      newErrors.state = "Selecciona un estado.";
+    }
+
+    if (details.length === 0) {
+      newErrors.details = "Debes agregar al menos un detalle.";
+    } else {
+      details.forEach((detail, index) => {
+        if (!detail.idProduct) {
+          newErrors[`details.${index}.idProduct`] = "Selecciona un producto.";
+        }
+        if (!detail.quantity || detail.quantity <= 0) {
+          newErrors[`details.${index}.quantity`] = "La cantidad debe ser mayor a 0.";
+        }
+      });
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
 
     // Asignar automáticamente las fechas actuales
     const formattedCreationDate = new Date().toISOString();
@@ -136,8 +187,6 @@ function RequestUpdate() {
         subtotal: parseFloat(detail.subtotal),
       })),
     };
-
-    console.log("Datos enviados al backend:", requestData);
 
     try {
       const response = await fetch(`http://localhost:3000/request/${id}`, {
@@ -178,7 +227,7 @@ function RequestUpdate() {
           <div className="row mb-3">
             <div className="col-sm">
               <label htmlFor="user" className="form-label">
-                Usuario
+                Usuario <span className="text-danger">*</span>
               </label>
               <select
                 name="idUser"
@@ -186,7 +235,6 @@ function RequestUpdate() {
                 id="user"
                 value={request.idUser}
                 onChange={handleChange}
-                required
               >
                 <option value="">Selecciona un usuario</option>
                 {users.map((user) => (
@@ -195,6 +243,9 @@ function RequestUpdate() {
                   </option>
                 ))}
               </select>
+              {errors.idUser && (
+                <div className="alert alert-danger p-1 mt-2">{errors.idUser}</div>
+              )}
             </div>
             <div className="col-sm">
               <label htmlFor="total" className="form-label">
@@ -213,7 +264,9 @@ function RequestUpdate() {
 
           <div className="row mb-3">
             <div className="col-sm">
-              <label className="form-label">Estado</label>
+              <label className="form-label">
+                Estado <span className="text-danger">*</span>
+              </label>
               <div>
                 <input
                   type="radio"
@@ -234,14 +287,13 @@ function RequestUpdate() {
                 />
                 <label className="ms-2">Cancelado</label>
               </div>
+              {errors.state && (
+                <div className="alert alert-danger p-1 mt-2">{errors.state}</div>
+              )}
             </div>
-            {/* Campo "Fecha de Creación" ocultado */}
-          </div>
-
-          <div className="row mb-3">
             <div className="col-sm">
               <label htmlFor="deadLine" className="form-label">
-                Fecha Límite
+                Fecha Límite <span className="text-danger">*</span>
               </label>
               <input
                 type="datetime-local"
@@ -250,58 +302,73 @@ function RequestUpdate() {
                 id="deadLine"
                 value={request.deadLine}
                 onChange={handleChange}
-                required
               />
+              {errors.deadLine && (
+                <div className="alert alert-danger p-1 mt-2">{errors.deadLine}</div>
+              )}
             </div>
-            {/* Campo "Fecha de Estado" ocultado */}
           </div>
 
           <hr className="mx-3" />
           <div className="mb-3">
             <h5>Detalles del Pedido</h5>
             {details.map((detail, index) => (
-              <div key={index} className="d-flex align-items-center mb-2 gap-2">
-                <select
-                  className="form-control"
-                  value={detail.idProduct}
-                  onChange={(e) =>
-                    handleDetailChange(index, "idProduct", e.target.value)
-                  }
-                  required
-                >
-                  <option value="">Selecciona un producto</option>
-                  {products.map((product) => (
-                    <option key={product.id} value={product.id}>
-                      {product.name}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  type="number"
-                  className="form-control"
-                  placeholder="Cantidad"
-                  value={detail.quantity}
-                  onChange={(e) =>
-                    handleDetailChange(index, "quantity", e.target.value)
-                  }
-                  required
-                />
-                <input
-                  type="number"
-                  className="form-control"
-                  placeholder="Subtotal"
-                  value={detail.subtotal}
-                  readOnly
-                />
-                <button
-                  type="button"
-                  className="btn btn-secondary rounded-4"
-                  onClick={() => handleRemoveDetail(index)}
-                >
-                  <i className="bi bi-dash"></i>
-                </button>
+              <div key={index} className="mb-3">
+                <div className="d-flex align-items-center gap-2">
+                  <select
+                    className="form-control"
+                    value={detail.idProduct}
+                    onChange={(e) =>
+                      handleDetailChange(index, "idProduct", e.target.value)
+                    }
+                  >
+                    <option value="">Selecciona un producto *</option>
+                    {products.map((product) => (
+                      <option key={product.id} value={product.id}>
+                        {product.name}
+                      </option>
+                    ))}
+                  </select>
+
+                  <input
+                    type="number"
+                    className="form-control w-50"
+                    placeholder="Cantidad *"
+                    value={detail.quantity}
+                    onChange={(e) =>
+                      handleDetailChange(index, "quantity", e.target.value)
+                    }
+                  />
+
+                  <input
+                    type="number"
+                    className="form-control w-50"
+                    placeholder="Subtotal"
+                    value={detail.subtotal}
+                    readOnly
+                  />
+
+                  <button
+                    type="button"
+                    className="btn btn-secondary rounded-4"
+                    onClick={() => handleRemoveDetail(index)}
+                  >
+                    <i className="bi bi-dash"></i>
+                  </button>
+                </div>
+
+                {(errors[`details.${index}.idProduct`] ||
+                  errors[`details.${index}.quantity`]) && (
+                  <div className="alert alert-danger p-1 mt-2">
+                    {errors[`details.${index}.idProduct`] ||
+                      errors[`details.${index}.quantity`]}
+                  </div>
+                )}
               </div>
             ))}
+            {errors.details && (
+              <div className="alert alert-danger p-1 mt-2">{errors.details}</div>
+            )}
             <button
               type="button"
               className="btn btn-info rounded-4"

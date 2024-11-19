@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import '../../../public/css/Login.css';  
+import '../../../public/css/Login.css';
 
 function Login() {
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ function Login() {
     }
     return '';
   };
-  
+
 
   const validatePassword = (value) => {
     if (value.trim() === '') {
@@ -66,53 +66,59 @@ function Login() {
     const mailError = validateMail(form.mail);
     const passwordError = validatePassword(form.password);
 
+    // Actualiza los errores en el estado
     setErrors({
       mail: mailError,
       password: passwordError,
     });
 
-    if (!mailError && !passwordError) {
-      try {
-        const response = await fetch('http://localhost:3000/auth/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            mail: form.mail,
-            password: form.password,
-          }),
-        });
+    // Si hay errores, no continúa
+    if (emailError || passwordError) {
+      setIsLoading(false);
+      return;
+    }
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          setShowAlert({
-            show: true,
-            message: errorData.message || 'Credenciales incorrectas',
-            type: 'danger'
-          });
-          return;
-        }
+    // Realiza la solicitud al servidor si no hay errores
+    try {
+      const response = await fetch('http://localhost:3000/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          mail: form.email,
+          password: form.password,
+        }),
+      });
 
-        const data = await response.json();
-        localStorage.setItem('token', data.token);
+      if (!response.ok) {
+        const errorData = await response.json();
         setShowAlert({
           show: true,
-          message: '¡Inicio de sesión exitoso!',
-          type: 'success'
+          message: errorData.message || 'Credenciales incorrectas',
+          type: 'danger',
         });
-        setTimeout(() => navigate('/admin/dashboard'), 1500);
-      } catch (error) {
-        console.error('Error:', error);
-        setShowAlert({
-          show: true,
-          message: 'Error al conectar con el servidor',
-          type: 'danger'
-        });
-      } finally {
         setIsLoading(false);
+        return;
       }
-    } else {
+
+      const data = await response.json();
+      localStorage.setItem('token', data.token);
+      setShowAlert({
+        show: true,
+        message: '¡Inicio de sesión exitoso!',
+        type: 'success',
+      });
+      setTimeout(() => window.location.reload(), 1600);
+      setTimeout(() => navigate('/admin/dashboard'), 1500);
+    } catch (error) {
+      console.error('Error:', error);
+      setShowAlert({
+        show: true,
+        message: 'Error al conectar con el servidor',
+        type: 'danger',
+      });
+    } finally {
       setIsLoading(false);
     }
   };
@@ -120,7 +126,7 @@ function Login() {
   return (
     <div className="login-page">
       <div className="container">
-        <div className="row justify-content-center align-items-center min-vh-100">
+        <div className="card-login">
           <div className="col-md-10">
             <div className="card shadow-lg">
               <div className="row g-0">

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../../public/css/datatableStyles.css";
 import { Link, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2"; // Importa SweetAlert2
+import Swal from "sweetalert2";
 import ProductionOrderDetailsModal from "../pages/admin/modules/production/ProductionOrders/ProductionOrderDetail";
 import * as XLSX from "xlsx";
 
@@ -24,7 +24,7 @@ function Datatables({ data }) {
       .then((data) => setUsers(Array.isArray(data) ? data : []))
       .catch((error) => {
         console.error("Error al obtener usuarios:", error);
-        setUsers([]); // Asegura que users sea un array vacío en caso de error
+        setUsers([]);
       });
 
     fetch("http://localhost:3000/product")
@@ -35,7 +35,7 @@ function Datatables({ data }) {
       .then((data) => setProducts(Array.isArray(data) ? data : []))
       .catch((error) => {
         console.error("Error al obtener productos:", error);
-        setProducts([]); // Asegura que products sea un array vacío en caso de error
+        setProducts([]);
       });
   }, []);
 
@@ -49,24 +49,40 @@ function Datatables({ data }) {
     setSelectedDetails({});
   };
 
+  // Modificación aquí:
   const handleEditClick = (item) => {
-    if (item.state === 4) { // Estado 4: Pendiente
+    if (item.state === 4 || item.state === 6) {
       navigate(`/admin/production-order-update/${item.id}`);
     } else {
       Swal.fire({
         title: "No se puede editar",
-        text: "Solo las órdenes de producción en estado 'Pendiente' pueden ser editadas.",
+        text: "Solo las órdenes de producción en estado 'Pendiente' o 'En producción' pueden ser editadas.",
         icon: "warning",
         confirmButtonText: "Aceptar",
       });
     }
   };
 
-  const filteredData = data.content.filter((item) =>
-    Object.values(item).some((val) =>
-      val.toString().toLowerCase().includes(searchTerm.toLowerCase())
+  // Definir el orden deseado para los estados
+  const stateOrder = {
+    4: 1, // Pendiente
+    6: 2, // En producción
+    7: 3, // Terminado
+    3: 4, // Cancelado
+  };
+
+  // Filtrar y ordenar los datos
+  const filteredData = data.content
+    .filter((item) =>
+      Object.values(item).some((val) =>
+        val.toString().toLowerCase().includes(searchTerm.toLowerCase())
+      )
     )
-  );
+    .sort((a, b) => {
+      const orderA = stateOrder[a.state] || 99;
+      const orderB = stateOrder[b.state] || 99;
+      return orderA - orderB;
+    });
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -89,13 +105,14 @@ function Datatables({ data }) {
 
   const getStateName = (stateId) => {
     const states = {
-      4: "Pendiente",
-      6: "En producción",
-      7: "Terminado",
-      3: "Cancelado",
-      1: "Activo",
+      4: { name: "Pendiente", color: "gray" },
+      6: { name: "En producción", color: "goldenrod" },
+      7: { name: "Terminado", color: "green" },
+      3: { name: "Cancelado", color: "red" },
+      1: { name: "Activo", color: "black" },
     };
-    return states[stateId] || "Desconocido";
+    const state = states[stateId] || { name: "Desconocido", color: "black" };
+    return <span style={{ color: state.color }}>{state.name}</span>;
   };
 
   const footerStyle = {
@@ -146,8 +163,11 @@ function Datatables({ data }) {
             <i className="bi bi-search" id="search"></i>
           </div>
 
-          <button className="btn btn-success rounded-5 h-50">
-            <i class="bi bi-filetype-xlsx"></i>
+          <button
+            className="btn btn-success rounded-5 h-50"
+            onClick={exportToExcel}
+          >
+            <i className="bi bi-filetype-xlsx"></i>
           </button>
         </div>
       </div>
