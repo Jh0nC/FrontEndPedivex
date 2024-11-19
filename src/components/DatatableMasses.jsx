@@ -24,7 +24,7 @@ function Datatable({ data }) {
             </div>
 
             <button className="btn btn-success rounded-5 h-50">
-              <i class="bi bi-filetype-xlsx"></i>
+              <i className="bi bi-filetype-xlsx"></i>
             </button>
           </div>
         </div>
