@@ -126,7 +126,7 @@ function Login() {
             </div>
 
             <button className="login-button" type="submit">Entrar</button>
-            <Link to="/passwordRecovery" className="login-link">¿Olvidaste tu contraseña?</Link>
+            <Link to="/RequestRecovery" className="login-link">¿Olvidaste tu contraseña?</Link>
 
           </form>
         </div>

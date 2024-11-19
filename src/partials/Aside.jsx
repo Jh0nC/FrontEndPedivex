@@ -93,7 +93,7 @@ function Sidenav() {
             <i className="bi bi-chevron-down"></i>
           </a>
           <div className="collapse submenu-sidenav" id="submenu-sales">
-            <Link to={'/admin/catalogue'} >
+            <Link to={'/catalogue'} >
               Catálogo
             </Link>
             <Link to={'/admin/request'} >
