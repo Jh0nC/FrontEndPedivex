@@ -37,7 +37,7 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
     };
 
     const fetchUsers = async () => {
-      const response = await fetch("http://localhost:3000/user");
+      const response = await fetch("http://localhost:3000/employee");
       const data = await response.json();
       const empleados = data.filter((user) => user.idRole === 3); // Filtrar empleados
       setUsers(empleados);

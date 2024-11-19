@@ -5,6 +5,7 @@ import imgCarousel3 from "../../public/assets/products/panzerotti_arequipe.jpg"
 import Footer from "../partials/Footer.jsx";
 
 function Landing() {
+
   return (
     <>
 
