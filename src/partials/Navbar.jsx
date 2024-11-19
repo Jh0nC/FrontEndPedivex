@@ -10,27 +10,33 @@ function Navbar() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem('authData'));
-    const token = data.token
-
-    if (token) {
-      try {
-        const payload = JSON.parse(atob(token.split(".")[1])); // Decodificar el payload del token JWT
-        setUser(payload);
-        setIsLoggedIn(true);
-      } catch (error) {
-        console.error("Error decoding token:", error);
-        setIsLoggedIn(false);
-      }
-    } else {
+    // Recuperar datos del localStorage
+    const storedAuthData = localStorage.getItem('authData');
+    if (!storedAuthData) {
       setIsLoggedIn(false);
+      return;
     }
 
+    try {
+      const data = JSON.parse(storedAuthData);
+      const token = data?.token;
+
+      if (token) {
+        const payload = JSON.parse(atob(token.split(".")[1])); // Decodificar el payload del token JWT
+        setUser(payload); // Establece el usuario a partir del token
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+      }
+    } catch (error) {
+      console.error("Error decoding token:", error);
+      setIsLoggedIn(false);
+    }
   }, []);
 
   // Función para cerrar sesión
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("authData");
     setIsLoggedIn(false);
     setUser(null);
     navigate("/login"); // Redirige a la página de inicio de sesión
