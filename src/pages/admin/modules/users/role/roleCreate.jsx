@@ -104,7 +104,7 @@ function roleCreate() {
         <form onSubmit={handleSubmit(enviarFormulario)} className='mt-3'>
           <div className='row mb-3'>
             <div className="col-sm">
-              <label htmlFor="exampleInputEmail1" className="form-label">Rol:</label>
+              <label htmlFor="exampleInputEmail1" className="form-label">Rol <span style={{ color: 'red' }}>*</span></label>
               <input
                 id="exampleInputEmail1"
                 aria-describedby="emailHelp"
@@ -124,7 +124,7 @@ function roleCreate() {
             <div className="alert alert-danger p-1 col">No se puede ingresar numeros o caracteres especiales</div>
           )}
           <div className=''>
-            <p>Permisos:</p>
+            <p>Permisos <span style={{ color: 'red' }}>*</span></p>
             {permissions.map((permission) => (
               <div key={permission.id}>
                 <input

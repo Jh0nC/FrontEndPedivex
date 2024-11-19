@@ -30,9 +30,15 @@ function RequestUpdate() {
 
         setRequest({
           ...data,
-          creationDate: data.creationDate ? new Date(data.creationDate).toISOString().slice(0, 16) : "",
-          deadLine: data.deadLine ? new Date(data.deadLine).toISOString().slice(0, 16) : "",
-          stateDate: data.stateDate ? new Date(data.stateDate).toISOString().slice(0, 16) : "",
+          creationDate: data.creationDate
+            ? new Date(data.creationDate).toISOString().slice(0, 16)
+            : "",
+          deadLine: data.deadLine
+            ? new Date(data.deadLine).toISOString().slice(0, 16)
+            : "",
+          stateDate: data.stateDate
+            ? new Date(data.stateDate).toISOString().slice(0, 16)
+            : "",
         });
 
         setDetails(Array.isArray(data.requestDetails) ? data.requestDetails : []);
@@ -98,13 +104,7 @@ function RequestUpdate() {
 
   const handleStateChange = (stateId) => {
     setRequest({ ...request, state: stateId });
-  
-    // Si el estado cambia a "Terminado", realiza la actualización
-    if (stateId === 7) {
-      handleSubmit(); // Llama a la función de envío para registrar los cambios
-    }
   };
-  
 
   const handleCancel = () => {
     navigate(`/admin/request`);
@@ -113,9 +113,12 @@ function RequestUpdate() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formattedCreationDate = request.creationDate ? new Date(request.creationDate).toISOString() : "";
-    const formattedDeadLine = request.deadLine ? new Date(request.deadLine).toISOString() : "";
-    const formattedStateDate = request.stateDate ? new Date(request.stateDate).toISOString() : "";
+    // Asignar automáticamente las fechas actuales
+    const formattedCreationDate = new Date().toISOString();
+    const formattedStateDate = new Date().toISOString();
+    const formattedDeadLine = request.deadLine
+      ? new Date(request.deadLine).toISOString()
+      : "";
 
     const total = calculateTotal();
 
@@ -133,8 +136,8 @@ function RequestUpdate() {
         subtotal: parseFloat(detail.subtotal),
       })),
     };
-  
-    console.log('Datos enviados al backend:', requestData);
+
+    console.log("Datos enviados al backend:", requestData);
 
     try {
       const response = await fetch(`http://localhost:3000/request/${id}`, {
@@ -232,6 +235,7 @@ function RequestUpdate() {
                 <label className="ms-2">Cancelado</label>
               </div>
             </div>
+            {/* Campo "Fecha de Creación" ocultado */}
           </div>
 
           <div className="row mb-3">
@@ -249,6 +253,7 @@ function RequestUpdate() {
                 required
               />
             </div>
+            {/* Campo "Fecha de Estado" ocultado */}
           </div>
 
           <hr className="mx-3" />
@@ -259,7 +264,9 @@ function RequestUpdate() {
                 <select
                   className="form-control"
                   value={detail.idProduct}
-                  onChange={(e) => handleDetailChange(index, "idProduct", e.target.value)}
+                  onChange={(e) =>
+                    handleDetailChange(index, "idProduct", e.target.value)
+                  }
                   required
                 >
                   <option value="">Selecciona un producto</option>
@@ -274,7 +281,9 @@ function RequestUpdate() {
                   className="form-control"
                   placeholder="Cantidad"
                   value={detail.quantity}
-                  onChange={(e) => handleDetailChange(index, "quantity", e.target.value)}
+                  onChange={(e) =>
+                    handleDetailChange(index, "quantity", e.target.value)
+                  }
                   required
                 />
                 <input
@@ -293,7 +302,11 @@ function RequestUpdate() {
                 </button>
               </div>
             ))}
-            <button type="button" className="btn btn-info rounded-4" onClick={handleAddDetail}>
+            <button
+              type="button"
+              className="btn btn-info rounded-4"
+              onClick={handleAddDetail}
+            >
               <i className="bi bi-plus-lg"></i>
             </button>
           </div>

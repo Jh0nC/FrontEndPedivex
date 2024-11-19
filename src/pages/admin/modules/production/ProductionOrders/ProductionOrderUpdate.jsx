@@ -7,8 +7,9 @@ function ProductionOrderUpdate() {
   const [users, setUsers] = useState([]);
   const [products, setProducts] = useState([]);
   const [details, setDetails] = useState([]);
+
   const [formData, setFormData] = useState({
-    date: "",
+    // date: "", // Eliminado del estado inicial
     notes: "",
     idUser: "",
     state: 4,
@@ -28,13 +29,22 @@ function ProductionOrderUpdate() {
         const result = await response.json();
 
         setFormData({
-          ...result,
-          date: result.date ? new Date(result.date).toISOString().slice(0, 16) : "",
-          targetDate: result.targetDate ? new Date(result.targetDate).toISOString().slice(0, 16) : "",
-          details: Array.isArray(result.productionOrderDetails) ? result.productionOrderDetails : [],
+          ...formData,
+          notes: result.notes || "",
+          idUser: result.idUser || "",
+          state: result.state || 4,
+          targetDate: result.targetDate
+            ? new Date(result.targetDate).toISOString().slice(0, 16)
+            : "",
+          // date: result.date ? new Date(result.date).toISOString().slice(0, 16) : "",
+          details: Array.isArray(result.productionOrderDetails)
+            ? result.productionOrderDetails
+            : [],
         });
 
-        setDetails(Array.isArray(result.productionOrderDetails) ? result.productionOrderDetails : []);
+        setDetails(
+          Array.isArray(result.productionOrderDetails) ? result.productionOrderDetails : []
+        );
 
         const userResponse = await fetch("http://localhost:3000/user");
         const userData = await userResponse.json();
@@ -80,16 +90,8 @@ function ProductionOrderUpdate() {
     setFormData((prev) => ({ ...prev, details: updatedDetails }));
   };
 
-  const handleStateChange = (newState) => {
-    if (formData.state === 7) {
-      Swal.fire("Cambio de Estado no permitido", "La orden de producción ya está en estado 'Terminado' y no se puede cambiar.", "warning");
-      return;
-    }
-    if ((formData.state === 6 || formData.state === 7) && newState === 3) {
-      Swal.fire("Cambio de Estado no permitido", "No se puede cancelar una orden que está en producción o terminada.", "warning");
-      return;
-    }
-    setFormData({ ...formData, state: newState });
+  const handleStateChange = (stateId) => {
+    setFormData({ ...formData, state: stateId });
   };
 
   const handleCancel = () => {
@@ -99,8 +101,10 @@ function ProductionOrderUpdate() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formattedDate = formData.date ? new Date(formData.date).toISOString() : "";
-    const formattedTargetDate = formData.targetDate ? new Date(formData.targetDate).toISOString() : "";
+    const formattedDate = new Date().toISOString(); // Asignar fecha actual automáticamente
+    const formattedTargetDate = formData.targetDate
+      ? new Date(formData.targetDate).toISOString()
+      : "";
 
     try {
       const response = await fetch(`http://localhost:3000/productionOrder/${id}`, {
@@ -110,7 +114,7 @@ function ProductionOrderUpdate() {
         },
         body: JSON.stringify({
           ...formData,
-          date: formattedDate,
+          date: formattedDate, // Incluir fecha actual en los datos enviados
           targetDate: formattedTargetDate,
           productionOrderDetails: details.map((detail) => ({
             id: detail.id,
@@ -156,7 +160,9 @@ function ProductionOrderUpdate() {
         <form onSubmit={handleSubmit} className="mt-3">
           <div className="row mb-3">
             <div className="col-sm">
-              <label htmlFor="user" className="form-label">Usuario</label>
+              <label htmlFor="user" className="form-label">
+                Usuario
+              </label>
               <select
                 name="idUser"
                 className="form-select"
@@ -174,7 +180,9 @@ function ProductionOrderUpdate() {
               </select>
             </div>
             <div className="col-sm">
-              <label htmlFor="notes" className="form-label">Notas</label>
+              <label htmlFor="notes" className="form-label">
+                Notas
+              </label>
               <input
                 type="text"
                 className="form-control"
@@ -221,20 +229,11 @@ function ProductionOrderUpdate() {
                 <label className="ms-2">Cancelado</label>
               </div>
             </div>
+            {/* Campo "Fecha" eliminado del formulario */}
             <div className="col-sm">
-              <label htmlFor="date" className="form-label" style={{ display: "none" }}>Fecha</label>
-              <input
-                type="datetime-local"
-                className="form-control"
-                name="date"
-                id="date"
-                value={formatDateForInput(formData.date)}
-                onChange={handleChange}
-                style={{ display: "none" }}
-              />
-            </div>
-            <div className="col-sm">
-              <label htmlFor="targetDate" className="form-label">Fecha Límite</label>
+              <label htmlFor="targetDate" className="form-label">
+                Fecha Límite
+              </label>
               <input
                 type="datetime-local"
                 className="form-control"
@@ -273,18 +272,30 @@ function ProductionOrderUpdate() {
                   onChange={(e) => handleDetailChange(index, "amount", e.target.value)}
                   required
                 />
-                <button type="button" className="btn btn-secondary rounded-4" onClick={() => handleRemoveDetail(index)}>
+                <button
+                  type="button"
+                  className="btn btn-secondary rounded-4"
+                  onClick={() => handleRemoveDetail(index)}
+                >
                   <i className="bi bi-dash"></i>
                 </button>
               </div>
             ))}
-            <button type="button" className="btn btn-info rounded-4" onClick={handleAddDetail}>
+            <button
+              type="button"
+              className="btn btn-info rounded-4"
+              onClick={handleAddDetail}
+            >
               <i className="bi bi-plus-lg"></i>
             </button>
           </div>
 
-          <div className="d-flex justify-content-end gap-2">
-            <button type="button" className="btn btn-secondary rounded-5" onClick={handleCancel}>
+          <div className="m-1 d-flex gap-3">
+            <button
+              type="button"
+              className="btn btn-secondary rounded-5"
+              onClick={handleCancel}
+            >
               Cancelar
             </button>
             <button type="submit" className="btn btn-success rounded-5">

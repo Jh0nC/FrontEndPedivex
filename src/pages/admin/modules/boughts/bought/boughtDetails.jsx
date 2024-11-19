@@ -38,7 +38,6 @@ function boughtDetails({ show, onClose, details }) {
               <div className="card mb-1">
                 <div className="card-body">
                   <div key={detail.id}>
-                    <p>Id Compra: {detail.idBought}</p>
                     <p>Nombre Insumo: {detail.supplieName}</p>
                     <p>Cantidad: {detail.amount}</p>
                     <p>Unidad: {detail.unit}</p>

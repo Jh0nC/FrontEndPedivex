@@ -57,7 +57,8 @@ function BoughtCreate() {
                 throw new Error('Error al obtener los insumos');
               }
               const data = await response.json();
-              setSupplies(data);
+              const activos = data.filter(insumo => insumo.state === 1);
+              setSupplies(activos);
             } catch (error) {
               setError('Error al cargar insumos: ' + error.message);
             }
@@ -143,7 +144,7 @@ function BoughtCreate() {
                     <form onSubmit={handleSubmit(onSubmit)} className='mt-3'>
                         <div className="row mb-3">
                             <div className="col-sm">
-                                <label htmlFor="nroReceipt" className="form-label">Nro Recibo</label>
+                                <label htmlFor="nroReceipt" className="form-label">Nro Recibo <span style={{ color: 'red' }}>*</span></label>
                                 <input
                                     id="nroReceipt"
                                     className='form-control'
@@ -155,7 +156,7 @@ function BoughtCreate() {
                                 )}
                             </div>
                             <div className="col-sm">
-                                <label htmlFor="date" className="form-label">Fecha</label>
+                                <label htmlFor="date" className="form-label">Fecha <span style={{ color: 'red' }}>*</span></label>
                                 <input
                                     id="date"
                                     className='form-control'
@@ -183,7 +184,7 @@ function BoughtCreate() {
                                 )}
                             </div>
                             <div className="col-sm">
-                                <label htmlFor="providerName" className="form-label">Proveedor</label>
+                                <label htmlFor="providerName" className="form-label">Proveedor <span style={{ color: 'red' }}>*</span></label>
                                 <input
                                     id="providerName"
                                     className='form-control'
@@ -242,6 +243,7 @@ function BoughtCreate() {
                                     <div className="d-flex flex-column">
                                         <select
                                             className="form-control"
+                                            disabled
                                             {...register(`details.${index}.unit`, { required: true })}
                                         >
                                             <option value="gr">Gramos</option>
@@ -270,6 +272,7 @@ function BoughtCreate() {
                                         type="button"
                                         className="btn btn-secondary rounded-4"
                                         onClick={() => remove(index)}
+                                        disabled={detalles.length == 1}
                                     >
                                         <i className="bi bi-dash"></i>
                                     </button>

@@ -5,7 +5,14 @@ import { useNavigate } from "react-router-dom";
 
 function ProductionOrderCreate({ onSave, initialData = {} }) {
   const navigate = useNavigate();
-  const { register, handleSubmit, control, setValue, watch, formState: { errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       date: initialData.date || new Date().toISOString().split("T")[0],
       notes: initialData.notes || "",
@@ -23,7 +30,6 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
   const [products, setProducts] = useState([]);
   const [users, setUsers] = useState([]);
 
-  // Fetch products and users
   useEffect(() => {
     const fetchProducts = async () => {
       const response = await fetch("http://localhost:3000/product");
@@ -42,56 +48,60 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
     fetchUsers();
   }, []);
 
-  // Handle form submission
   const onSubmit = async (data) => {
     const formattedData = {
-        ...data,
-        state: 4, // Estado general de la orden
-        details: data.details.map(detail => ({
-            idProduct: parseInt(detail.idProduct, 10),
-            amount: parseInt(detail.amount, 10),
-            state: 1, // Valor predeterminado o el valor deseado para el campo `state`
-        })),
+      ...data,
+      state: 4, // Estado general de la orden
+      details: data.details.map((detail) => ({
+        idProduct: parseInt(detail.idProduct, 10),
+        amount: parseInt(detail.amount, 10),
+        state: 1, // Valor predeterminado o el valor deseado para el campo `state`
+      })),
     };
 
-    console.log("Datos enviados al backend:", JSON.stringify(formattedData, null, 2));
+    console.log(
+      "Datos enviados al backend:",
+      JSON.stringify(formattedData, null, 2)
+    );
 
     try {
-        const response = await fetch("http://localhost:3000/productionOrder", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formattedData),
-        });
-        if (!response.ok) throw new Error(`Error en la solicitud: ${response.status}`);
+      const response = await fetch("http://localhost:3000/productionOrder", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formattedData),
+      });
+      if (!response.ok)
+        throw new Error(`Error en la solicitud: ${response.status}`);
 
-        Swal.fire({
-            icon: "success",
-            title: "Orden de Producción creada con éxito",
-            confirmButtonText: "Aceptar",
-        }).then(() => {
-            if (onSave) onSave();
-            navigate("/admin/productionOrder");
-        });
+      Swal.fire({
+        icon: "success",
+        title: "Orden de Producción creada con éxito",
+        confirmButtonText: "Aceptar",
+      }).then(() => {
+        if (onSave) onSave();
+        navigate("/admin/productionOrder");
+      });
     } catch (error) {
-        Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: `Hubo un problema al crear la orden de producción: ${error.message}`,
-        });
-        console.error("Error al enviar datos:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: `Hubo un problema al crear la orden de producción: ${error.message}`,
+      });
+      console.error("Error al enviar datos:", error);
     }
-};
-
-
-
+  };
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
       <div className="order-form-container border rounded-4 mx-auto my-3 p-3">
-        <h2>{initialData.id ? "Editar Orden de Producción" : "Crear Orden de Producción"}</h2>
+        <h2>
+          {initialData.id
+            ? "Editar Orden de Producción"
+            : "Crear Orden de Producción"}
+        </h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-3">
-            <label className="form-label">Fecha de creación:</label>
+            <label className="form-label">Fecha de creación</label>
             <input
               type="date"
               className="form-control"
@@ -100,7 +110,7 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
             />
           </div>
           <div className="mb-3">
-            <label className="form-label">Notas:</label>
+            <label className="form-label">Notas</label>
             <textarea
               className="form-control"
               {...register("notes")}
@@ -108,7 +118,10 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
             ></textarea>
           </div>
           <div className="mb-3">
-            <label className="form-label">Empleado:</label>
+            <label className="form-label">
+              Empleado
+              <span className="text-danger">*</span>
+            </label>
             <select
               className="form-control"
               {...register("idUser", { required: "Selecciona un empleado" })}
@@ -120,54 +133,73 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
                 </option>
               ))}
             </select>
-            {errors.idUser && <div className="alert alert-danger p-1 mt-2">{errors.idUser.message}</div>}
+            {errors.idUser && (
+              <div className="alert alert-danger p-1 mt-2">
+                {errors.idUser.message}
+              </div>
+            )}
           </div>
           <div className="mb-3">
-            <label className="form-label">Fecha de Entrega:</label>
+            <label className="form-label">
+              Fecha de Entrega:
+              <span className="text-danger">*</span>
+            </label>
             <input
               type="date"
               className="form-control"
               min={new Date().toISOString().split("T")[0]}
-              {...register("targetDate", { required: "Este campo es obligatorio" })}
+              {...register("targetDate", {
+                required: "Este campo es obligatorio",
+              })}
             />
-            {errors.targetDate && <div className="alert alert-danger p-1 mt-2">{errors.targetDate.message}</div>}
+            {errors.targetDate && (
+              <div className="alert alert-danger p-1 mt-2">
+                {errors.targetDate.message}
+              </div>
+            )}
           </div>
           <hr className="mx-3" />
           <div className="mb-3">
-            <h5>Detalles</h5>
+            <h5>Detalles de la Orden</h5>
             {fields.map((item, index) => (
-              <div key={item.id} className="d-flex align-items-center mb-2 gap-2">
-                <select
-                  className="form-control"
-                  {...register(`details.${index}.idProduct`, { required: "Selecciona un producto" })}
-                >
-                  <option value="">Selecciona un producto</option>
-                  {products.map((product) => (
-                    <option key={product.id} value={product.id}>
-                      {product.name}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  type="number"
-                  className="form-control w-50"
-                  placeholder="Cantidad"
-                  min="1"
-                  {...register(`details.${index}.amount`, {
-                    required: "Este campo es obligatorio",
-                    min: { value: 1, message: "Cantidad debe ser mayor a 0" },
-                  })}
-                />
+              <div key={item.id} className="mb-3">
+                <div className="d-flex align-items-center gap-2">
+                  <select
+                    className="form-control"
+                    {...register(`details.${index}.idProduct`, {
+                      required: "Selecciona un producto",
+                    })}
+                  >
+                    <option value="">Selecciona un producto *</option>
+                    {products.map((product) => (
+                      <option key={product.id} value={product.id}>
+                        {product.name}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="number"
+                    className="form-control w-50"
+                    placeholder="Cantidad *"
+                    min="1"
+                    {...register(`details.${index}.amount`, {
+                      required: "Este campo es obligatorio",
+                      min: { value: 1, message: "Cantidad debe ser mayor a 0" },
+                    })}
+                  />
+                  <button
+                    type="button"
+                    className="btn btn-secondary rounded-4"
+                    onClick={() => remove(index)}
+                  >
+                    <i className="bi bi-dash"></i>
+                  </button>
+                </div>
                 {errors?.details?.[index]?.amount && (
-                  <div className="alert alert-danger p-1 mt-2">{errors.details[index].amount.message}</div>
+                  <div className="alert alert-danger p-1 mt-2">
+                    {errors.details[index].amount.message}
+                  </div>
                 )}
-                <button
-                  type="button"
-                  className="btn btn-secondary rounded-4"
-                  onClick={() => remove(index)}
-                >
-                  <i className="bi bi-dash"></i>
-                </button>
               </div>
             ))}
             <button
@@ -179,7 +211,11 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
             </button>
           </div>
           <div className="d-flex justify-content-end gap-2">
-            <button type="button" className="btn btn-secondary rounded-5" onClick={() => navigate("/admin/productionOrder")}>
+            <button
+              type="button"
+              className="btn btn-secondary rounded-5"
+              onClick={() => navigate("/admin/productionOrder")}
+            >
               Cancelar
             </button>
             <button type="submit" className="btn btn-success rounded-5">
