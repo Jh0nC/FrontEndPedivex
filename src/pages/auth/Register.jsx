@@ -10,12 +10,12 @@ const UserCreate = () => {
     document: '',
     address: '',
     phoneNumber: '',
-    password: '',
-    confirmPassword: ''
+    password: ''
   });
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const navigate = useNavigate();
 
   const validateField = (name, value) => {
     const validations = {
@@ -25,8 +25,7 @@ const UserCreate = () => {
       document: value.length < 8 ? 'Documento debe tener al menos 8 caracteres' : null,
       phoneNumber: !/^\d{7,10}$/.test(value) ? 'Teléfono debe tener entre 7 y 10 dígitos' : null,
       password: !/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/.test(value) 
-        ? 'La contraseña debe tener al menos 8 caracteres, un número y un carácter especial' : null,
-      confirmPassword: value !== formData.password ? 'Las contraseñas no coinciden' : null
+        ? 'La contraseña debe tener al menos 8 caracteres, un número y un carácter especial' : null
     };
     return validations[name];
   };
@@ -61,7 +60,7 @@ const UserCreate = () => {
       const response = await fetch('http://localhost:3000/user', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, state: 1, idRole: 1 }),
+        body: JSON.stringify({ ...formData, state: 1, idRole: 2 }),
       });
 
       if (!response.ok) throw new Error('Error en el registro');
@@ -70,8 +69,10 @@ const UserCreate = () => {
       // Reset form
       setFormData({
         firstName: '', lastName: '', mail: '', document: '',
-        address: '', phoneNumber: '', password: '', confirmPassword: ''
+        address: '', phoneNumber: '', password: ''
       });
+
+      navigate('/login');
     } catch (error) {
       setServerError('Error al crear el usuario. Por favor intente nuevamente.');
     } finally {
@@ -86,8 +87,7 @@ const UserCreate = () => {
     { name: 'document', label: 'Documento', type: 'text', icon: 'fa-id-card', required: true },
     { name: 'address', label: 'Dirección', type: 'text', icon: 'fa-home', required: true },
     { name: 'phoneNumber', label: 'Teléfono', type: 'tel', icon: 'fa-phone', required: true },
-    { name: 'password', label: 'Contraseña', type: 'password', icon: 'fa-lock', required: true },
-    { name: 'confirmPassword', label: 'Confirmar Contraseña', type: 'password', icon: 'fa-lock', required: true }
+    { name: 'password', label: 'Contraseña', type: 'password', icon: 'fa-lock', required: true }
   ];
 
   return (
@@ -169,7 +169,7 @@ const UserCreate = () => {
                   </button>
 
                   <Link
-                    to="/admin/users"
+                    to="/login"
                     className="btn btn-lg btn-outline-secondary"
                   >
                     Regresar

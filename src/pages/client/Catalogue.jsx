@@ -21,7 +21,6 @@ function Catalogue() {
       try {
         const response = await fetch("http://localhost:3000/product");
         const data = await response.json();
-        console.log(data);
         setProducts(data);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -160,8 +159,9 @@ function Catalogue() {
 
   // Función para generar el pedido
   const generateOrder = () => {
-    const user = localStorage.getItem("user");
-    if (!user) {
+    const data = JSON.parse(localStorage.getItem("authData"));
+    const currentUser = data?.user;
+    if (!currentUser) {
       Swal.fire({
         title: "Inicia sesión",
         text: "Debes iniciar sesión para realizar un pedido.",
@@ -172,8 +172,6 @@ function Catalogue() {
       });
       return;
     }
-
-    const currentUser = JSON.parse(user);
 
     if (cart.length === 0) {
       Swal.fire(
@@ -193,17 +191,19 @@ function Catalogue() {
     const order = {
       idUser: currentUser.id,
       total: calculateTotal(),
-      state: 7,
+      state: 4,
       creationDate,
       deadLine,
       stateDate: creationDate,
-      requestDetails: cart.map((item) => ({
+      details: cart.map((item) => ({
         idProduct: item.id,
         quantity: item.quantity,
         subtotal: (item.price * item.quantity).toFixed(2),
         total: (item.price * item.quantity).toFixed(2),
       })),
     };
+
+    console.log(order);
 
     postOrder(order);
   };
@@ -239,7 +239,13 @@ function Catalogue() {
                           <span>
                             {item.name} - ${item.price} x {item.quantity}
                           </span>
-                          <div>
+                          <div className="d-flex gap-2">
+                            <button
+                              className="button-cart btn btn-outline-success btn-sm rounded-5"
+                              onClick={() => addToCart(item)}
+                            >
+                              <i className="bi bi-plus-lg"></i>
+                            </button>
                             <button
                               className="button-cart btn btn-outline-danger btn-sm me-2 rounded-5"
                               onClick={() => decreaseQuantity(item.id)}
