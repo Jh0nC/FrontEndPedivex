@@ -85,6 +85,11 @@ function RequestCreate({ onSave, initialData = {} }) {
           ...prevErrors,
           [`details.${index}`]: "La cantidad debe ser mayor a 0.",
         }));
+      } else if (selectedProduct && quantity > selectedProduct.stock) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [`details.${index}`]: `El producto "${selectedProduct.name}" no tiene suficiente stock. Disponible: ${selectedProduct.stock}, solicitado: ${quantity}.`,
+        }));
       } else {
         setErrors((prevErrors) => {
           const { [`details.${index}`]: _, ...rest } = prevErrors;
@@ -154,10 +159,26 @@ function RequestCreate({ onSave, initialData = {} }) {
     return Object.keys(newErrors).length === 0;
   };
 
+  const validateStock = () => {
+    const newErrors = {};
+    formData.details.forEach((detail, index) => {
+      const selectedProduct = products.find(
+        (prod) => prod.id === parseInt(detail.idProduct)
+      );
+      if (selectedProduct && detail.quantity > selectedProduct.stock) {
+        newErrors[`details.${index}`] = `El producto "${selectedProduct.name}" no tiene suficiente stock. Disponible: ${selectedProduct.stock}, solicitado: ${detail.quantity}.`;
+      }
+    });
+
+    setErrors((prevErrors) => ({ ...prevErrors, ...newErrors }));
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!validateForm()) {
+    // Validar formulario y stock
+    if (!validateForm() || !validateStock()) {
       return; // No permitir el envío si hay errores
     }
 

@@ -8,7 +8,7 @@ function RequestUpdate() {
   const [products, setProducts] = useState([]);
   const [details, setDetails] = useState([]);
   const [errors, setErrors] = useState({});
-
+  const [isSubmitting, setIsSubmitting] = useState(false); // Nuevo estado
   const [request, setRequest] = useState({
     idUser: "",
     total: 0,
@@ -136,19 +136,19 @@ function RequestUpdate() {
       newErrors.deadLine = "La fecha límite no puede ser anterior a hoy.";
     }
 
-    if (!request.state) {
-      newErrors.state = "Selecciona un estado.";
-    }
-
     if (details.length === 0) {
       newErrors.details = "Debes agregar al menos un detalle.";
     } else {
       details.forEach((detail, index) => {
+        const product = products.find((p) => p.id === parseInt(detail.idProduct, 10));
         if (!detail.idProduct) {
           newErrors[`details.${index}.idProduct`] = "Selecciona un producto.";
         }
         if (!detail.quantity || detail.quantity <= 0) {
           newErrors[`details.${index}.quantity`] = "La cantidad debe ser mayor a 0.";
+        }
+        if (product && detail.quantity > product.stock && request.state === 7) {
+          newErrors[`details.${index}.quantity`] = `La cantidad excede el stock disponible (${product.stock}).`;
         }
       });
     }
@@ -163,6 +163,8 @@ function RequestUpdate() {
     if (!validateForm()) {
       return;
     }
+
+    setIsSubmitting(true); // Mostrar indicador de carga
 
     // Asignar automáticamente las fechas actuales
     const formattedCreationDate = new Date().toISOString();
@@ -197,8 +199,10 @@ function RequestUpdate() {
         body: JSON.stringify(requestData),
       });
 
+      const result = await response.json();
+
       if (!response.ok) {
-        throw new Error(`Error ${response.status}: ${response.statusText}`);
+        throw new Error(result.message || "Error al actualizar el pedido.");
       }
 
       Swal.fire({
@@ -216,6 +220,8 @@ function RequestUpdate() {
         icon: "error",
         confirmButtonText: "Ok",
       });
+    } finally {
+      setIsSubmitting(false); // Ocultar indicador de carga
     }
   };
 
@@ -386,8 +392,8 @@ function RequestUpdate() {
             >
               Cancelar
             </button>
-            <button type="submit" className="btn btn-success rounded-5">
-              Guardar
+            <button type="submit" className="btn btn-success rounded-5" disabled={isSubmitting}>
+              {isSubmitting ? "Guardando..." : "Guardar"}
             </button>
           </div>
         </form>

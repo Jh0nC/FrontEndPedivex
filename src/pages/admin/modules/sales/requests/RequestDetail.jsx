@@ -76,7 +76,7 @@ function RequestDetailsModal({ show, onClose, details }) {
             ></button>
           </div>
           <div className="modal-body">
-            <p><strong>Usuario:</strong> {getUserNameById(details.idUser)}</p>
+            <p><strong>Cliente:</strong> {getUserNameById(details.idUser)}</p>
             <p><strong>Total:</strong> {details.total}</p>
             <p><strong>Estado:</strong> {getStateNameById(details.state)}</p>
             <p><strong>Fecha de Creación:</strong> {details.creationDate}</p>

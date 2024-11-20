@@ -156,7 +156,7 @@ function Datatables({ data }) {
           <tr>
             <th>ID</th>
             <th>Fecha Creación</th>
-            <th>Usuario</th>
+            <th>Cliente</th>
             <th>Total</th>
             <th>Estado</th>
             <th>Fecha Límite</th>
