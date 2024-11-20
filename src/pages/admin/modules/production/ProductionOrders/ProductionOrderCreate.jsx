@@ -121,6 +121,8 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ stock: supply.stock - usedAmount }),
             });
+            console.log(supply.id)  
+            console.log(supply.stock)
   
             if (!updateResponse.ok) {
               throw new Error(
