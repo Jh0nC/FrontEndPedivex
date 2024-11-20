@@ -8,6 +8,7 @@ function ProductionOrderUpdate() {
   const [products, setProducts] = useState([]);
   const [details, setDetails] = useState([]);
   const [errors, setErrors] = useState({});
+  const [supplie, setSupplies] = useState([]);
 
   const [formData, setFormData] = useState({
     idUser: "",
@@ -66,6 +67,13 @@ function ProductionOrderUpdate() {
       }
     };
 
+    const fetchSupplies = async () => {
+      const response = await fetch("http://localhost:3000/supplie");
+      const data = await response.json();
+      setSupplies(data);
+    };
+
+    fetchSupplies();
     fetchData();
   }, [id]);
 
@@ -103,6 +111,62 @@ function ProductionOrderUpdate() {
     setFormData({ ...formData, state: stateId });
     setErrors((prevErrors) => ({ ...prevErrors, state: null })); // Limpiar errores
   };
+  
+  const actualizarStock = async (data) => {
+    try {
+      const productDetails = await Promise.all(
+        data.details.map(async (detail) => {
+          const response = await fetch(`http://localhost:3000/product/${detail.idProduct}`);
+          if (!response.ok) throw new Error(`Error al obtener datos del producto: ${detail.idProduct}`);
+          const product = await response.json();
+          return {
+            ...product,
+            requiredAmount: detail.amount,
+          };
+        })
+      );
+  
+      for (const product of productDetails) {
+        const datasheetDetails = product.datasheet?.datasheetDetails || [];
+        const massDetails = product.datasheet?.mass?.massDetails || [];
+  
+        for (const detail of [...datasheetDetails, ...massDetails]) {
+          const supply = supplie.find((s) => s.id === detail.idSupplie);
+          if (supply) {
+            const usedAmount = detail.amount * product.requiredAmount;
+  
+            // Verificar si el stock es suficiente
+            if (supply.stock - usedAmount < 0) {
+              Swal.fire({
+                title: "Error de Stock",
+                text: `No hay suficiente stock de ${supply.name} para comenzar la producción.`,
+                icon: "error",
+                confirmButtonText: "Ok",
+              });
+              return false; // Retorna false si el stock es insuficiente
+            }
+  
+            // Actualizar el stock del insumo
+            const updateResponse = await fetch(`http://localhost:3000/supplie/${supply.id}`, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ stock: supply.stock - usedAmount }),
+            });
+  
+            if (!updateResponse.ok) {
+              throw new Error(
+                `No se pudo actualizar el stock de ${supply.name}. Error: ${updateResponse.status}`
+              );
+            }
+          }
+        }
+      }
+      return true; // Retorna true si todo se actualizó correctamente
+    } catch (error) {
+      console.error("Error al actualizar el stock:", error);
+      throw error;
+    }
+  };
 
   const handleCancel = () => {
     navigate(`/admin/productionOrder`);
@@ -136,16 +200,25 @@ function ProductionOrderUpdate() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!validateForm()) {
       return;
     }
-
+  
+    if (formData.state == 6) {
+      const stockUpdated = await actualizarStock(formData);
+  
+      if (!stockUpdated) {
+        // Detener ejecución si no se pudo actualizar el stock
+        return;
+      }
+    }
+  
     const formattedDate = new Date().toISOString(); // Asignar fecha actual automáticamente
     const formattedTargetDate = formData.targetDate
       ? new Date(formData.targetDate).toISOString()
       : "";
-
+  
     try {
       const response = await fetch(`http://localhost:3000/productionOrder/${id}`, {
         method: "PUT",
@@ -164,11 +237,11 @@ function ProductionOrderUpdate() {
           })),
         }),
       });
-
+  
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
-
+  
       Swal.fire({
         title: "¡Pedido de Producción actualizado!",
         text: "El pedido ha sido actualizado exitosamente.",
@@ -186,6 +259,7 @@ function ProductionOrderUpdate() {
       });
     }
   };
+  
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
