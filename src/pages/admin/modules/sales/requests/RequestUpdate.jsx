@@ -164,7 +164,7 @@ function RequestUpdate() {
       return;
     }
 
-    setIsSubmitting(true); // Mostrar indicador de carga
+    setIsSubmitting(true); //  indicador de carga 1
 
     // Asignar automáticamente las fechas actuales
     const formattedCreationDate = new Date().toISOString();
@@ -221,7 +221,7 @@ function RequestUpdate() {
         confirmButtonText: "Ok",
       });
     } finally {
-      setIsSubmitting(false); // Ocultar indicador de carga
+      setIsSubmitting(false); //  indicador de carga 2
     }
   };
 
