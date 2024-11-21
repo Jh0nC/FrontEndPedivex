@@ -133,7 +133,7 @@ const CreateReturn = () => {
       });
   
       if (response.ok) {
-        alert('Devolución creada correctamente');
+        navigate('/admin/devolutions');
       } else {
         alert('Error al crear la devolución');
       }
