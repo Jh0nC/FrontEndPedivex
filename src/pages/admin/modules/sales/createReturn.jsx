@@ -108,24 +108,16 @@ const CreateReturn = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
   
-    const navigate = useNavigate();
-  
-    // Validaciones adicionales antes de enviar
-    if (!saleId || !returnDetails.length || !formDate) {
-      alert("Por favor completa todos los campos requeridos.");
-      return;
-    }
-  
     if (Object.keys(errors).length > 0) {
-      alert("Por favor corrige los errores antes de enviar.");
+      alert('Please fix the errors before submitting');
       return;
     }
   
     try {
-      const response = await fetch("http://localhost:3000/devolution/", {
-        method: "POST",
+      const response = await fetch('http://localhost:3000/devolution/', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           idSale: saleId,
@@ -141,15 +133,13 @@ const CreateReturn = () => {
       });
   
       if (response.ok) {
-        navigate("/admin/devolutions"); // Redirección exitosa
+        alert('Devolución creada correctamente');
       } else {
-        const errorData = await response.json();
-        console.error("Error en la respuesta:", errorData);
-        alert("Error al crear la devolución. Por favor revisa los datos.");
+        alert('Error al crear la devolución');
       }
     } catch (error) {
-      console.error("Error de envío:", error);
-      alert("Ocurrió un error al procesar la devolución. Intenta de nuevo.");
+      console.error('Submission error:', error);
+      alert('Error al crear la devolución');
     }
   };
   
