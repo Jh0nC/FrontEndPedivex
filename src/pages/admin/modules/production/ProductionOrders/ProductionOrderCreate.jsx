@@ -105,38 +105,10 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
   
       if (!response.ok) throw new Error(`Error en la solicitud: ${response.status}`);
   
-      // Restar los insumos del stock tras crear la orden
-      for (const product of productDetails) {
-        const datasheetDetails = product.datasheet?.datasheetDetails || [];
-        const massDetails = product.datasheet?.mass?.massDetails || [];
-  
-        for (const detail of [...datasheetDetails, ...massDetails]) {
-          const supply = supplie.find((s) => s.id === detail.idSupplie);
-          if (supply) {
-            const usedAmount = detail.amount * product.requiredAmount;
-  
-            // Actualizar el stock del insumo
-            const updateResponse = await fetch(`http://localhost:3000/supplie/${supply.id}`, {
-              method: "PATCH",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ stock: supply.stock - usedAmount }),
-            });
-            console.log(supply.id)  
-            console.log(supply.stock)
-  
-            if (!updateResponse.ok) {
-              throw new Error(
-                `No se pudo actualizar el stock de ${supply.name}. Error: ${updateResponse.status}`
-              );
-            }
-          }
-        }
-      }
-  
       // Notificar éxito
       Swal.fire({
         icon: "success",
-        title: "Orden de Producción creada y stock actualizado con éxito",
+        title: "Orden de Producción creada",
         confirmButtonText: "Aceptar",
       }).then(() => {
         if (onSave) onSave();
