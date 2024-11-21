@@ -60,7 +60,7 @@ function Navbar() {
           <div className="navbar-list">
             <li><Link to={"/"}>Inicio</Link></li>
             <li><Link to={"/catalogue"}>Catálogo</Link></li>
-            <li><Link to={"/aboutUs"}>Parcerottis</Link></li>
+            <li><Link to={"/About"}>Nosotros</Link></li>
             {isLoggedIn && (
               <li><Link to={"/admin/dashboard"}>Admin</Link></li>
             )}

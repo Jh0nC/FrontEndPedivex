@@ -76,7 +76,7 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
         <Route path='/RequestRecovery' element={<RequestRecovery />}/>
         <Route path='/ValidateToken' element={<ValidateToken />}/>
         <Route path='/' element={<Landing />} />
-        <Route path='aboutUs' element={<About />} />
+        <Route path='About' element={<About />} />
         <Route path='catalogue' element={<Catalogue />} />
         <Route path='admin' element={<PrivateRoute><AdminPage /></PrivateRoute>}>
           <Route path="" element={<OutletPage />} />
