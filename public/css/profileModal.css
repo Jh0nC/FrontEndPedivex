@@ -1,0 +1,25 @@
+.dropdown-toggle::after {
+  margin-left: 0.7rem;
+}
+
+.dropdown-menu {
+  min-width: 200px;
+  padding: 0.5rem 0;
+}
+
+.dropdown-header {
+  padding: 0.75rem 1rem;
+}
+
+.dropdown-item {
+  padding: 0.5rem 1rem;
+}
+
+.dropdown-item:active {
+  background-color: #f8f9fa;
+  color: inherit;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+}

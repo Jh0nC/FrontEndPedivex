@@ -60,7 +60,7 @@ import ClientEdit from "./pages/admin/modules/clients/ClientEdit";
 // PrivateRoute component to protect routes
 function PrivateRoute({ children }) {
   const data = JSON.parse(localStorage.getItem('authData'));
-  const token = data.token
+  const token = data?.token
   return token ? children : <Navigate to="/login" />;
 }
 

@@ -5,69 +5,69 @@ import logo from "../../public/assets/icons/logo.png";
 
 function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showProfileModal, setShowProfileModal] = useState(false);
   const [user, setUser] = useState(null);
+  const [role, setRole] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Recuperar datos del localStorage
-    const storedAuthData = localStorage.getItem('authData');
-    if (!storedAuthData) {
-      setIsLoggedIn(false);
-      return;
-    }
+    const storedAuthData = JSON.parse(localStorage.getItem('authData'));
 
-    try {
-      const data = JSON.parse(storedAuthData);
-      const token = data?.token;
+    if (storedAuthData) {
+      try {
+        const token = storedAuthData.token
 
-      if (token) {
-        const payload = JSON.parse(atob(token.split(".")[1])); // Decodificar el payload del token JWT
-        setUser(payload); // Establece el usuario a partir del token
-        setIsLoggedIn(true);
-      } else {
-        setIsLoggedIn(false);
+        if (token) {
+          setRole(storedAuthData.role);
+          setUser(storedAuthData.user);
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
+        }
+
+      } catch (error) {
+        console.log(`Error: ${error}`);
       }
-    } catch (error) {
-      console.error("Error decoding token:", error);
-      setIsLoggedIn(false);
     }
+
   }, []);
 
-  // Función para cerrar sesión
   const handleLogout = () => {
     localStorage.removeItem("authData");
     setIsLoggedIn(false);
     setUser(null);
-    navigate("/login"); // Redirige a la página de inicio de sesión
-  };
-
-  const handleProfileClick = () => {
-    setShowProfileModal(true);
-  };
-
-  const closeProfileModal = () => {
-    setShowProfileModal(false);
+    setTimeout(() => {
+      window.location.reload();
+    }, 100)
+    navigate("/login");
   };
 
   return (
     <>
       <div className="container-fluid px-2 position-fixed z-3 top-0">
         <div className="container-fluid border-type-top shadow own-navbar">
-          <a className="navbar-logo" href="#">
+          <Link className="navbar-logo" to={"/"} >
             <img src={logo} alt="Logo" />
-          </a>
+          </Link>
           <div className="navbar-list">
             <li><Link to={"/"}>Inicio</Link></li>
             <li><Link to={"/catalogue"}>Catálogo</Link></li>
             <li><Link to={"/aboutUs"}>Parcerottis</Link></li>
-            {isLoggedIn && (
+            {role && role.id == 1 ? (
               <li><Link to={"/admin/dashboard"}>Admin</Link></li>
-            )}
+            ) : ("")}
           </div>
           <div className="navbar-auth">
             {isLoggedIn ? (
-              <ProfileModal user={user} onClose={closeProfileModal} onLogout={handleLogout} />
+              <>
+                <button
+                  type="button"
+                  className="btn d-flex gap-2 justify-content-center align-items-center"
+                  data-bs-toggle="modal"
+                  data-bs-target="#profile" >
+                  <i className="bi bi-person-circle"></i>
+                  {(user.firstName + " " + user.lastName) || "Usuario"}
+                </button>
+              </>
             ) : (
               <Link to={"/login"}>
                 Iniciar sesión
@@ -78,6 +78,7 @@ function Navbar() {
         </div>
       </div>
       <div className="navbar-place"></div>
+      <ProfileModal user={user} onLogout={handleLogout} role={role} />
     </>
   );
 }

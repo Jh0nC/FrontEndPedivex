@@ -211,7 +211,7 @@ function Catalogue() {
 
   return (
     <>
-      <div className="container-fluid p-5">
+      <div className="container-fluid px-4 mt-5">
         <div className="row catalogue-prom-panel mb-4">
           <div className="col">
             <h1 className="text-center display-4">¡Mejores que Paliqueso!</h1>
@@ -228,8 +228,8 @@ function Catalogue() {
           <div className="row">
             <div className="col-4">
               <div className="rounded-5 card shadow-sm">
-                <div className="card-header bg-primary text-white">
-                  <h5>Carrito de Compras</h5>
+                <div className="card-header rounded-5 bg-primary text-white d-flex shadow">
+                  <h3 className="mx-auto pt-2">Carrito de Compras</h3>
                 </div>
                 <div className="card-body">
                   {cart.length > 0 ? (
@@ -241,13 +241,13 @@ function Catalogue() {
                           </span>
                           <div className="d-flex gap-2">
                             <button
-                              className="button-cart btn btn-outline-success btn-sm rounded-5"
+                              className="button-cart btn btn-outline-success btn-sm rounded-5 shadow-sm"
                               onClick={() => addToCart(item)}
                             >
                               <i className="bi bi-plus-lg"></i>
                             </button>
                             <button
-                              className="button-cart btn btn-outline-danger btn-sm me-2 rounded-5"
+                              className="button-cart btn btn-outline-danger btn-sm me-2 rounded-5 shadow-sm"
                               onClick={() => decreaseQuantity(item.id)}
                             >
                               <i className="bi bi-dash-lg"></i>
@@ -296,7 +296,7 @@ function Catalogue() {
                           </ul>
                         </p>
                         <button
-                          className="button-cart btn btn-success btn-sm rounded-5 shadow"
+                          className="button-cart btn btn-success btn-sm rounded-5 shadow-sm"
                           onClick={() => addToCart(product)}
                         >
                           Agregar al carrito
@@ -309,8 +309,8 @@ function Catalogue() {
             </div>
           </div>
         </div>
-        <Footer />
       </div>
+      <Footer />
     </>
   );
 }
