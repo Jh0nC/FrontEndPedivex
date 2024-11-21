@@ -111,47 +111,60 @@ const CreateReturn = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    // Verificar si todos los campos de cantidad están en 0
+    const allQuantitiesZero = returnDetails.every(detail => detail.quantity === 0);
+
+    if (allQuantitiesZero) {
+        Swal.fire(
+            'Advertencia',
+            'Debes ingresar una cantidad mayor a 0 en al menos un producto para realizar la devolución.',
+            'warning'
+        );
+        return;
+    }
+
     if (Object.keys(errors).length > 0) {
-      Swal.fire('Errores', 'Corrige los errores antes de enviar.', 'warning');
-      return;
+        Swal.fire('Errores', 'Corrige los errores antes de enviar.', 'warning');
+        return;
     }
 
     try {
-      const response = await fetch('http://localhost:3000/devolution/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          idSale: saleId,
-          devolutionDetails: returnDetails.map((detail) => ({
-            idProduct: detail.idProduct,
-            quantity: detail.quantity,
-            idMotive: detail.idMotive,
-            changedProduct: detail.changedProduct,
-            changedQuantity: detail.changedQuantity,
-          })),
-          date: formDate,
-        }),
-      });
-
-      if (response.ok) {
-        Swal.fire({
-          title: 'Éxito',
-          text: 'Devolución creada correctamente',
-          icon: 'success',
-          confirmButtonText: 'Aceptar',
-        }).then(() => {
-          navigate('/admin/devolutions');
+        const response = await fetch('http://localhost:3000/devolution/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                idSale: saleId,
+                devolutionDetails: returnDetails.map((detail) => ({
+                    idProduct: detail.idProduct,
+                    quantity: detail.quantity,
+                    idMotive: detail.idMotive,
+                    changedProduct: detail.changedProduct,
+                    changedQuantity: detail.changedQuantity,
+                })),
+                date: formDate,
+            }),
         });
-      } else {
-        Swal.fire('Error', 'Error al crear la devolución.', 'error');
-      }
+
+        if (response.ok) {
+            Swal.fire({
+                title: 'Éxito',
+                text: 'Devolución creada correctamente',
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+            }).then(() => {
+                navigate('/admin/devolutions');
+            });
+        } else {
+            Swal.fire('Error', 'Error al crear la devolución.', 'error');
+        }
     } catch (error) {
-      console.error('Submission error:', error);
-      Swal.fire('Error', 'Ocurrió un error al procesar la devolución.', 'error');
+        console.error('Submission error:', error);
+        Swal.fire('Error', 'Ocurrió un error al procesar la devolución.', 'error');
     }
-  };
+};
+
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
