@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { PlusCircle, Trash2 } from 'lucide-react';
 import Swal from 'sweetalert2';
 
 const CreateReturn = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [motives, setMotives] = useState([]);
   const [saleId, setSaleId] = useState(id || '');
@@ -18,7 +19,7 @@ const CreateReturn = () => {
       try {
         const [productsResponse, motivesResponse] = await Promise.all([
           fetch('http://localhost:3000/product'),
-          fetch('http://localhost:3000/motivedevolution')
+          fetch('http://localhost:3000/motivedevolution'),
         ]);
 
         const productsData = await productsResponse.json();
@@ -27,7 +28,8 @@ const CreateReturn = () => {
         setProducts(productsData);
         setMotives(motivesData);
       } catch (error) {
-        console.error("Error fetching initial data:", error);
+        Swal.fire('Error', 'Error al cargar los datos iniciales.', 'error');
+        console.error('Error fetching initial data:', error);
       }
     };
 
@@ -54,7 +56,8 @@ const CreateReturn = () => {
 
           setReturnDetails(initialDetails);
         } catch (error) {
-          console.error("Error fetching sale details:", error);
+          Swal.fire('Error', 'Error al cargar los detalles de la venta.', 'error');
+          console.error('Error fetching sale details:', error);
         }
       };
 
@@ -67,7 +70,7 @@ const CreateReturn = () => {
 
     if (field === 'quantity') {
       if (value < 0 || value > returnDetails[index].maxQuantity) {
-        fieldErrors[`${index}-${field}`] = `Quantity must be between 0 and ${returnDetails[index].maxQuantity}`;
+        fieldErrors[`${index}-${field}`] = `La cantidad debe estar entre 0 y ${returnDetails[index].maxQuantity}`;
       } else {
         delete fieldErrors[`${index}-${field}`];
       }
@@ -75,9 +78,9 @@ const CreateReturn = () => {
 
     if (field === 'changedQuantity') {
       if (value < 0) {
-        fieldErrors[`${index}-${field}`] = 'Changed quantity cannot be negative';
+        fieldErrors[`${index}-${field}`] = 'La cantidad cambiada no puede ser negativa';
       } else if (value > returnDetails[index].quantity) {
-        fieldErrors[`${index}-${field}`] = 'Changed quantity cannot exceed quantity';
+        fieldErrors[`${index}-${field}`] = 'La cantidad cambiada no puede exceder la cantidad original';
       } else {
         delete fieldErrors[`${index}-${field}`];
       }
@@ -107,12 +110,12 @@ const CreateReturn = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     if (Object.keys(errors).length > 0) {
-      alert('Please fix the errors before submitting');
+      Swal.fire('Errores', 'Corrige los errores antes de enviar.', 'warning');
       return;
     }
-  
+
     try {
       const response = await fetch('http://localhost:3000/devolution/', {
         method: 'POST',
@@ -131,18 +134,24 @@ const CreateReturn = () => {
           date: formDate,
         }),
       });
-  
+
       if (response.ok) {
-        alert('Devolución creada correctamente');
+        Swal.fire({
+          title: 'Éxito',
+          text: 'Devolución creada correctamente',
+          icon: 'success',
+          confirmButtonText: 'Aceptar',
+        }).then(() => {
+          navigate('/admin/devolutions');
+        });
       } else {
-        alert('Error al crear la devolución');
+        Swal.fire('Error', 'Error al crear la devolución.', 'error');
       }
     } catch (error) {
       console.error('Submission error:', error);
-      alert('Error al crear la devolución');
+      Swal.fire('Error', 'Ocurrió un error al procesar la devolución.', 'error');
     }
   };
-  
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
@@ -175,7 +184,7 @@ const CreateReturn = () => {
               <div key={index} className="card mb-3">
                 <div className="card-body">
                   <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h4 className="card-title">Devolver producto </h4>
+                    <h4 className="card-title">Devolver producto</h4>
                     <button
                       className="btn btn-outline-danger rounded-5"
                       onClick={() => removeReturnDetail(index)}
@@ -192,7 +201,7 @@ const CreateReturn = () => {
                         value={detail.idProduct}
                         onChange={(e) => handleReturnDetailsChange(index, 'idProduct', parseInt(e.target.value))}
                       >
-                        {products.map(product => (
+                        {products.map((product) => (
                           <option key={product.id} value={product.id}>
                             {product.name}
                           </option>
@@ -211,7 +220,6 @@ const CreateReturn = () => {
                         onChange={(e) => handleReturnDetailsChange(index, 'quantity', parseInt(e.target.value))}
                       />
                       {errors[`${index}-quantity`] && (
-                        
                         <div className="alert alert-danger p-1 col">{errors[`${index}-quantity`]}</div>
                       )}
                       <small className="form-text text-muted">
@@ -220,13 +228,13 @@ const CreateReturn = () => {
                     </div>
 
                     <div className="col-md-6">
-                      <label className="form-label">Motivo devolucion </label>
+                      <label className="form-label">Motivo devolución</label>
                       <select
                         className={`form-select ${errors[`${index}-idMotive`] ? 'is-invalid' : ''}`}
                         value={detail.idMotive}
                         onChange={(e) => handleReturnDetailsChange(index, 'idMotive', parseInt(e.target.value))}
                       >
-                        {motives.map(motive => (
+                        {motives.map((motive) => (
                           <option key={motive.id} value={motive.id}>
                             {motive.name}
                           </option>
@@ -241,7 +249,7 @@ const CreateReturn = () => {
                         value={detail.changedProduct}
                         onChange={(e) => handleReturnDetailsChange(index, 'changedProduct', parseInt(e.target.value))}
                       >
-                        {products.map(product => (
+                        {products.map((product) => (
                           <option key={product.id} value={product.id}>
                             {product.name}
                           </option>
@@ -250,7 +258,7 @@ const CreateReturn = () => {
                     </div>
 
                     <div className="col-md-6">
-                      <label className="form-label">Cantidad a cambiar</label>
+                      <label className="form-label">Cantidad cambiada</label>
                       <input
                         type="number"
                         className={`form-control ${errors[`${index}-changedQuantity`] ? 'is-invalid' : ''}`}
@@ -260,7 +268,7 @@ const CreateReturn = () => {
                         onChange={(e) => handleReturnDetailsChange(index, 'changedQuantity', parseInt(e.target.value))}
                       />
                       {errors[`${index}-changedQuantity`] && (
-                        <small className="text-danger">{errors[`${index}-changedQuantity`]}</small>
+                        <div className="alert alert-danger p-1 col">{errors[`${index}-changedQuantity`]}</div>
                       )}
                     </div>
                   </div>
@@ -268,12 +276,26 @@ const CreateReturn = () => {
               </div>
             ))}
 
-            <div className="d-flex justify-content-between mt-4">
+            <div className="d-flex justify-content-between mb-4">
+              <button
+                className="btn btn-outline-success rounded-5"
+                onClick={() => setReturnDetails([...returnDetails, {
+                  idProduct: products[0]?.id || 1,
+                  productName: '',
+                  quantity: 0,
+                  maxQuantity: 0,
+                  idMotive: motives[0]?.id || 1,
+                  changedProduct: products[0]?.id || 1,
+                  changedQuantity: 0,
+                }])}
+              >
+                <PlusCircle size={16} /> Añadir Producto
+              </button>
               <button
                 className="btn btn-success rounded-5"
                 onClick={handleSubmit}
               >
-                Realizar Devolucion
+                Realizar Devolución
               </button>
             </div>
           </div>
