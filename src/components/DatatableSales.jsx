@@ -140,10 +140,17 @@ function Datatable({ data }) {
                 >
                   Editar
                 </button>
+                <Link to={`/admin/sales-return/${item.id}`}>
+                  <button className="btn btn-success rounded-5">
+                    Realizar Devolución
+                  </button>
+                </Link>
               </td>
+
             </tr>
           ))}
         </tbody>
+
       </table>
 
       <div className="datatable_footer d-flex justify-content-between align-items-center">
@@ -155,9 +162,8 @@ function Datatable({ data }) {
               <button
                 key={index + 1}
                 onClick={() => paginate(index + 1)}
-                className={`page-item ${
-                  currentPage === index + 1 ? "active" : ""
-                }`}
+                className={`page-item ${currentPage === index + 1 ? "active" : ""
+                  }`}
                 style={{
                   backgroundColor:
                     currentPage === index + 1 ? "#FFD700" : "#FFFAE0",

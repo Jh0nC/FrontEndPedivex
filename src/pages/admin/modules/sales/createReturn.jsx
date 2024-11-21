@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { PlusCircle, Trash2 } from 'lucide-react';
+import Swal from 'sweetalert2';
 
 const CreateReturn = () => {
   const { id } = useParams();
@@ -106,12 +107,12 @@ const CreateReturn = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     if (Object.keys(errors).length > 0) {
       alert('Please fix the errors before submitting');
       return;
     }
-
+  
     try {
       const response = await fetch('http://localhost:3000/devolution/', {
         method: 'POST',
@@ -130,17 +131,18 @@ const CreateReturn = () => {
           date: formDate,
         }),
       });
-
+  
       if (response.ok) {
-        alert('Return created successfully');
+        alert('Devolución creada correctamente');
       } else {
-        alert('Error creating return');
+        alert('Error al crear la devolución');
       }
     } catch (error) {
       console.error('Submission error:', error);
-      alert('Error creating return');
+      alert('Error al crear la devolución');
     }
   };
+  
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
