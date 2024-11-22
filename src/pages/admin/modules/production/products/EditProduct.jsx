@@ -174,7 +174,7 @@ function EditProduct() {
                 id="price"
                 value={product.price}
                 onChange={(e) => setProduct({ ...product, price: e.target.value })}
-                required
+
               />
             </div>
             <div className="col-sm">
@@ -195,65 +195,6 @@ function EditProduct() {
             </div>
           </div>
 
-          <div className="row mb-3">
-            <div className="col-sm">
-              <label htmlFor="stock" className="form-label">Stock</label>
-              <input
-                type="number"
-                className="form-control"
-                name="stock"
-                id="stock"
-                value={product.stock}
-                onChange={(e) => setProduct({ ...product, stock: e.target.value })}
-                required
-              />
-            </div>
-            <div className="col-sm">
-              <label htmlFor="state" className="form-label">Estado</label>
-              <div className="d-flex w-100 h-50 align-items-center justify-content-center gap-5">
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="state"
-                    id="active"
-                    checked={product.state === 1}
-                    onChange={() => setProduct({ ...product, state: 1 })}
-                  />
-                  <label className="form-check-label" htmlFor="active">
-                    Activo
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="state"
-                    id="inactive"
-                    checked={product.state === 2}
-                    onChange={() => setProduct({ ...product, state: 2 })}
-                  />
-                  <label className="form-check-label" htmlFor="inactive">
-                    Inactivo
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="state"
-                    id="exhausted"
-                    checked={product.state === 5}
-                    onChange={() => setProduct({ ...product, state: 5 })}
-                  />
-                  <label className="form-check-label" htmlFor="exhausted">
-                    Agotado
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-
           <hr className="mx-3" />
           <div className="mb-3">
             <h5>Detalles de Insumos</h5>
@@ -263,7 +204,6 @@ function EditProduct() {
                   className="form-control"
                   value={detail.idSupplie}
                   onChange={(e) => handleDetailChange(index, "idSupplie", e.target.value)}
-                  required
                 >
                   <option value="">Selecciona un insumo</option>
                   {supplies.map((supplie) => (
@@ -278,7 +218,7 @@ function EditProduct() {
                   value={detail.amount}
                   onChange={(e) => handleDetailChange(index, "amount", e.target.value)}
                   placeholder="Cantidad"
-                  required
+
                 />
                 <select
                   className="form-control"

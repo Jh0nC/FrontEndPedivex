@@ -22,6 +22,7 @@ import ValidateToken from "./pages/auth/ValidateToken";
 import About from "./pages/client/About";
 import Catalogue from "./pages/client/Catalogue";
 import AdminPage from "./pages/admin/AdminPage";
+import EmployeePage from "./pages/employee/EmployeePage";
 import Dashboard from "./pages/admin/modules/Dashboard";
 import Products from "./pages/admin/modules/production/products/Products";
 import SuppliesCreate from "./pages/admin/modules/boughts/supplies/SuppliesCreate";
@@ -46,7 +47,7 @@ import Masses from "./pages/admin/modules/production/masses/Masses";
 import CreateMass from "./pages/admin/modules/production/masses/CreateMass";
 import CreateProducts from "./pages/admin/modules/production/products/CreateProduct";
 import EditMass from "./pages/admin/modules/production/masses/EditMasses";
-import OutletPage from "./pages/admin/OutletPage";
+// import OutletPage from "./pages/admin/OutletPage";
 import ProductCategories from "./pages/admin/modules/production/porductCategories/ProductCategories";
 import CreateCategory from "./pages/admin/modules/production/porductCategories/CreateCategory";
 import Sales from "./pages/admin/modules/sales/Sales";
@@ -56,12 +57,37 @@ import EditCategorie from "./pages/admin/modules/production/porductCategories/Ed
 import CreateReturn from "./pages/admin/modules/sales/createReturn";
 import EditProduct from "./pages/admin/modules/production/products/EditProduct";
 import ClientEdit from "./pages/admin/modules/clients/ClientEdit";
+import Br from "./pages/Br";
 
 // PrivateRoute component to protect routes
-function PrivateRoute({ children }) {
+function PrivateRouteAdmin({ children }) {
   const data = JSON.parse(localStorage.getItem('authData'));
-  const token = data?.token
-  return token ? children : <Navigate to="/login" />;
+  const token = data?.token;
+  const role = data?.role;
+  if (token) {
+    if (role.id == 1) {
+      return children;
+    } else if (role.id == 2) {
+      return <Navigate to="/catalogue" />
+    }
+  } else {
+    return <Navigate to="/login" />
+  }
+};
+
+function PrivateRouteEmployee({ children }) {
+  const data = JSON.parse(localStorage.getItem('authData'));
+  const token = data?.token;
+  const role = data?.role;
+  if (token) {
+    if (role.id == 3) {
+      return children;
+    } else if (role.id == 2) {
+      return <Navigate to="/catalogue" />
+    }
+  } else {
+    return <Navigate to="/login" />
+  }
 }
 
 ReactDOM.createRoot(document.querySelector('#root')).render(
@@ -73,13 +99,18 @@ ReactDOM.createRoot(document.querySelector('#root')).render(
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/ResetPassword' element={<ResetPassword />} />
-        <Route path='/RequestRecovery' element={<RequestRecovery />}/>
-        <Route path='/ValidateToken' element={<ValidateToken />}/>
+        <Route path='/RequestRecovery' element={<RequestRecovery />} />
+        <Route path='/ValidateToken' element={<ValidateToken />} />
         <Route path='/' element={<Landing />} />
         <Route path='About' element={<About />} />
         <Route path='catalogue' element={<Catalogue />} />
-        <Route path='admin' element={<PrivateRoute><AdminPage /></PrivateRoute>}>
-          <Route path="" element={<OutletPage />} />
+        <Route path='employee' element={<PrivateRouteEmployee><EmployeePage /></PrivateRouteEmployee>} >
+          <Route path='productionOrder' element={<ProductionOrder />} />
+          <Route path='request' element={<Request />} />
+        </Route>
+
+        <Route path='admin' element={<PrivateRouteAdmin><AdminPage /></PrivateRouteAdmin>}>
+          {/* <Route path="" element={<OutletPage />} /> */}
           <Route path='dashboard' element={<Dashboard />} />
           <Route path='masses' element={<Masses />} />
           <Route path='masses/create' element={<CreateMass />} />

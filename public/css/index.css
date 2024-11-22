@@ -436,3 +436,9 @@ a {
 .logout-button:hover {
   background-color: #c0392b;
 }
+
+.list-group-content-c li,
+.list-group-header-c li {
+  width: 33.33%;
+  height: auto;
+}

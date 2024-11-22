@@ -115,9 +115,9 @@ function Datatable({ data }) {
               <td>{item.total}</td>
               <td>{getUserNameById(item.idUser)}</td>
               <td>
-                {item.state === 8 ? (
-                  <button className="btn btn-warning rounded-5 h-50">
-                    Finalizada
+                {item.state === 7 ? (
+                  <button className="btn btn-success rounded-5 h-50">
+                    Terminado
                   </button>
                 ) : item.state === 9 ? (
                   <button className="btn btn-secondary rounded-5 h-50">
@@ -141,7 +141,7 @@ function Datatable({ data }) {
                   Editar
                 </button>
                 <Link to={`/admin/sales-return/${item.id}`}>
-                  <button className="btn btn-success rounded-5">
+                  <button className="btn btn-outline-danger rounded-5">
                     Realizar Devolución
                   </button>
                 </Link>

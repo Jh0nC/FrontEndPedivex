@@ -1,9 +1,9 @@
-export const login = async (email, password) => {
+const login = async (mail, password) => {
   try {
-    const response = await fetch('http://tu-api.com/login', {
+    const response = await fetch('http://localhost:3000/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ mail, password }),
     });
 
     if (response.ok) {
@@ -22,10 +22,14 @@ export const login = async (email, password) => {
   }
 };
 
-export const logout = () => {
+const logout = () => {
   localStorage.removeItem('token');
 };
 
-export const isAuthenticated = () => {
+const isAuthenticated = () => {
   return !!localStorage.getItem('token');
 };
+
+export default {
+  isAuthenticated
+}

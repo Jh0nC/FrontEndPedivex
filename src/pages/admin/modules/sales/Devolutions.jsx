@@ -79,7 +79,7 @@ function Supplies() {
                 <td>{item.date}</td>
                 <td className='d-flex gap-2'>
                   <button
-                    className='btn btn-outline-danger'
+                    className='btn btn-secondary rounded-5'
                     onClick={() => fetchDetalle(item.id)} // Obtener el detalle y abrir el modal
                   >
                     Ver Detalle
@@ -97,7 +97,7 @@ function Supplies() {
       {/* Modal para mostrar detalles de la devolución */}
       {modalVisible && (
         <div className="modal-overlay">
-          <div className="modal-content">
+          <div className="modal-content rounded-5">
             <div className="modal-header">
               <h5 className="modal-title">Detalle de Devolución</h5>
               <button type="button" className="btn-close" aria-label="Close" onClick={closeModal}></button>
@@ -122,7 +122,7 @@ function Supplies() {
               )}
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" onClick={closeModal}>
+              <button type="button" className="btn btn-secondary rounded-5" onClick={closeModal}>
                 Cerrar
               </button>
             </div>
@@ -142,6 +142,7 @@ function Supplies() {
           display: flex;
           justify-content: center;
           align-items: center;
+          z-index: 5
         }
 
         .modal-content {

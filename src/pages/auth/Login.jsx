@@ -103,6 +103,9 @@ function Login() {
       }
 
       const data = await response.json();
+
+      console.log(data);
+      
       const role = data.role;
 
       localStorage.setItem('authData', JSON.stringify({
@@ -110,11 +113,15 @@ function Login() {
         user: data.user,
         role: role
       }));
+
       setShowAlert({
         show: true,
         message: '¡Inicio de sesión exitoso!',
         type: 'success',
       });
+
+      console.log(role);
+
       setTimeout(() => window.location.reload(), 1600);
       if (role.role == 'Administrador') {
         setTimeout(() => navigate('/admin/dashboard'), 1500);
