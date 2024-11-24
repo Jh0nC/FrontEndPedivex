@@ -10,6 +10,8 @@ function ProductionOrderUpdate() {
   const [errors, setErrors] = useState({});
   const [supplie, setSupplies] = useState([]);
 
+  const [initialState, setInitialState] = useState(null); // Nuevo estado para almacenar el estado inicial
+
   const [formData, setFormData] = useState({
     idUser: "",
     state: 4,
@@ -46,6 +48,8 @@ function ProductionOrderUpdate() {
             : [],
           notes: result.notes || "",
         });
+
+        setInitialState(result.state || 4); // Establecer el estado inicial
 
         setDetails(
           Array.isArray(result.productionOrderDetails) ? result.productionOrderDetails : []
@@ -108,10 +112,20 @@ function ProductionOrderUpdate() {
   };
 
   const handleStateChange = (stateId) => {
+    // Validación para no permitir cambiar a "Terminado" sin antes estar en "En Producción"
+    if (stateId == 7 && initialState != 6) {
+      Swal.fire({
+        title: "Cambio de estado no permitido",
+        text: "No se puede cambiar a estado Terminado sin antes estar en estado En Producción.",
+        icon: "error",
+        confirmButtonText: "Ok",
+      });
+      return;
+    }
     setFormData({ ...formData, state: stateId });
     setErrors((prevErrors) => ({ ...prevErrors, state: null })); // Limpiar errores
   };
-  
+
   const actualizarStock = async (data) => {
     try {
       const productDetails = await Promise.all(
@@ -125,16 +139,16 @@ function ProductionOrderUpdate() {
           };
         })
       );
-  
+
       for (const product of productDetails) {
         const datasheetDetails = product.datasheet?.datasheetDetails || [];
         const massDetails = product.datasheet?.mass?.massDetails || [];
-  
+
         for (const detail of [...datasheetDetails, ...massDetails]) {
           const supply = supplie.find((s) => s.id === detail.idSupplie);
           if (supply) {
             const usedAmount = detail.amount * product.requiredAmount;
-  
+
             // Verificar si el stock es suficiente
             if (supply.stock - usedAmount < 0) {
               Swal.fire({
@@ -145,14 +159,14 @@ function ProductionOrderUpdate() {
               });
               return false; // Retorna false si el stock es insuficiente
             }
-  
+
             // Actualizar el stock del insumo
             const updateResponse = await fetch(`http://localhost:3000/supplie/${supply.id}`, {
               method: "PATCH",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ stock: supply.stock - usedAmount }),
             });
-  
+
             if (!updateResponse.ok) {
               throw new Error(
                 `No se pudo actualizar el stock de ${supply.name}. Error: ${updateResponse.status}`
@@ -200,25 +214,25 @@ function ProductionOrderUpdate() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!validateForm()) {
       return;
     }
-  
+
     if (formData.state == 6) {
       const stockUpdated = await actualizarStock(formData);
-  
+
       if (!stockUpdated) {
         // Detener ejecución si no se pudo actualizar el stock
         return;
       }
     }
-  
+
     const formattedDate = new Date().toISOString(); // Asignar fecha actual automáticamente
     const formattedTargetDate = formData.targetDate
       ? new Date(formData.targetDate).toISOString()
       : "";
-  
+
     try {
       const response = await fetch(`http://localhost:3000/productionOrder/${id}`, {
         method: "PUT",
@@ -237,11 +251,11 @@ function ProductionOrderUpdate() {
           })),
         }),
       });
-  
+
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
-  
+
       Swal.fire({
         title: "¡Pedido de Producción actualizado!",
         text: "El pedido ha sido actualizado exitosamente.",
@@ -259,7 +273,6 @@ function ProductionOrderUpdate() {
       });
     }
   };
-  
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
@@ -314,7 +327,7 @@ function ProductionOrderUpdate() {
                   type="radio"
                   name="state"
                   value="6"
-                  checked={formData.state === 6}
+                  checked={formData.state == 6}
                   onChange={() => handleStateChange(6)}
                 />
                 <label className="ms-2">En Producción</label>
@@ -324,7 +337,7 @@ function ProductionOrderUpdate() {
                   type="radio"
                   name="state"
                   value="7"
-                  checked={formData.state === 7}
+                  checked={formData.state == 7}
                   onChange={() => handleStateChange(7)}
                 />
                 <label className="ms-2">Terminado</label>
@@ -334,7 +347,7 @@ function ProductionOrderUpdate() {
                   type="radio"
                   name="state"
                   value="3"
-                  checked={formData.state === 3}
+                  checked={formData.state == 3}
                   onChange={() => handleStateChange(3)}
                 />
                 <label className="ms-2">Cancelado</label>
@@ -362,64 +375,63 @@ function ProductionOrderUpdate() {
 
           <hr className="mx-3" />
           <div className="mb-3">
-  <h5>Detalles del Pedido</h5>
-  {details.map((detail, index) => (
-    <div key={index} className="mb-3">
-      <div className="d-flex align-items-center gap-2">
-        {/* Select para producto */}
-        <select
-          className="form-control"
-          value={detail.idProduct}
-          onChange={(e) => handleDetailChange(index, "idProduct", e.target.value)}
-        >
-          <option value="">Selecciona un producto *</option>
-          {products.map((product) => (
-            <option key={product.id} value={product.id}>
-              {product.name}
-            </option>
-          ))}
-        </select>
+            <h5>Detalles del Pedido</h5>
+            {details.map((detail, index) => (
+              <div key={index} className="mb-3">
+                <div className="d-flex align-items-center gap-2">
+                  {/* Select para producto */}
+                  <select
+                    className="form-control"
+                    value={detail.idProduct}
+                    onChange={(e) => handleDetailChange(index, "idProduct", e.target.value)}
+                  >
+                    <option value="">Selecciona un producto *</option>
+                    {products.map((product) => (
+                      <option key={product.id} value={product.id}>
+                        {product.name}
+                      </option>
+                    ))}
+                  </select>
 
-        {/* Input para cantidad */}
-        <input
-          type="number"
-          className="form-control w-50"
-          placeholder="Cantidad *"
-          value={detail.amount}
-          onChange={(e) => handleDetailChange(index, "amount", e.target.value)}
-        />
+                  {/* Input para cantidad */}
+                  <input
+                    type="number"
+                    className="form-control w-50"
+                    placeholder="Cantidad *"
+                    value={detail.amount}
+                    onChange={(e) => handleDetailChange(index, "amount", e.target.value)}
+                  />
 
-        {/* Botón para eliminar detalle */}
-        <button
-          type="button"
-          className="btn btn-secondary rounded-4"
-          onClick={() => handleRemoveDetail(index)}
-        >
-          <i className="bi bi-dash"></i>
-        </button>
-      </div>
+                  {/* Botón para eliminar detalle */}
+                  <button
+                    type="button"
+                    className="btn btn-secondary rounded-4"
+                    onClick={() => handleRemoveDetail(index)}
+                  >
+                    <i className="bi bi-dash"></i>
+                  </button>
+                </div>
 
-      {/* Mensaje de validación único para ambos campos */}
-      {(errors[`details.${index}.idProduct`] || errors[`details.${index}.amount`]) && (
-        <div className="alert alert-danger p-1 mt-2">
-          {errors[`details.${index}.idProduct`] ||
-            errors[`details.${index}.amount`]}
-        </div>
-      )}
-    </div>
-  ))}
-  {errors.details && (
-    <div className="alert alert-danger p-1 mt-2">{errors.details}</div>
-  )}
-  <button
-    type="button"
-    className="btn btn-info rounded-4"
-    onClick={handleAddDetail}
-  >
-    <i className="bi bi-plus-lg"></i>
-  </button>
-</div>
-
+                {/* Mensaje de validación único para ambos campos */}
+                {(errors[`details.${index}.idProduct`] || errors[`details.${index}.amount`]) && (
+                  <div className="alert alert-danger p-1 mt-2">
+                    {errors[`details.${index}.idProduct`] ||
+                      errors[`details.${index}.amount`]}
+                  </div>
+                )}
+              </div>
+            ))}
+            {errors.details && (
+              <div className="alert alert-danger p-1 mt-2">{errors.details}</div>
+            )}
+            <button
+              type="button"
+              className="btn btn-info rounded-4"
+              onClick={handleAddDetail}
+            >
+              <i className="bi bi-plus-lg"></i>
+            </button>
+          </div>
 
           <div className="d-flex justify-content-end gap-2">
             <button
