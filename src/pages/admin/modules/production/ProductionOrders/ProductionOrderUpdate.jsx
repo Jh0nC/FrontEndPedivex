@@ -10,7 +10,7 @@ function ProductionOrderUpdate() {
   const [errors, setErrors] = useState({});
   const [supplie, setSupplies] = useState([]);
 
-  const [initialState, setInitialState] = useState(null); // Nuevo estado para almacenar el estado inicial
+  const [initialState, setInitialState] = useState(null); // nuevo estado para almacenar el estado inicial
 
   const [formData, setFormData] = useState({
     idUser: "",
