@@ -8,7 +8,7 @@ function RequestUpdate() {
   const [products, setProducts] = useState([]);
   const [details, setDetails] = useState([]);
   const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false); // Nuevo estado
+  const [isSubmitting, setIsSubmitting] = useState(false); // nuevo estado
   const [request, setRequest] = useState({
     idUser: "",
     total: 0,
