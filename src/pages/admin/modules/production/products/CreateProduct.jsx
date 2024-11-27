@@ -202,9 +202,9 @@
 //             </div>
 // <div className="row my-4">
 //   <div className="col-6">
-//     <label for="formFile" class="form-label">Imagen del producto <span style={{ color: 'red' }}>*</span></label>
+//     <label for="formFile" className="form-label">Imagen del producto <span style={{ color: 'red' }}>*</span></label>
 //     <input
-//       class="form-control"
+//       className="form-control"
 //       name="image"
 //       type="file"
 //       id="formFile"
@@ -214,17 +214,17 @@
 //     </input>
 //   </div>
 //   <div className="col-6 ps-4">
-//     <label for="formFile" class="form-label">Detalles de la masa seleccionada</label>
-//     <ul class="list-group list-group-horizontal list-group-header-c">
-//       <li class="list-group-item"><b>#ID</b></li>
-//       <li class="list-group-item"><b>Insumo</b></li>
-//       <li class="list-group-item"><b>Cantidad</b></li>
+//     <label for="formFile" className="form-label">Detalles de la masa seleccionada</label>
+//     <ul className="list-group list-group-horizontal list-group-header-c">
+//       <li className="list-group-item"><b>#ID</b></li>
+//       <li className="list-group-item"><b>Insumo</b></li>
+//       <li className="list-group-item"><b>Cantidad</b></li>
 //     </ul>
 //     {selectedMassDetails.map((detail, index) => (
-//       <ul class="list-group list-group-horizontal list-group-content-c" key={index}>
-//         <li class="list-group-item">{index + 1}</li>
-//         <li class="list-group-item">{detail.supply.name}</li>
-//         <li class="list-group-item">{`${detail.amount} ${detail.unit}`}</li>
+//       <ul className="list-group list-group-horizontal list-group-content-c" key={index}>
+//         <li className="list-group-item">{index + 1}</li>
+//         <li className="list-group-item">{detail.supply.name}</li>
+//         <li className="list-group-item">{`${detail.amount} ${detail.unit}`}</li>
 //       </ul>
 //     ))}
 //     {selectedMassDetails.length === 0 && (
@@ -511,9 +511,9 @@ function CreateProducts() {
             </div>
             <div className="row my-4">
               <div className="col-6">
-                <label for="formFile" class="form-label">Imagen del producto <span style={{ color: 'red' }}>*</span></label>
+                <label for="formFile" className="form-label">Imagen del producto <span style={{ color: 'red' }}>*</span></label>
                 <input
-                  class="form-control"
+                  className="form-control"
                   name="image"
                   type="file"
                   id="formFile"
@@ -523,17 +523,17 @@ function CreateProducts() {
                 </input>
               </div>
               <div className="col-6 ps-4">
-                <label for="formFile" class="form-label">Detalles de la masa seleccionada</label>
-                <ul class="list-group list-group-horizontal list-group-header-c">
-                  <li class="list-group-item"><b>#ID</b></li>
-                  <li class="list-group-item"><b>Insumo</b></li>
-                  <li class="list-group-item"><b>Cantidad</b></li>
+                <label for="formFile" className="form-label">Detalles de la masa seleccionada</label>
+                <ul className="list-group list-group-horizontal list-group-header-c">
+                  <li className="list-group-item"><b>#ID</b></li>
+                  <li className="list-group-item"><b>Insumo</b></li>
+                  <li className="list-group-item"><b>Cantidad</b></li>
                 </ul>
                 {selectedMassDetails.map((detail, index) => (
-                  <ul class="list-group list-group-horizontal list-group-content-c" key={index}>
-                    <li class="list-group-item">{index + 1}</li>
-                    <li class="list-group-item">{detail.supply.name}</li>
-                    <li class="list-group-item">{`${detail.amount} ${detail.unit}`}</li>
+                  <ul className="list-group list-group-horizontal list-group-content-c" key={index}>
+                    <li className="list-group-item">{index + 1}</li>
+                    <li className="list-group-item">{detail.supply.name}</li>
+                    <li className="list-group-item">{`${detail.amount} ${detail.unit}`}</li>
                   </ul>
                 ))}
                 {selectedMassDetails.length === 0 && (

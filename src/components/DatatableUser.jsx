@@ -133,7 +133,7 @@ function Datatables({ data }) {
               <td>{item.address}</td>
               <td>{item.phoneNumber}</td>
               <td>{item.role.role}</td>
-              <td className='d-flex justify-content-center align-items-center gap-2'>
+              <td className='d-flex justify-content-center align-items-center gap-2 border-0'>
                 <button
                   className='btn btn-warning rounded-5 h-50'
                   onClick={() => handleEditClick(item.id)}

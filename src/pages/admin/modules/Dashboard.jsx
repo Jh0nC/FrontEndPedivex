@@ -79,7 +79,7 @@ function Dashboard() {
     labels: topCinco.map(item => item.productName),
     datasets: [{
       label: 'Top 5 productos mas vendidos del mes',
-      backgroundColor: '#FEB81C',
+      backgroundColor: '#C3C3C3',
       borderColor: 'black',
       borderWidth: 1,
       hoverBackgroundColor: '#feb61c34',
@@ -92,7 +92,7 @@ function Dashboard() {
     labels: topAnual.map(item => item.productName),
     datasets: [{
       label: 'Top productos mas vendidos en el año',
-      backgroundColor: '#FEB81C',
+      backgroundColor: '#C3C3C3',
       borderColor: 'black',
       borderWidth: 1,
       hoverBackgroundColor: '#feb61c34',
@@ -113,7 +113,7 @@ function Dashboard() {
     labels: ventasPorMes.map(item => obtenerNombreMes(item.mes)),
     datasets: [{
       label: 'Ventas por mes',
-      backgroundColor: '#FEB81C',
+      backgroundColor: '#C3C3C3',
       borderColor: 'black',
       borderWidth: 1,
       hoverBackgroundColor: '#feb61c34',
