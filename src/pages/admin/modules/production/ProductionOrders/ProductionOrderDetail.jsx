@@ -30,30 +30,36 @@ function ProductionOrderDetailsModal({ show, onClose, details }) {
 
   if (!show) return null;
 
-  // Mapeo de estados
-  const stateNames = {
-    4: "Pendiente",
-    6: "En producción",
-    7: "Terminado",
-    3: "Cancelado",
-    1: "Activo",
+  // Función para formatear fechas sin crear un objeto Date
+  const formatDate = (dateString) => {
+    try {
+      const [year, month, day] = dateString.split('T')[0].split('-');
+      return `${day}-${month}-${year}`;
+    } catch (error) {
+      console.error("Error al formatear la fecha:", error);
+      return "Fecha inválida";
+    }
   };
 
-  // Helper function to get product name by ID
+  // Helper function para obtener el nombre del producto por ID
   const getProductNameById = (id) => {
     const product = products.find((product) => product.id === id);
     return product ? product.name : "Desconocido";
   };
 
-  // Helper function to get state name by number
-  const getStateNameByNumber = (number) => {
-    return stateNames[number] || "Desconocido";
+  // Helper function para obtener el nombre del estado general por ID
+  const getStateNameById = (id) => {
+    const states = {
+      4: "Pendiente",
+      6: "En producción",
+      7: "Terminado",
+      3: "Cancelado",
+    };
+    return states[id] || "Desconocido";
   };
 
   // Obtener el número de la orden de producción
-  const orderNumber = details.productionOrderDetails.length
-    ? details.productionOrderDetails[0].idProductionOrder
-    : "Desconocido";
+  const orderNumber = details.id || "Desconocido";
 
   return (
     <div
@@ -63,7 +69,9 @@ function ProductionOrderDetailsModal({ show, onClose, details }) {
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">Detalles de la Orden de Producción #{orderNumber}</h5>
+            <h5 className="modal-title">
+              Detalles de la Orden de Producción #{orderNumber}
+            </h5>
             <button
               type="button"
               className="btn-close"
@@ -71,21 +79,41 @@ function ProductionOrderDetailsModal({ show, onClose, details }) {
             ></button>
           </div>
           <div className="modal-body">
-            {details.productionOrderDetails.map((detail) => (
-              <div key={detail.id} className="card mb-3">
-                <div className="card-body">
-                  <p className="card-text">
-                    <strong>Producto:</strong> {getProductNameById(detail.idProduct)}
-                  </p>
-                  <p className="card-text">
-                    <strong>Cantidad:</strong> {detail.amount}
-                  </p>
-                  <p className="card-text">
-                    <strong>Estado:</strong> {getStateNameByNumber(detail.state)}
-                  </p>
+            <p>
+              <strong>Notas:</strong> {details.notes}
+            </p>
+            <p>
+              <strong>Estado:</strong> {getStateNameById(details.state)}
+            </p>
+            <p>
+              <strong>Fecha de Creación:</strong> {formatDate(details.date)}
+            </p>
+            <p>
+              <strong>Fecha Objetivo:</strong> {formatDate(details.targetDate)}
+            </p>
+
+            {details.productionOrderDetails &&
+            details.productionOrderDetails.length > 0 ? (
+              details.productionOrderDetails.map((detail) => (
+                <div key={detail.id} className="card mb-3">
+                  <div className="card-body">
+                    <p className="card-text">
+                      <strong>Producto:</strong>{" "}
+                      {getProductNameById(detail.idProduct)}
+                    </p>
+                    <p className="card-text">
+                      <strong>Cantidad:</strong> {detail.amount}
+                    </p>
+                    {/* Si no necesitas mostrar el estado de cada detalle, puedes eliminar esta sección */}
+                    {/* <p className="card-text">
+                      <strong>Estado:</strong> {getStateNameById(detail.state)}
+                    </p> */}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p>No hay detalles disponibles.</p>
+            )}
           </div>
           <div className="modal-footer">
             <button

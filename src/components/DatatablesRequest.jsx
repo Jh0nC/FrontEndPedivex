@@ -4,6 +4,7 @@ import "../../public/css/datatableStyles.css";
 import { Link, useNavigate } from "react-router-dom";
 import RequestDetailsModal from "../pages/admin/modules/sales/requests/RequestDetail";
 import * as XLSX from "xlsx";
+import { format } from "date-fns";
 
 function Datatables({ data }) {
   const [showModal, setShowModal] = useState(false);
@@ -26,6 +27,15 @@ function Datatables({ data }) {
       .then((data) => setProducts(data))
       .catch((error) => console.error("Error al obtener productos:", error));
   }, []);
+
+  const formatDate = (dateString) => {
+    try {
+      return format(new Date(dateString), "dd/MM/yyyy");
+    } catch (error) {
+      console.error("Error al formatear la fecha:", error);
+      return "Fecha inválida";
+    }
+  };
 
   const handleDetailsClick = (item) => {
     setSelectedDetails(item);
@@ -50,14 +60,12 @@ function Datatables({ data }) {
     setSelectedDetails({});
   };
 
-  // Definir el orden deseado para los estados
   const stateOrder = {
     4: 1, // Pendiente
     7: 2, // Terminado
     3: 3, // Cancelado
   };
 
-  // Filtrar y ordenar los datos
   const filteredData = data.content
     .filter((item) =>
       Object.values(item).some((val) =>
@@ -168,11 +176,11 @@ function Datatables({ data }) {
             currentItems.map((item, index) => (
               <tr key={index}>
                 <td>{item.id}</td>
-                <td>{item.creationDate}</td>
+                <td>{formatDate(item.creationDate)}</td>
                 <td>{getUserNameById(item.idUser)}</td>
                 <td>{item.total}</td>
                 <td>{getStateNameById(item.state)}</td>
-                <td>{item.deadLine}</td>
+                <td>{formatDate(item.deadLine)}</td>
                 <td>
                   <button
                     className="btn btn-secondary me-2 rounded-5"

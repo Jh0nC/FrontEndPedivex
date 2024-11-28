@@ -39,6 +39,16 @@ function Datatables({ data }) {
       });
   }, []);
 
+  const formatDate = (dateString) => {
+    try {
+      const [year, month, day] = dateString.split('T')[0].split('-');
+      return `${day}/${month}/${year}`;
+    } catch (error) {
+      console.error('Error al formatear la fecha:', error);
+      return 'Fecha inválida';
+    }
+  };
+
   const handleDetailsClick = (item) => {
     setSelectedDetails(item);
     setShowModal(true);
@@ -49,7 +59,6 @@ function Datatables({ data }) {
     setSelectedDetails({});
   };
 
-  // Modificación aquí:
   const handleEditClick = (item) => {
     if (item.state === 4 || item.state === 6) {
       navigate(`/admin/production-order-update/${item.id}`);
@@ -63,7 +72,6 @@ function Datatables({ data }) {
     }
   };
 
-  // Definir el orden deseado para los estados
   const stateOrder = {
     4: 1, // Pendiente
     6: 2, // En producción
@@ -71,7 +79,6 @@ function Datatables({ data }) {
     3: 4, // Cancelado
   };
 
-  // Filtrar y ordenar los datos
   const filteredData = data.content
     .filter((item) =>
       Object.values(item).some((val) =>
@@ -188,11 +195,11 @@ function Datatables({ data }) {
             currentItems.map((item, index) => (
               <tr key={index}>
                 <td>{item.id}</td>
-                <td>{item.date}</td>
+                <td>{formatDate(item.date)}</td>
                 <td>{item.notes}</td>
                 <td>{getUserNameById(item.idUser)}</td>
                 <td>{getStateName(item.state)}</td>
-                <td>{item.targetDate}</td>
+                <td>{formatDate(item.targetDate)}</td>
                 <td>
                   <button
                     className="btn btn-secondary me-2 rounded-5"

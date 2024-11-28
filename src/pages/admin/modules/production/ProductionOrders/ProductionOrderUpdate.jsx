@@ -10,7 +10,7 @@ function ProductionOrderUpdate() {
   const [errors, setErrors] = useState({});
   const [supplie, setSupplies] = useState([]);
 
-  const [initialState, setInitialState] = useState(null); // nuevo estado para almacenar el estado inicial
+  const [initialState, setInitialState] = useState(null); // Nuevo estado para almacenar el estado inicial
 
   const [formData, setFormData] = useState({
     idUser: "",
@@ -36,7 +36,7 @@ function ProductionOrderUpdate() {
           idUser: result.idUser || "",
           state: result.state || 4,
           targetDate: result.targetDate
-            ? new Date(result.targetDate).toISOString().slice(0, 16)
+            ? new Date(result.targetDate).toISOString().slice(0, 10)
             : "",
           details: Array.isArray(result.productionOrderDetails)
             ? result.productionOrderDetails.map((detail) => ({
@@ -193,7 +193,7 @@ function ProductionOrderUpdate() {
     }
     if (!formData.targetDate) {
       newErrors.targetDate = "Selecciona una fecha límite.";
-    } else if (new Date(formData.targetDate) < new Date()) {
+    } else if (new Date(formData.targetDate) < new Date().setHours(0, 0, 0, 0)) {
       newErrors.targetDate = "La fecha límite no puede ser anterior a hoy.";
     }
     if (details.length === 0) {
@@ -358,7 +358,7 @@ function ProductionOrderUpdate() {
                 Fecha Límite <span className="text-danger">*</span>
               </label>
               <input
-                type="datetime-local"
+                type="date"
                 className="form-control"
                 name="targetDate"
                 id="targetDate"
