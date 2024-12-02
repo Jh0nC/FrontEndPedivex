@@ -30,10 +30,13 @@ function ProductionOrderDetailsModal({ show, onClose, details }) {
 
   if (!show) return null;
 
-  // Función para formatear fechas sin crear un objeto Date
+  // Función corregida para formatear fechas utilizando Date
   const formatDate = (dateString) => {
     try {
-      const [year, month, day] = dateString.split('T')[0].split('-');
+      const date = new Date(dateString);
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0"); // Los meses van de 0 a 11
+      const year = date.getFullYear();
       return `${day}-${month}-${year}`;
     } catch (error) {
       console.error("Error al formatear la fecha:", error);
@@ -104,10 +107,6 @@ function ProductionOrderDetailsModal({ show, onClose, details }) {
                     <p className="card-text">
                       <strong>Cantidad:</strong> {detail.amount}
                     </p>
-                    {/* Si no necesitas mostrar el estado de cada detalle, puedes eliminar esta sección */}
-                    {/* <p className="card-text">
-                      <strong>Estado:</strong> {getStateNameById(detail.state)}
-                    </p> */}
                   </div>
                 </div>
               ))
