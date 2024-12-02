@@ -5,6 +5,15 @@ import { useNavigate } from "react-router-dom";
 
 function ProductionOrderCreate({ onSave, initialData = {} }) {
   const navigate = useNavigate();
+
+  // Función para obtener la fecha formateada en 'YYYY-MM-DD'
+  function getFormattedDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Los meses comienzan desde 0
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
   const {
     register,
     handleSubmit,
@@ -13,7 +22,7 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      date: initialData.date || new Date().toISOString().split("T")[0],
+      date: initialData.date || getFormattedDate(new Date()),
       notes: initialData.notes || "",
       idUser: initialData.idUser || "",
       targetDate: initialData.targetDate || "",
@@ -60,8 +69,13 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
       // Obtener todos los detalles de los productos seleccionados en la orden
       const productDetails = await Promise.all(
         data.details.map(async (detail) => {
-          const response = await fetch(`http://localhost:3000/product/${detail.idProduct}`);
-          if (!response.ok) throw new Error(`Error al obtener datos del producto: ${detail.idProduct}`);
+          const response = await fetch(
+            `http://localhost:3000/product/${detail.idProduct}`
+          );
+          if (!response.ok)
+            throw new Error(
+              `Error al obtener datos del producto: ${detail.idProduct}`
+            );
           const product = await response.json();
           return {
             ...product,
@@ -69,22 +83,25 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
           };
         })
       );
-  
+
       // Validar si hay suficientes insumos para todos los productos
       for (const product of productDetails) {
         const datasheetDetails = product.datasheet?.datasheetDetails || [];
         const massDetails = product.datasheet?.mass?.massDetails || [];
-  
+
         for (const detail of [...datasheetDetails, ...massDetails]) {
           const supply = supplie.find((s) => s.id === detail.idSupplie);
-          if (!supply || supply.stock < detail.amount * product.requiredAmount) {
+          if (
+            !supply ||
+            supply.stock < detail.amount * product.requiredAmount
+          ) {
             throw new Error(
               `No hay suficiente stock de ${detail.supply.name} para producir ${product.requiredAmount} unidades de ${product.name}.`
             );
           }
         }
       }
-  
+
       // Formatear datos para enviar al backend
       const formattedData = {
         ...data,
@@ -95,16 +112,17 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
           state: 1, // Estado predeterminado para detalles
         })),
       };
-  
+
       // Crear la orden de producción
       const response = await fetch("http://localhost:3000/productionOrder", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formattedData),
       });
-  
-      if (!response.ok) throw new Error(`Error en la solicitud: ${response.status}`);
-  
+
+      if (!response.ok)
+        throw new Error(`Error en la solicitud: ${response.status}`);
+
       // Notificar éxito
       Swal.fire({
         icon: "success",
@@ -122,8 +140,6 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
       });
     }
   };
-  
-  
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
@@ -220,7 +236,10 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
                     min="1"
                     {...register(`details.${index}.amount`, {
                       required: "Este campo es obligatorio",
-                      min: { value: 1, message: "La cantidad debe ser mayor a 0" },
+                      min: {
+                        value: 1,
+                        message: "La cantidad debe ser mayor a 0",
+                      },
                     })}
                   />
                   <button

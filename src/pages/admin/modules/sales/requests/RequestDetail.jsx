@@ -37,7 +37,21 @@ function RequestDetailsModal({ show, onClose, details }) {
 
   if (!show) return null;
 
-  // Helper functions to get names
+  // Función para formatear fechas
+  const formatDate = (dateString) => {
+    try {
+      const date = new Date(dateString);
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0"); // Los meses van de 0 a 11
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
+    } catch (error) {
+      console.error("Error al formatear la fecha:", error);
+      return "Fecha inválida";
+    }
+  };
+
+  // Funciones helper para obtener nombres
   const getUserNameById = (id) => {
     const user = users.find((user) => user.id === id);
     return user ? `${user.firstName} ${user.lastName}` : "Desconocido";
@@ -48,7 +62,7 @@ function RequestDetailsModal({ show, onClose, details }) {
     return product ? product.name : "Desconocido";
   };
 
-  // Helper function to get state name by ID
+  // Función helper para obtener el nombre del estado por ID
   const getStateNameById = (id) => {
     const states = {
       4: "Pendiente",
@@ -66,9 +80,7 @@ function RequestDetailsModal({ show, onClose, details }) {
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">
-              Detalles del Pedido #{details.id}
-            </h5>
+            <h5 className="modal-title">Detalles del Pedido #{details.id}</h5>
             <button
               type="button"
               className="btn-close"
@@ -76,19 +88,30 @@ function RequestDetailsModal({ show, onClose, details }) {
             ></button>
           </div>
           <div className="modal-body">
-            <p><strong>Cliente:</strong> {getUserNameById(details.idUser)}</p>
-            <p><strong>Total:</strong> {details.total}</p>
-            <p><strong>Estado:</strong> {getStateNameById(details.state)}</p>
-            <p><strong>Fecha de Creación:</strong> {details.creationDate}</p>
-            <p><strong>Fecha Límite:</strong> {details.deadLine}</p>
-            <p><strong>Fecha de Estado:</strong> {details.stateDate}</p>
+            <p>
+              <strong>Cliente:</strong> {getUserNameById(details.idUser)}
+            </p>
+            <p>
+              <strong>Total:</strong> {details.total}
+            </p>
+            <p>
+              <strong>Estado:</strong> {getStateNameById(details.state)}
+            </p>
+            <p>
+              <strong>Fecha de Creación:</strong>{" "}
+              {formatDate(details.creationDate)}
+            </p>
+            <p>
+              <strong>Fecha Límite:</strong> {formatDate(details.deadLine)}
+            </p>
 
             {details.requestDetails && details.requestDetails.length > 0 ? (
               details.requestDetails.map((detail) => (
                 <div key={detail.idProduct} className="card mb-3">
                   <div className="card-body">
                     <p className="card-text">
-                      <strong>Producto:</strong> {getProductNameById(detail.idProduct)}
+                      <strong>Producto:</strong>{" "}
+                      {getProductNameById(detail.idProduct)}
                     </p>
                     <p className="card-text">
                       <strong>Cantidad:</strong> {detail.quantity}
