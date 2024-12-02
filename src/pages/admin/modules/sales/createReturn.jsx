@@ -18,8 +18,8 @@ const CreateReturn = () => {
     const fetchInitialData = async () => {
       try {
         const [productsResponse, motivesResponse] = await Promise.all([
-          fetch('http://localhost:3000/product'),
-          fetch('http://localhost:3000/motivedevolution'),
+          fetch('https://pedivexapi.onrender.com/product'),
+          fetch('https://pedivexapi.onrender.com/motivedevolution'),
         ]);
 
         const productsData = await productsResponse.json();
@@ -40,7 +40,7 @@ const CreateReturn = () => {
     if (saleId) {
       const fetchSaleDetails = async () => {
         try {
-          const response = await fetch(`http://localhost:3000/sale/${saleId}`);
+          const response = await fetch(`https://pedivexapi.onrender.com/sale/${saleId}`);
           const data = await response.json();
 
           setSaleInfo(data);
@@ -129,7 +129,7 @@ const CreateReturn = () => {
     }
 
     try {
-        const response = await fetch('http://localhost:3000/devolution/', {
+        const response = await fetch('https://pedivexapi.onrender.com/devolution/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -168,7 +168,7 @@ const CreateReturn = () => {
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <div className="mass-form-container border rounded-4 mx-auto my-3 p-3">
+      <div className="form-container border rounded-4 mx-auto my-3 p-3">
         <div className="card">
           <div className="card-header">
             <h2 className="text-2xl font-bold">Devolver Producto</h2>

@@ -52,7 +52,7 @@ function BoughtCreate() {
     useEffect(() => {
         const fetchInsumos = async () => {
             try {
-              const response = await fetch('http://localhost:3000/supplie');
+              const response = await fetch('https://pedivexapi.onrender.com/supplie');
               if (!response.ok) {
                 throw new Error('Error al obtener los insumos');
               }
@@ -68,7 +68,7 @@ function BoughtCreate() {
 
         const fetchProveedores = async () => {
             try {
-                const response = await fetch('http://localhost:3000/provider');
+                const response = await fetch('https://pedivexapi.onrender.com/provider');
                 if (!response.ok) {
                     throw new Error('Error al obtener los proveedores');
                 }
@@ -98,7 +98,7 @@ function BoughtCreate() {
             total: parseFloat(data.total, 10),
         };
         try {
-            const response = await fetch('http://localhost:3000/bought', {
+            const response = await fetch('https://pedivexapi.onrender.com/bought', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -139,7 +139,7 @@ function BoughtCreate() {
     return (
         <>
             <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-                <div className="mass-form-container border rounded-4 mx-auto my-3 p-3">
+                <div className="form-container border rounded-4 mx-auto my-3 p-3">
                     <h2>Crear Nueva Compra</h2>
                     <form onSubmit={handleSubmit(onSubmit)} className='mt-3'>
                         <div className="row mb-3">

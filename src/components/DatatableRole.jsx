@@ -49,7 +49,7 @@ function Datatables({ data }) {
             icon: 'error'
           });
         } else {
-          const response = await fetch(`http://localhost:3000/role/${id}`, {
+          const response = await fetch(`https://pedivexapi.onrender.com/role/${id}`, {
             method: 'PATCH',
             headers: {
               'Content-Type': 'application/json'

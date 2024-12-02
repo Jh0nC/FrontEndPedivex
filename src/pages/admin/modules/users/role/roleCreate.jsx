@@ -17,7 +17,7 @@ function roleCreate() {
     // Función para obtener los permisos desde la API
     const fetchPermissions = async () => {
       try {
-        const response = await fetch('http://localhost:3000/permission');
+        const response = await fetch('https://pedivexapi.onrender.com/permission');
         if (!response.ok) {
           throw new Error('Error al obtener los permisos');
         }
@@ -44,7 +44,7 @@ function roleCreate() {
     try {
       // Crear el rol
       const dataToSend = { ...formData, state: 1 }
-      const response = await fetch('http://localhost:3000/role', {
+      const response = await fetch('https://pedivexapi.onrender.com/role', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ function roleCreate() {
 
       // Crear rolePermission para cada permiso seleccionado
       for (let permissionId of selectedPermissions) {
-        await fetch('http://localhost:3000/rolePermission', {
+        await fetch('https://pedivexapi.onrender.com/rolePermission', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ function roleCreate() {
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <div className="mass-form-container border rounded-4 mx-auto my-3 p-3">
+      <div className="form-container border rounded-4 mx-auto my-3 p-3">
         <h2 className='mx-3'>Crear Nuevo Rol</h2>
         <form onSubmit={handleSubmit(enviarFormulario)} className='mt-3'>
           <div className='row mb-3'>

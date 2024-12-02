@@ -32,20 +32,20 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await fetch("http://localhost:3000/product");
+      const response = await fetch("https://pedivexapi.onrender.com/product");
       const data = await response.json();
       setProducts(data);
     };
 
     const fetchUsers = async () => {
-      const response = await fetch("http://localhost:3000/employee");
+      const response = await fetch("https://pedivexapi.onrender.com/employee");
       const data = await response.json();
       const empleados = data.filter((user) => user.idRole === 3); // Filtrar empleados
       setUsers(empleados);
     };
 
     const fetchSupplies = async () => {
-      const response = await fetch("http://localhost:3000/supplie");
+      const response = await fetch("https://pedivexapi.onrender.com/supplie");
       const data = await response.json();
       setSupplies(data);
     };
@@ -60,7 +60,7 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
       // Obtener todos los detalles de los productos seleccionados en la orden
       const productDetails = await Promise.all(
         data.details.map(async (detail) => {
-          const response = await fetch(`http://localhost:3000/product/${detail.idProduct}`);
+          const response = await fetch(`https://pedivexapi.onrender.com/product/${detail.idProduct}`);
           if (!response.ok) throw new Error(`Error al obtener datos del producto: ${detail.idProduct}`);
           const product = await response.json();
           return {
@@ -97,7 +97,7 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
       };
   
       // Crear la orden de producción
-      const response = await fetch("http://localhost:3000/productionOrder", {
+      const response = await fetch("https://pedivexapi.onrender.com/productionOrder", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formattedData),

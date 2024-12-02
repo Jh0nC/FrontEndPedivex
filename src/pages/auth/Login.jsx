@@ -80,7 +80,7 @@ function Login() {
 
     // Realiza la solicitud al servidor si no hay errores
     try {
-      const response = await fetch('http://localhost:3000/auth/login', {
+      const response = await fetch('https://pedivexapi.onrender.com/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

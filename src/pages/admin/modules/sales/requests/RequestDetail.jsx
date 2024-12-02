@@ -6,13 +6,13 @@ function RequestDetailsModal({ show, onClose, details }) {
 
   useEffect(() => {
     // Fetch para obtener usuarios
-    fetch("http://localhost:3000/user")
+    fetch("https://pedivexapi.onrender.com/user")
       .then((response) => response.json())
       .then((data) => setUsers(data))
       .catch((error) => console.error("Error al obtener usuarios:", error));
 
     // Fetch para obtener productos
-    fetch("http://localhost:3000/product")
+    fetch("https://pedivexapi.onrender.com/product")
       .then((response) => response.json())
       .then((data) => setProducts(data))
       .catch((error) => console.error("Error al obtener productos:", error));

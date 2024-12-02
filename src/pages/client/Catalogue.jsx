@@ -19,7 +19,7 @@ function Catalogue() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("http://localhost:3000/product");
+        const response = await fetch("https://pedivexapi.onrender.com/product");
         const data = await response.json();
         setProducts(data);
       } catch (error) {
@@ -129,7 +129,7 @@ function Catalogue() {
   // Función para enviar el pedido a la API
   const postOrder = async (order) => {
     try {
-      const response = await fetch("http://localhost:3000/request", {
+      const response = await fetch("https://pedivexapi.onrender.com/request", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -8,7 +8,7 @@ function Supplies() {
   useEffect(() => {
     const fetchDatos = async () => {
       try {
-        const response = await fetch("http://localhost:3000/devolution");
+        const response = await fetch("https://pedivexapi.onrender.com/devolution");
         if (!response.ok) {
           throw new Error("Network response was not ok " + response.statusText);
         }
@@ -24,7 +24,7 @@ function Supplies() {
 
   const fetchDetalle = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3000/devolution/${id}`);
+      const response = await fetch(`https://pedivexapi.onrender.com/devolution/${id}`);
       if (!response.ok) {
         throw new Error("Network response was not ok " + response.statusText);
       }

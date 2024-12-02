@@ -41,7 +41,7 @@ function Datatables({ data }) {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`http://localhost:3000/user/${id}`, {
+        const response = await fetch(`https://pedivexapi.onrender.com/user/${id}`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json'

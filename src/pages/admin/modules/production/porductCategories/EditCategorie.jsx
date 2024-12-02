@@ -6,12 +6,13 @@ function EditCategorie() {
   const { id } = useParams();
   const [categoryName, setCategoryName] = useState('');
   const [error, setError] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCategory = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/productCategories/${id}`);
+        const response = await fetch(`https://pedivexapi.onrender.com/productCategories/${id}`);
         if (!response.ok) throw new Error('Error al cargar la categoría');
         const data = await response.json();
         setCategoryName(data.name);
@@ -36,12 +37,16 @@ function EditCategorie() {
         icon: 'error',
         title: 'Error',
         text: 'El nombre de la categoría no puede estar vacío',
+        customClass: {
+          popup: 'rounded-5',
+          confirmButton: 'btn btn-secondary rounded-5 px-3'
+        }
       });
       return;
     }
 
     try {
-      const response = await fetch(`http://localhost:3000/productCategories/${id}`, {
+      const response = await fetch(`https://pedivexapi.onrender.com/productCategories/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -54,6 +59,10 @@ function EditCategorie() {
           icon: 'success',
           title: 'Categoría actualizada',
           text: 'La categoría se ha actualizado exitosamente',
+          customClass: {
+            popup: 'rounded-5',
+            confirmButton: 'btn btn-success rounded-5 px-3'
+          }
         }).then(() => {
           navigate('/admin/productCategories');
         });
@@ -70,28 +79,49 @@ function EditCategorie() {
     }
   };
 
+  const handleCancel = () => {
+    navigate('/admin/productCategories')
+  };
+
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <form onSubmit={handleSubmit}>
-        <div className="row m-2">
-          <h2>Editar Categoría de Producto</h2>
-          <div className="mt-1 col-10 d-flex gap-4">
-            <div className="col-4">
-              <input
-                type="text"
-                className="form-control"
-                value={categoryName}
-                onChange={(e) => setCategoryName(e.target.value)}
-                placeholder="Nombre de la categoría"
-              />
-              {error && <div className="alert alert-danger mt-2">{error}</div>}
-            </div>
-            <button type="submit" className="btn btn-success rounded-5">
-              Guardar
-            </button>
+      <div className="form-container border rounded-4 mx-auto my-3 p-4">
+        <form onSubmit={handleSubmit}>
+          <h2 className='mb-3'>Crear categoría de producto</h2>
+          <div className="row col-5 p-3">
+            <input
+              type="text"
+              className="form-control"
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
+              placeholder="Categoría"
+            />
+            {error && <div className="alert alert-danger mt-2">{error}</div>}
           </div>
-        </div>
-      </form>
+          <div className="row d-flex gap-3 px-3">
+            <button
+              type='button'
+              onClick={handleCancel}
+              className="btn btn-secondary rounded-5 w-auto">
+              Regresar
+            </button>
+            {isSubmitting ? (
+              <button
+                type="submit"
+                className="btn btn-success rounded-5 w-auto"
+                disabled >
+                Guardando...
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className="btn btn-success rounded-5 w-auto">
+                Guardar
+              </button>
+            )}
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

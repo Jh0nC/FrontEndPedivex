@@ -12,7 +12,7 @@ function EditMass() {
 
   useEffect(() => {
     // Fetch the mass data by ID
-    fetch(`http://localhost:3000/masses/${id}`)
+    fetch(`https://pedivexapi.onrender.com/masses/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setName(data.name);
@@ -26,7 +26,7 @@ function EditMass() {
       .catch((error) => console.error('Error fetching mass data:', error));
 
     // Fetch the supplies data
-    fetch("http://localhost:3000/supplie")
+    fetch("https://pedivexapi.onrender.com/supplie")
       .then((response) => response.json())
       .then((data) => setSupplies(data))
       .catch((error) => console.error('Error fetching supplies:', error));
@@ -56,7 +56,7 @@ function EditMass() {
       details,
     };
 
-    fetch(`http://localhost:3000/masses/${id}`, {
+    fetch(`https://pedivexapi.onrender.com/masses/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -86,7 +86,7 @@ function EditMass() {
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <div className="mass-form-container border rounded-4 mx-auto my-3 p-3">
+      <div className="form-container border rounded-4 mx-auto my-3 p-3">
         <h2>Editar Masa</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">

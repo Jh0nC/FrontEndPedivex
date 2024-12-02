@@ -7,12 +7,12 @@ function Products() {
   // const [states, setSates] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/product')
+    fetch('https://pedivexapi.onrender.com/product')
       .then(response => response.json())
       .then(data => setCardsData(data))
       .catch(error => console.error("Error fetching products:", error));
 
-    // fetch('http://localhost:3000/states')
+    // fetch('https://pedivexapi.onrender.com/states')
     //   .then(response => response.json())
     //   .then(data => setSates(data))
     //   .catch(error => console.error("Error fetching products:", error));

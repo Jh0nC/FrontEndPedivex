@@ -11,7 +11,7 @@ function SupplieUpdate() {
   useEffect(() => {
     const fetchSupplie = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/supplie/${id}`);
+        const response = await fetch(`https://pedivexapi.onrender.com/supplie/${id}`);
         if (!response.ok) {
           throw new Error('Error en la solicitud de datos');
         }
@@ -33,7 +33,7 @@ function SupplieUpdate() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await fetch(`http://localhost:3000/supplie/${id}`, {
+      const response = await fetch(`https://pedivexapi.onrender.com/supplie/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

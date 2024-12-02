@@ -26,7 +26,7 @@ function ProductionOrderUpdate() {
     const fetchData = async () => {
       try {
         // Fetch de la orden de producción
-        const response = await fetch(`http://localhost:3000/productionOrder/${id}`);
+        const response = await fetch(`https://pedivexapi.onrender.com/productionOrder/${id}`);
         if (!response.ok) {
           throw new Error("Error fetching data");
         }
@@ -56,13 +56,13 @@ function ProductionOrderUpdate() {
         );
 
         // Fetch de usuarios y filtrado de empleados
-        const userResponse = await fetch("http://localhost:3000/user");
+        const userResponse = await fetch("https://pedivexapi.onrender.com/user");
         const userData = await userResponse.json();
         const empleados = userData.filter((user) => user.idRole === 3);
         setUsers(Array.isArray(empleados) ? empleados : []);
 
         // Fetch de productos
-        const productResponse = await fetch("http://localhost:3000/product");
+        const productResponse = await fetch("https://pedivexapi.onrender.com/product");
         const productData = await productResponse.json();
         setProducts(Array.isArray(productData) ? productData : []);
       } catch (error) {
@@ -72,7 +72,7 @@ function ProductionOrderUpdate() {
     };
 
     const fetchSupplies = async () => {
-      const response = await fetch("http://localhost:3000/supplie");
+      const response = await fetch("https://pedivexapi.onrender.com/supplie");
       const data = await response.json();
       setSupplies(data);
     };
@@ -130,7 +130,7 @@ function ProductionOrderUpdate() {
     try {
       const productDetails = await Promise.all(
         data.details.map(async (detail) => {
-          const response = await fetch(`http://localhost:3000/product/${detail.idProduct}`);
+          const response = await fetch(`https://pedivexapi.onrender.com/product/${detail.idProduct}`);
           if (!response.ok) throw new Error(`Error al obtener datos del producto: ${detail.idProduct}`);
           const product = await response.json();
           return {
@@ -161,7 +161,7 @@ function ProductionOrderUpdate() {
             }
 
             // Actualizar el stock del insumo
-            const updateResponse = await fetch(`http://localhost:3000/supplie/${supply.id}`, {
+            const updateResponse = await fetch(`https://pedivexapi.onrender.com/supplie/${supply.id}`, {
               method: "PATCH",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ stock: supply.stock - usedAmount }),
@@ -234,7 +234,7 @@ function ProductionOrderUpdate() {
       : "";
 
     try {
-      const response = await fetch(`http://localhost:3000/productionOrder/${id}`, {
+      const response = await fetch(`https://pedivexapi.onrender.com/productionOrder/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -276,7 +276,7 @@ function ProductionOrderUpdate() {
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <div className="mass-form-container border rounded-4 mx-auto my-3 p-3">
+      <div className="form-container border rounded-4 mx-auto my-3 p-3">
         <h2>Editar Orden de Producción</h2>
         <form onSubmit={handleSubmit} className="mt-3">
           <div className="row mb-3">

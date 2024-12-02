@@ -26,7 +26,7 @@ function EditProduct() {
 
   useEffect(() => {
     // Fetch para obtener el producto a editar
-    fetch(`http://localhost:3000/product/${id}`)
+    fetch(`https://pedivexapi.onrender.com/product/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setProduct({
@@ -43,17 +43,17 @@ function EditProduct() {
       });
 
     // Fetch para categorías
-    fetch("http://localhost:3000/productCategories")
+    fetch("https://pedivexapi.onrender.com/productCategories")
       .then((response) => response.json())
       .then((data) => setCategories(data));
 
     // Fetch para masas
-    fetch("http://localhost:3000/masses")
+    fetch("https://pedivexapi.onrender.com/masses")
       .then((response) => response.json())
       .then((data) => setMasses(data));
 
     // Fetch para insumos
-    fetch("http://localhost:3000/supplie")
+    fetch("https://pedivexapi.onrender.com/supplie")
       .then((response) => response.json())
       .then((data) => setSupplies(data));
   }, [id]);
@@ -98,7 +98,7 @@ function EditProduct() {
 
     try {
       console.log(updatedProduct);
-      const response = await fetch(`http://localhost:3000/product/${id}`, {
+      const response = await fetch(`https://pedivexapi.onrender.com/product/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -130,7 +130,7 @@ function EditProduct() {
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <div className="mass-form-container border rounded-4 mx-auto my-3 p-3">
+      <div className="form-container border rounded-4 mx-auto my-3 p-3">
         <h2>Editar Producto</h2>
         <form onSubmit={handleSubmit} className="mt-3">
           <div className="row mb-3">

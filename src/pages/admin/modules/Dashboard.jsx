@@ -32,7 +32,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchTopCinco = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/dashboard/topCinco?mes=11`);
+        const response = await fetch(`https://pedivexapi.onrender.com/dashboard/topCinco?mes=11`);
         if (!response.ok) {
           throw new Error('Error al obtener los top cinco');
         }
@@ -45,7 +45,7 @@ function Dashboard() {
 
     const fetchTopAnual = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/dashboard/topAnual?anio=2024`);
+        const response = await fetch(`https://pedivexapi.onrender.com/dashboard/topAnual?anio=2024`);
         if (!response.ok) {
           throw new Error('Error al obtener los top anuales');
         }
@@ -58,7 +58,7 @@ function Dashboard() {
 
     const fetchVentasPorMes = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/dashboard/ventasPorMes?anio=2024`);
+        const response = await fetch(`https://pedivexapi.onrender.com/dashboard/ventasPorMes?anio=2024`);
         if (!response.ok) {
           throw new Error('Error al obtener las ventas por mes');
         }

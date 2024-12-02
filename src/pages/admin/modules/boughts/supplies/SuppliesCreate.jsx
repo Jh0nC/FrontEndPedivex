@@ -11,7 +11,7 @@ function SupplieCreate() {
 
   const enviarFormulario = async (formData) => {
     try {
-      const response = await fetch('http://localhost:3000/supplie', {
+      const response = await fetch('https://pedivexapi.onrender.com/supplie', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

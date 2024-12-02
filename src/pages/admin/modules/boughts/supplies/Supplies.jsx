@@ -7,7 +7,7 @@ function Supplies() {
   useEffect(() => {
     const fetchDatos = async () => {
       try {
-        const response = await fetch("http://localhost:3000/supplie");
+        const response = await fetch("https://pedivexapi.onrender.com/supplie");
         if (!response.ok) {
           throw new Error("Network response was not ok " + response.statusText);
         }
@@ -26,7 +26,7 @@ function Supplies() {
     const newState = currentState === 1 ? 2 : 1; // Cambia entre 1 y 2
 
     try {
-      const response = await fetch(`http://localhost:3000/supplie/${id}`, {
+      const response = await fetch(`https://pedivexapi.onrender.com/supplie/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ state: newState })

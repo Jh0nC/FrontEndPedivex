@@ -442,3 +442,12 @@ a {
   width: 33.33%;
   height: auto;
 }
+
+textarea {
+  resize: none;
+  overflow-y: auto;
+}
+
+.form-container {
+  
+}

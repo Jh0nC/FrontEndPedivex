@@ -22,13 +22,13 @@ function RequestCreate({ onSave, initialData = {} }) {
 
   useEffect(() => {
     // Fetch de productos
-    fetch("http://localhost:3000/product")
+    fetch("https://pedivexapi.onrender.com/product")
       .then((response) => response.json())
       .then((data) => setProducts(data))
       .catch((error) => console.error("Error fetching products:", error));
 
     // Fetch de usuarios filtrando solo clientes
-    fetch("http://localhost:3000/user")
+    fetch("https://pedivexapi.onrender.com/user")
       .then((response) => response.json())
       .then((data) => {
         const clientes = data.filter((user) => user.idRole === 2); // Clientes
@@ -194,7 +194,7 @@ function RequestCreate({ onSave, initialData = {} }) {
       deadLine: new Date(formData.deadLine).toISOString(),
     };
 
-    fetch("http://localhost:3000/request", {
+    fetch("https://pedivexapi.onrender.com/request", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formattedData),

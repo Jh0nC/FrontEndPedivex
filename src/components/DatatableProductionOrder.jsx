@@ -16,7 +16,7 @@ function Datatables({ data }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:3000/user")
+    fetch("https://pedivexapi.onrender.com/user")
       .then((response) => {
         if (!response.ok) throw new Error("Error en la API de usuarios");
         return response.json();
@@ -27,7 +27,7 @@ function Datatables({ data }) {
         setUsers([]);
       });
 
-    fetch("http://localhost:3000/product")
+    fetch("https://pedivexapi.onrender.com/product")
       .then((response) => {
         if (!response.ok) throw new Error("Error en la API de productos");
         return response.json();

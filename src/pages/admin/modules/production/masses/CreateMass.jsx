@@ -21,13 +21,13 @@ function CreateMass({ onCancel, initialData = {} }) {
   const [supplies, setSupplies] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/supplie")
+    fetch("https://pedivexapi.onrender.com/supplie")
       .then((response) => response.json())
       .then((data) => setSupplies(data));
   }, []);
 
   const onSubmit = (data) => {
-    fetch("http://localhost:3000/masses", {
+    fetch("https://pedivexapi.onrender.com/masses", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -55,9 +55,13 @@ function CreateMass({ onCancel, initialData = {} }) {
       });
   };
 
+  const handleCancel = () => {
+    navigate('/admin/masses');
+  }
+
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <div className="mass-form-container border rounded-4 mx-auto my-3 p-3">
+      <div className="form-container border rounded-4 mx-auto my-3 p-3">
         <h2>{initialData.id ? 'Editar Masa' : 'Agregar Masa'}</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-3">
@@ -143,7 +147,10 @@ function CreateMass({ onCancel, initialData = {} }) {
           </div>
 
           <div className="d-flex justify-content-end gap-2">
-            <button type="button" className="btn btn-secondary" onClick={onCancel}>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={handleCancel}>
               Cancelar
             </button>
             <button type="submit" className="btn btn-success">

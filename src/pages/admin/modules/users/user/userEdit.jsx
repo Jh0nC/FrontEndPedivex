@@ -28,7 +28,7 @@ function UserEdit() {
     // Función para obtener los roles
     const fetchRoles = async () => {
       try {
-        const response = await fetch('http://localhost:3000/role');
+        const response = await fetch('https://pedivexapi.onrender.com/role');
         if (!response.ok) {
           throw new Error('Error al obtener los roles');
         }
@@ -42,7 +42,7 @@ function UserEdit() {
     // Función para obtener los datos del usuario si existe un ID
     const fetchUser = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/user/${id}`);
+        const response = await fetch(`https://pedivexapi.onrender.com/user/${id}`);
         if (!response.ok) {
           throw new Error('Error al obtener el usuario');
         }
@@ -72,7 +72,7 @@ function UserEdit() {
     };
     
     try {
-      const response = await fetch(`http://localhost:3000/user/${id}`, { 
+      const response = await fetch(`https://pedivexapi.onrender.com/user/${id}`, { 
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -112,7 +112,7 @@ function UserEdit() {
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <div className="mass-form-container border rounded-4 mx-auto my-3 p-3">
+      <div className="form-container border rounded-4 mx-auto my-3 p-3">
         <h2 className='mx-3'>Editar Usuario</h2>
         <form onSubmit={handleSubmit(onSubmit)} className='mt-3'>
           <div className="row mb-3">

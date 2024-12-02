@@ -17,15 +17,15 @@
 //   const navigate = useNavigate();
 
 //   useEffect(() => {
-//     fetch("http://localhost:3000/productCategories")
+//     fetch("https://pedivexapi.onrender.com/productCategories")
 //       .then((response) => response.json())
 //       .then((data) => setCategories(data));
 
-//     fetch("http://localhost:3000/masses")
+//     fetch("https://pedivexapi.onrender.com/masses")
 //       .then((response) => response.json())
 //       .then((data) => setMasses(data));
 
-//     fetch("http://localhost:3000/supplie")
+//     fetch("https://pedivexapi.onrender.com/supplie")
 //       .then((response) => response.json())
 //       .then((data) => setSupplies(data.filter((supplie) => supplie.state === 1))); // Filtra insumos activos
 //   }, []);
@@ -108,7 +108,7 @@
 //     };
 
 //     try {
-//       const response = await fetch("http://localhost:3000/product", {
+//       const response = await fetch("https://pedivexapi.onrender.com/product", {
 //         method: "POST",
 //         headers: { "Content-Type": "application/json" },
 //         body: JSON.stringify(product),
@@ -136,7 +136,7 @@
 
 //   return (
 //     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-//       <div className="mass-form-container border rounded-4 mx-auto my-3 p-3">
+//       <div className="form-container border rounded-4 mx-auto my-3 p-3">
 //         <h2>Agregar Producto</h2>
 //         <form onSubmit={handleSubmit} className="mt-3">
 //           {/* Categoría y Nombre */}
@@ -326,15 +326,15 @@ function CreateProducts() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:3000/productCategories")
+    fetch("https://pedivexapi.onrender.com/productCategories")
       .then((response) => response.json())
       .then((data) => setCategories(data));
 
-    fetch("http://localhost:3000/masses")
+    fetch("https://pedivexapi.onrender.com/masses")
       .then((response) => response.json())
       .then((data) => setMasses(data));
 
-    fetch("http://localhost:3000/supplie")
+    fetch("https://pedivexapi.onrender.com/supplie")
       .then((response) => response.json())
       .then((data) => setSupplies(data.filter((supplie) => supplie.state === 1))); // Filtra insumos activos
   }, []);
@@ -417,7 +417,7 @@ function CreateProducts() {
     };
 
     try {
-      const response = await fetch("http://localhost:3000/product", {
+      const response = await fetch("https://pedivexapi.onrender.com/product", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(product),
@@ -445,7 +445,7 @@ function CreateProducts() {
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <div className="mass-form-container border rounded-4 mx-auto my-3 p-3">
+      <div className="form-container border rounded-4 mx-auto my-3 p-3">
         <h2>Agregar Producto</h2>
         <form onSubmit={handleSubmit} className="mt-3">
           {/* Categoría y Nombre */}
@@ -603,7 +603,7 @@ function CreateProducts() {
               className="btn btn-secondary rounded-5"
               onClick={handleCancelClick}
             >
-              Cancelar
+              Regresar
             </button>
             <button type="submit" className="btn btn-success rounded-5">
               Guardar
