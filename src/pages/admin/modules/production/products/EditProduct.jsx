@@ -26,7 +26,7 @@ function EditProduct() {
 
   useEffect(() => {
     // Fetch para obtener el producto a editar
-    fetch(`https://pedivexapi.onrender.com/product/${id}`)
+    fetch(`http://localhost:3000/product/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setProduct({
@@ -43,17 +43,17 @@ function EditProduct() {
       });
 
     // Fetch para categorías
-    fetch("https://pedivexapi.onrender.com/productCategories")
+    fetch("http://localhost:3000/productCategories")
       .then((response) => response.json())
       .then((data) => setCategories(data));
 
     // Fetch para masas
-    fetch("https://pedivexapi.onrender.com/masses")
+    fetch("http://localhost:3000/masses")
       .then((response) => response.json())
       .then((data) => setMasses(data));
 
     // Fetch para insumos
-    fetch("https://pedivexapi.onrender.com/supplie")
+    fetch("http://localhost:3000/supplie")
       .then((response) => response.json())
       .then((data) => setSupplies(data));
   }, [id]);
@@ -98,7 +98,7 @@ function EditProduct() {
 
     try {
       console.log(updatedProduct);
-      const response = await fetch(`https://pedivexapi.onrender.com/product/${id}`, {
+      const response = await fetch(`http://localhost:3000/product/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

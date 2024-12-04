@@ -47,7 +47,7 @@ function Datatables({ data }) {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`https://pedivexapi.onrender.com/supplie/${id}`, {
+        const response = await fetch(`http://localhost:3000/supplie/${id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ state: newState })

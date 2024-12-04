@@ -21,13 +21,13 @@ function CreateMass({ onCancel, initialData = {} }) {
   const [supplies, setSupplies] = useState([]);
 
   useEffect(() => {
-    fetch("https://pedivexapi.onrender.com/supplie")
+    fetch("http://localhost:3000/supplie")
       .then((response) => response.json())
       .then((data) => setSupplies(data));
   }, []);
 
   const onSubmit = (data) => {
-    fetch("https://pedivexapi.onrender.com/masses", {
+    fetch("http://localhost:3000/masses", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

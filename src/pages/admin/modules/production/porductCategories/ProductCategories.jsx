@@ -6,7 +6,7 @@ function ProductCategories() {
 
   useEffect(() => {
     // Simula una llamada API para obtener las masas
-    fetch('https://pedivexapi.onrender.com/productCategories')
+    fetch('http://localhost:3000/productCategories')
       .then(response => response.json())
       .then(data => setData(data))
       .catch(error => console.error('Error fetching productCategories:', error));

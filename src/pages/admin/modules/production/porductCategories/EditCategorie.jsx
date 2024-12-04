@@ -12,7 +12,7 @@ function EditCategorie() {
   useEffect(() => {
     const fetchCategory = async () => {
       try {
-        const response = await fetch(`https://pedivexapi.onrender.com/productCategories/${id}`);
+        const response = await fetch(`http://localhost:3000/productCategories/${id}`);
         if (!response.ok) throw new Error('Error al cargar la categoría');
         const data = await response.json();
         setCategoryName(data.name);
@@ -46,7 +46,7 @@ function EditCategorie() {
     }
 
     try {
-      const response = await fetch(`https://pedivexapi.onrender.com/productCategories/${id}`, {
+      const response = await fetch(`http://localhost:3000/productCategories/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

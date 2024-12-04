@@ -17,15 +17,15 @@
 //   const navigate = useNavigate();
 
 //   useEffect(() => {
-//     fetch("https://pedivexapi.onrender.com/productCategories")
+//     fetch("http://localhost:3000/productCategories")
 //       .then((response) => response.json())
 //       .then((data) => setCategories(data));
 
-//     fetch("https://pedivexapi.onrender.com/masses")
+//     fetch("http://localhost:3000/masses")
 //       .then((response) => response.json())
 //       .then((data) => setMasses(data));
 
-//     fetch("https://pedivexapi.onrender.com/supplie")
+//     fetch("http://localhost:3000/supplie")
 //       .then((response) => response.json())
 //       .then((data) => setSupplies(data.filter((supplie) => supplie.state === 1))); // Filtra insumos activos
 //   }, []);
@@ -108,7 +108,7 @@
 //     };
 
 //     try {
-//       const response = await fetch("https://pedivexapi.onrender.com/product", {
+//       const response = await fetch("http://localhost:3000/product", {
 //         method: "POST",
 //         headers: { "Content-Type": "application/json" },
 //         body: JSON.stringify(product),
@@ -326,15 +326,15 @@ function CreateProducts() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("https://pedivexapi.onrender.com/productCategories")
+    fetch("http://localhost:3000/productCategories")
       .then((response) => response.json())
       .then((data) => setCategories(data));
 
-    fetch("https://pedivexapi.onrender.com/masses")
+    fetch("http://localhost:3000/masses")
       .then((response) => response.json())
       .then((data) => setMasses(data));
 
-    fetch("https://pedivexapi.onrender.com/supplie")
+    fetch("http://localhost:3000/supplie")
       .then((response) => response.json())
       .then((data) => setSupplies(data.filter((supplie) => supplie.state === 1))); // Filtra insumos activos
   }, []);
@@ -417,7 +417,7 @@ function CreateProducts() {
     };
 
     try {
-      const response = await fetch("https://pedivexapi.onrender.com/product", {
+      const response = await fetch("http://localhost:3000/product", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(product),

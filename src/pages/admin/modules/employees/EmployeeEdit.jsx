@@ -24,7 +24,7 @@ function EmployeeEdit() {
   useEffect(() => {
     const fetchRoles = async () => {
       try {
-        const response = await fetch('https://pedivexapi.onrender.com/role');
+        const response = await fetch('http://localhost:3000/role');
         if (!response.ok) {
           throw new Error('Error al obtener los roles');
         }
@@ -37,7 +37,7 @@ function EmployeeEdit() {
 
     const fetchEmployee = async () => {
       try {
-        const response = await fetch(`https://pedivexapi.onrender.com/user/${id}`);
+        const response = await fetch(`http://localhost:3000/user/${id}`);
         if (!response.ok) {
           throw new Error('Error al obtener el empleado');
         }
@@ -82,7 +82,7 @@ function EmployeeEdit() {
     };
   
     try {
-      const response = await fetch(`https://pedivexapi.onrender.com/user/${id}`, { 
+      const response = await fetch(`http://localhost:3000/user/${id}`, { 
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

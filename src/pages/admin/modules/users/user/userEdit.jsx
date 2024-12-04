@@ -28,7 +28,7 @@ function UserEdit() {
     // Función para obtener los roles
     const fetchRoles = async () => {
       try {
-        const response = await fetch('https://pedivexapi.onrender.com/role');
+        const response = await fetch('http://localhost:3000/role');
         if (!response.ok) {
           throw new Error('Error al obtener los roles');
         }
@@ -42,7 +42,7 @@ function UserEdit() {
     // Función para obtener los datos del usuario si existe un ID
     const fetchUser = async () => {
       try {
-        const response = await fetch(`https://pedivexapi.onrender.com/user/${id}`);
+        const response = await fetch(`http://localhost:3000/user/${id}`);
         if (!response.ok) {
           throw new Error('Error al obtener el usuario');
         }
@@ -72,7 +72,7 @@ function UserEdit() {
     };
     
     try {
-      const response = await fetch(`https://pedivexapi.onrender.com/user/${id}`, { 
+      const response = await fetch(`http://localhost:3000/user/${id}`, { 
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

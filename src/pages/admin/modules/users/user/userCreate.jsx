@@ -14,7 +14,7 @@ function UserCreate() {
     // Función para obtener los roles desde la API
     const fetchRoles = async () => {
       try {
-        const response = await fetch('https://pedivexapi.onrender.com/role');
+        const response = await fetch('http://localhost:3000/role');
         if (!response.ok) {
           throw new Error('Error al obtener los roles');
         }
@@ -36,7 +36,7 @@ function UserCreate() {
     };
 
     try {
-      const response = await fetch('https://pedivexapi.onrender.com/user', {
+      const response = await fetch('http://localhost:3000/user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

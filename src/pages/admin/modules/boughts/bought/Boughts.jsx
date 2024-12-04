@@ -7,7 +7,7 @@ function Boughts() {
   useEffect(() => {
     const fetchDatos = async () => {
       try {
-        const response = await fetch("https://pedivexapi.onrender.com/bought");
+        const response = await fetch("http://localhost:3000/bought");
         if (!response.ok) {
           throw new Error("Network response was not ok " + response.statusText);
         }

@@ -45,7 +45,7 @@ function Datatables({ data }) {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`https://pedivexapi.onrender.com/bought/${id}`, {
+        const response = await fetch(`http://localhost:3000/bought/${id}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

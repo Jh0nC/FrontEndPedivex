@@ -29,7 +29,7 @@ function CreateCategory() {
     }
 
     try {
-      const response = await fetch('https://pedivexapi.onrender.com/productCategories', {
+      const response = await fetch('http://localhost:3000/productCategories', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

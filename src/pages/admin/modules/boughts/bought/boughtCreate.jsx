@@ -52,7 +52,7 @@ function BoughtCreate() {
     useEffect(() => {
         const fetchInsumos = async () => {
             try {
-              const response = await fetch('https://pedivexapi.onrender.com/supplie');
+              const response = await fetch('http://localhost:3000/supplie');
               if (!response.ok) {
                 throw new Error('Error al obtener los insumos');
               }
@@ -68,7 +68,7 @@ function BoughtCreate() {
 
         const fetchProveedores = async () => {
             try {
-                const response = await fetch('https://pedivexapi.onrender.com/provider');
+                const response = await fetch('http://localhost:3000/provider');
                 if (!response.ok) {
                     throw new Error('Error al obtener los proveedores');
                 }
@@ -98,7 +98,7 @@ function BoughtCreate() {
             total: parseFloat(data.total, 10),
         };
         try {
-            const response = await fetch('https://pedivexapi.onrender.com/bought', {
+            const response = await fetch('http://localhost:3000/bought', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

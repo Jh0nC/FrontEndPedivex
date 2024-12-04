@@ -80,7 +80,7 @@ function Login() {
 
     // Realiza la solicitud al servidor si no hay errores
     try {
-      const response = await fetch('https://pedivexapi.onrender.com/auth/login', {
+      const response = await fetch('http://localhost:3000/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -105,7 +105,7 @@ function Login() {
       const data = await response.json();
 
       console.log(data);
-      
+
       const role = data.role;
 
       localStorage.setItem('authData', JSON.stringify({
@@ -214,7 +214,6 @@ function Login() {
                     >
                       {isLoading ? (
                         <>
-                          <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                           Cargando...
                         </>
                       ) : (

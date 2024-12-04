@@ -41,20 +41,20 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await fetch("https://pedivexapi.onrender.com/product");
+      const response = await fetch("http://localhost:3000/product");
       const data = await response.json();
       setProducts(data);
     };
 
     const fetchUsers = async () => {
-      const response = await fetch("https://pedivexapi.onrender.com/employee");
+      const response = await fetch("http://localhost:3000/employee");
       const data = await response.json();
       const empleados = data.filter((user) => user.idRole === 3); // Filtrar empleados
       setUsers(empleados);
     };
 
     const fetchSupplies = async () => {
-      const response = await fetch("https://pedivexapi.onrender.com/supplie");
+      const response = await fetch("http://localhost:3000/supplie");
       const data = await response.json();
       setSupplies(data);
     };
@@ -114,7 +114,7 @@ function ProductionOrderCreate({ onSave, initialData = {} }) {
       };
 
       // Crear la orden de producción
-      const response = await fetch("https://pedivexapi.onrender.com/productionOrder", {
+      const response = await fetch("http://localhost:3000/productionOrder", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formattedData),

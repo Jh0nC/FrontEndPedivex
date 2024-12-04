@@ -18,8 +18,8 @@ const CreateReturn = () => {
     const fetchInitialData = async () => {
       try {
         const [productsResponse, motivesResponse] = await Promise.all([
-          fetch('https://pedivexapi.onrender.com/product'),
-          fetch('https://pedivexapi.onrender.com/motivedevolution'),
+          fetch('http://localhost:3000/product'),
+          fetch('http://localhost:3000/motivedevolution'),
         ]);
 
         const productsData = await productsResponse.json();
@@ -40,7 +40,7 @@ const CreateReturn = () => {
     if (saleId) {
       const fetchSaleDetails = async () => {
         try {
-          const response = await fetch(`https://pedivexapi.onrender.com/sale/${saleId}`);
+          const response = await fetch(`http://localhost:3000/sale/${saleId}`);
           const data = await response.json();
 
           setSaleInfo(data);
@@ -129,7 +129,7 @@ const CreateReturn = () => {
     }
 
     try {
-        const response = await fetch('https://pedivexapi.onrender.com/devolution/', {
+        const response = await fetch('http://localhost:3000/devolution/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

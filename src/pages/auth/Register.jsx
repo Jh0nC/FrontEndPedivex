@@ -57,7 +57,7 @@ const UserCreate = () => {
     }
 
     try {
-      const response = await fetch('https://pedivexapi.onrender.com/user', {
+      const response = await fetch('http://localhost:3000/user', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...formData, state: 1, idRole: 2 }),

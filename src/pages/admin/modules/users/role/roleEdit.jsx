@@ -18,7 +18,7 @@ function RoleEdit() {
     // Función para obtener los permisos desde la API
     const fetchPermissions = async () => {
       try {
-        const response = await fetch('https://pedivexapi.onrender.com/permission');
+        const response = await fetch('http://localhost:3000/permission');
         if (!response.ok) {
           throw new Error('Error al obtener los permisos');
         }
@@ -32,7 +32,7 @@ function RoleEdit() {
     // Función para obtener los detalles del rol específico usando el ID
     const fetchRole = async () => {
       try {
-        const response = await fetch(`https://pedivexapi.onrender.com/role/${id}`);
+        const response = await fetch(`http://localhost:3000/role/${id}`);
         if (!response.ok) {
           throw new Error('Error al obtener el rol');
         }
@@ -62,7 +62,7 @@ function RoleEdit() {
   const onSubmit = async (formData) => {
     try {
       // Actualizar el rol con un PUT
-      const response = await fetch(`https://pedivexapi.onrender.com/role/${id}`, {
+      const response = await fetch(`http://localhost:3000/role/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -113,7 +113,7 @@ function RoleEdit() {
 
   // Función para manejar la actualización de permisos
   const handlePermissionsUpdate = async (roleId) => {
-    await fetch(`https://pedivexapi.onrender.com/rolePermission`, {
+    await fetch(`http://localhost:3000/rolePermission`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -122,7 +122,7 @@ function RoleEdit() {
     });
 
     for (let permissionId of selectedPermissions) {
-      await fetch(`https://pedivexapi.onrender.com/rolePermission`, {
+      await fetch(`http://localhost:3000/rolePermission`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

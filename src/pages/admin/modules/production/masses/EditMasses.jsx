@@ -12,7 +12,7 @@ function EditMass() {
 
   useEffect(() => {
     // Fetch the mass data by ID
-    fetch(`https://pedivexapi.onrender.com/masses/${id}`)
+    fetch(`http://localhost:3000/masses/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setName(data.name);
@@ -26,7 +26,7 @@ function EditMass() {
       .catch((error) => console.error('Error fetching mass data:', error));
 
     // Fetch the supplies data
-    fetch("https://pedivexapi.onrender.com/supplie")
+    fetch("http://localhost:3000/supplie")
       .then((response) => response.json())
       .then((data) => setSupplies(data))
       .catch((error) => console.error('Error fetching supplies:', error));
@@ -56,7 +56,7 @@ function EditMass() {
       details,
     };
 
-    fetch(`https://pedivexapi.onrender.com/masses/${id}`, {
+    fetch(`http://localhost:3000/masses/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

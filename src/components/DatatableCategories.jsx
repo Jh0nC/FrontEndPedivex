@@ -14,7 +14,7 @@ function Datatable({ data }) {
   }, [data]);
 
   const handleDelete = async (id) => {
-    const checkAssosiation = await fetch(`https://pedivexapi.onrender.com/productCategories/${id}/hasProduct`);
+    const checkAssosiation = await fetch(`http://localhost:3000/productCategories/${id}/hasProduct`);
     const { hasProducts } = await checkAssosiation.json();
 
     if (hasProducts) {
@@ -46,7 +46,7 @@ function Datatable({ data }) {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`https://pedivexapi.onrender.com/productCategories/${id}`, {
+        const response = await fetch(`http://localhost:3000/productCategories/${id}`, {
           method: 'DELETE',
         });
 

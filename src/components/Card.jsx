@@ -36,9 +36,9 @@ function Card({ data }) {
               <span className="badge opacity-50 text-bg-success">{stock}</span>
             ) : stock == 0 ? (
               <span className="badge opacity-50 text-bg-danger">{stock}</span>
-            ) : stock < 30 (
+            ) : stock < 30 ? (
               <span className="badge opacity-50 text-bg-danger">{stock}</span>
-            )}
+            ): ""}
           </p>
           <p>
             <b>Estado: </b>

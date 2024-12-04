@@ -23,7 +23,7 @@ function RequestUpdate() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://pedivexapi.onrender.com/request/${id}`);
+        const response = await fetch(`http://localhost:3000/request/${id}`);
         if (!response.ok) {
           throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
@@ -44,14 +44,14 @@ function RequestUpdate() {
 
         setDetails(Array.isArray(data.requestDetails) ? data.requestDetails : []);
 
-        const userResponse = await fetch("https://pedivexapi.onrender.com/user");
+        const userResponse = await fetch("http://localhost:3000/user");
         const userData = await userResponse.json();
 
         // Filtrar solo clientes (suponiendo que idRole de clientes es 2)
         const clientes = userData.filter((user) => user.idRole === 2);
         setUsers(Array.isArray(clientes) ? clientes : []);
 
-        const productResponse = await fetch("https://pedivexapi.onrender.com/product");
+        const productResponse = await fetch("http://localhost:3000/product");
         const productData = await productResponse.json();
         setProducts(Array.isArray(productData) ? productData : []);
       } catch (error) {
@@ -191,7 +191,7 @@ function RequestUpdate() {
     };
 
     try {
-      const response = await fetch(`https://pedivexapi.onrender.com/request/${id}`, {
+      const response = await fetch(`http://localhost:3000/request/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
