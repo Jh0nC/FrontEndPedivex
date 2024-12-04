@@ -2,71 +2,46 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
-function Datatable({ data, fetchCategories }) {
+function Datatable({ data }) {
   const [categories, setCategories] = useState([]);
+  const [filteredCategories, setFilteredCategories] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     setCategories(data);
-    console.log('Categorías recibidas:', data); // Verificar si los datos se reciben correctamente
+    setFilteredCategories(data); // Inicializa el filtro con todas las categorías
+    console.log('Categorías recibidas:', data);
   }, [data]);
 
-  // Función para manejar el cambio de estado
-  const handleStateChange = async (id, currentState, name) => {
-    const newState = currentState === 1 ? 2 : 1;
-    const actionText = newState === 2 ? 'desactivar' : 'activar';
-
-    const result = await Swal.fire({
-      title: `¿Estás seguro de ${actionText} la categoría "${name}"?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí',
-      cancelButtonText: 'No'
-    });
-
-    if (result.isConfirmed) {
-      try {
-        const response = await fetch(`http://localhost:3000/productCategories/${id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ state: newState })
-        });
-
-        if (response.ok) {
-          Swal.fire({
-            title: 'Cambio exitoso',
-            text: `La categoría ha sido ${newState === 2 ? 'desactivada' : 'activada'} correctamente.`,
-            icon: 'success'
-          }).then(() => {
-            setCategories(prevCategories =>
-              prevCategories.map(item =>
-                item.id === id ? { ...item, state: newState } : item
-              )
-            );
-          });
-        } else {
-          throw new Error('Error al cambiar el estado');
-        }
-      } catch (error) {
-        Swal.fire({
-          title: 'Error',
-          text: 'Ocurrió un error al intentar cambiar el estado.',
-          icon: 'error'
-        });
-        console.error("Error al cambiar el estado de la categoría:", error);
-      }
-    }
-  };
-
   const handleDelete = async (id) => {
+    const checkAssosiation = await fetch(`http://localhost:3000/productCategories/${id}/hasProduct`);
+    const { hasProducts } = await checkAssosiation.json();
+
+    if (hasProducts) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se puede eliminar una categoría asociada a un producto.',
+        customClass: {
+          popup: 'rounded-5',
+          confirmButton: 'btn btn-secondary rounded-5 px-3'
+        }
+      });
+      return;
+    }
+
     const result = await Swal.fire({
       title: '¿Estás seguro?',
-      text: "¡No podrás revertir esto!",
+      text: "Se eliminará la categoría de producto",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, eliminarlo',
+      confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar',
+      customClass: {
+        popup: 'rounded-5',
+        confirmButton: 'btn btn-success rounded-5 px-3',
+        cancelButton: 'btn btn-danger rounded-5 px-3'
+      }
     });
 
     if (result.isConfirmed) {
@@ -81,9 +56,8 @@ function Datatable({ data, fetchCategories }) {
             'La categoría ha sido eliminada.',
             'success'
           ).then(() => {
-            fetchCategories(); // Refresca los datos después de eliminar
+            window.location.reload();
           });
-          console.log('Categoría eliminada con id:', id); // Confirmar la eliminación
         } else {
           throw new Error('No se pudo eliminar la categoría');
         }
@@ -93,9 +67,19 @@ function Datatable({ data, fetchCategories }) {
           error.message,
           'error'
         );
-        console.error("Error al eliminar la categoría:", error); // Registrar el error
+        console.error("Error al eliminar la categoría:", error);
       }
     }
+  };
+
+  // Maneja el cambio del término de búsqueda
+  const handleSearch = (event) => {
+    const value = event.target.value.toLowerCase();
+    setSearchTerm(value);
+    const filtered = categories.filter(category =>
+      category.name.toLowerCase().includes(value)
+    );
+    setFilteredCategories(filtered);
   };
 
   return (
@@ -108,10 +92,11 @@ function Datatable({ data, fetchCategories }) {
             <input
               type="search"
               placeholder="Buscar"
+              value={searchTerm}
+              onChange={handleSearch} // Asocia la función al input
             />
             <i className="bi bi-search" id="search"></i>
           </div>
-
           <button className="btn btn-success rounded-5 h-50">
             <i className="bi bi-filetype-xlsx"></i>
           </button>
@@ -120,38 +105,20 @@ function Datatable({ data, fetchCategories }) {
       <table className="datatable">
         <thead>
           <tr>
-            <th>ID</th>
+            <th>#</th>
             <th>Nombre</th>
-            <th>Estado</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
-          {categories.map((item, index) => (
+          {filteredCategories.map((item, index) => (
             <tr key={index}>
-              <td>{item.id}</td>
+              <td>{index + 1}</td>
               <td>{item.name}</td>
-              <td>
-                {item.state === 1 ? (
-                  <button
-                    className='btn btn-success rounded-5 h-50'
-                    onClick={() => handleStateChange(item.id, item.state, item.name)}
-                  >
-                    Activado
-                  </button>
-                ) : (
-                  <button
-                    className='btn btn-danger rounded-5 h-50'
-                    onClick={() => handleStateChange(item.id, item.state, item.name)}
-                  >
-                    Desactivado
-                  </button>
-                )}
-              </td>
-              <td className='d-flex gap-2'>
+              <td className='d-flex gap-2 align-items-center border-0'>
                 <Link className='btn btn-warning rounded-5' to={`edit/${item.id}`}>Editar</Link>
-                <button 
-                  className='btn btn-danger rounded-5' 
+                <button
+                  className='btn btn-danger rounded-5'
                   onClick={() => handleDelete(item.id)}>
                   Eliminar
                 </button>
@@ -160,8 +127,8 @@ function Datatable({ data, fetchCategories }) {
           ))}
         </tbody>
       </table>
-      <div className="datatable_footer d-flex justify-content-between align-items-center">
-        <p>Total de filas: {categories.length}</p>
+      <div className="datatable_footer">
+        <p className='m-2'>Total de filas: {filteredCategories.length}</p>
       </div>
     </div>
   );

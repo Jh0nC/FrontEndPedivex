@@ -105,7 +105,7 @@ function Login() {
       const data = await response.json();
 
       console.log(data);
-      
+
       const role = data.role;
 
       localStorage.setItem('authData', JSON.stringify({
@@ -214,7 +214,6 @@ function Login() {
                     >
                       {isLoading ? (
                         <>
-                          <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                           Cargando...
                         </>
                       ) : (

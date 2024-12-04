@@ -32,23 +32,23 @@ function Card({ data }) {
         <div className="card-body d-flex justify-content-between">
           <p>
             <b>Stock: </b>
-            {stock >= 50 ? (
+            {stock > 30 ? (
               <span className="badge opacity-50 text-bg-success">{stock}</span>
-            ) : stock >= 30 ? (
-              <span className="badge opacity-50 text-bg-warning">{stock}</span>
-            ) : (
+            ) : stock == 0 ? (
               <span className="badge opacity-50 text-bg-danger">{stock}</span>
-            )}
+            ) : stock < 30 ? (
+              <span className="badge opacity-50 text-bg-danger">{stock}</span>
+            ): ""}
           </p>
           <p>
             <b>Estado: </b>
-            {state === 1 ? (
-              <span className="badge opacity-50 text-bg-success text-uppercase">activo</span>
-            ) : state === 2 ? (
-              <span className="badge opacity-50 text-bg-secondary text-uppercase">inactivo</span>
+            {state === 10 ? (
+              <span className="badge opacity-50 text-bg-success text-uppercase">disponible</span>
+            ) : state === 11 ? (
+              <span className="badge opacity-50 text-bg-secondary text-uppercase">casi agotado</span>
             ) : state === 5 ? (
               <span className="badge opacity-50 text-bg-danger text-uppercase">agotado</span>
-            ): (<></>)}
+            ) : ("")}
           </p>
         </div>
         <div className="card-footer d-flex justify-content-between">
