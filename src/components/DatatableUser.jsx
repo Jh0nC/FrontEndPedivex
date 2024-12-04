@@ -13,7 +13,7 @@ function Datatables({ data }) {
 
   const filteredData = data.content.filter(item =>
     Object.values(item).some(
-      val => val.toString().toLowerCase().includes(searchTerm.toLowerCase())
+      val => val != null && val.toString().toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
 

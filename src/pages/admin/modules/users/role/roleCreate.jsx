@@ -110,12 +110,15 @@ function roleCreate() {
                 aria-describedby="emailHelp"
                 className='form-control'
                 type="text"
-                {...register("role", { required: true, maxLength: 25, pattern: /^[A-Za-z\s]+$/ })}
+                {...register("role", { required: true, minLength:6 , maxLength: 25, pattern: /^[A-Za-z\s]+$/ })}
               />
             </div>
           </div>
           {errors.role?.type === "required" && (
             <div className="alert alert-danger p-1 col">Ingrese el rol</div>
+          )}
+          {errors.role?.type === "minLength" && (
+            <div className="alert alert-danger p-1 col">Solo se puede ingresar minimo 6 letras</div>
           )}
           {errors.role?.type === "maxLength" && (
             <div className="alert alert-danger p-1 col">Solo se puede ingresar maximo 25 letras</div>

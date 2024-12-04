@@ -149,10 +149,13 @@ function BoughtCreate() {
                                     id="nroReceipt"
                                     className='form-control'
                                     type="text"
-                                    {...register('nroReceipt', { required: true })}
+                                    {...register('nroReceipt', { required: true, maxLength:255 })}
                                 />
                                 {errors.nroReceipt && (
                                     <div className="alert alert-danger p-1 col mt-2">Este campo es obligatorio</div>
+                                )}
+                                {errors.nroReceipt?.type=== 'maxLength' && (
+                                    <div className="alert alert-danger p-1 col mt-2">Este solo puede tener maximo 255 caracteres</div>
                                 )}
                             </div>
                             <div className="col-sm">
