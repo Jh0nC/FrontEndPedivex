@@ -87,12 +87,12 @@ function Datatables({ data }) {
     <div className="datatable-container border rounded-4 mx-auto my-3">
       <div className="datatable_header">
         <h2>{data.title}</h2>
-        <Link
+        {/* <Link
           to="/admin/roleCreate"
           className="btn btn-success rounded-5 d-flex gap-2 align-items-center"
         >
           Agregar Rol
-        </Link>
+        </Link> */}
 
         <div className="d-flex gap-2 align-items-center">
           <div className="input_search">
@@ -102,7 +102,7 @@ function Datatables({ data }) {
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
-                setCurrentPage(1);x
+                setCurrentPage(1);
               }}
             />
             <i className="bi bi-search" id="search"></i>
@@ -130,12 +130,12 @@ function Datatables({ data }) {
               <td>{item.id}</td>
               <td>{item.role}</td>
               <td className='d-flex align-items-center gap-2'>
-                <button
+                {/* <button
                   className='btn btn-warning rounded-5'
                   onClick={() => handleEditClick(item.id)}
                 >
                   Editar
-                </button>
+                </button> */}
                 {item.state === 1 ? (
                   <button
                     className='btn btn-success rounded-5 h-50'
