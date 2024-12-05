@@ -44,7 +44,7 @@ function Supplies() {
   const data = {
     module: "Devoluciones",
     title: "Devoluciones",
-    colNames: ["Id", "Numero venta", "Fecha", "Acciones"],
+    colNames: ["Id", "Numero venta", "Motivo de devolución", "Fecha", "Acciones"],
     content: datos.map(item => ({
       ...item,
     }))
@@ -76,6 +76,7 @@ function Supplies() {
               <tr key={index}>
                 <td>{item.id}</td>
                 <td>{item.idSale}</td>
+                <td>{item.details.length > 0 ? item.details[0].motiveDevolution.name : 'No disponible'}</td> {/* Corregido aquí */}
                 <td>{item.date}</td>
                 <td className='d-flex gap-2'>
                   <button
@@ -181,4 +182,4 @@ function Supplies() {
   );
 }
 
-export default Supplies;
+export default Supplies;

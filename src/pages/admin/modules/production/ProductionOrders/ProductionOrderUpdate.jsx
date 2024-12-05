@@ -90,13 +90,54 @@ function ProductionOrderUpdate() {
     setErrors((prevErrors) => ({ ...prevErrors, [name]: null })); // Limpiar errores al cambiar
   };
 
-  const handleDetailChange = (index, field, value) => {
+  const handleDetailChange = async (index, field, value) => {
     const updatedDetails = [...details];
     updatedDetails[index][field] = value;
+  
+    // Validar si hay suficientes insumos disponibles
+    if (field === "amount") {
+      const detail = updatedDetails[index];
+      const productResponse = await fetch(`http://localhost:3000/product/${detail.idProduct}`);
+      if (productResponse.ok) {
+        const product = await productResponse.json();
+        const productAmount = value;
+  
+        if (product.datasheet && product.datasheet.datasheetDetails) {
+          for (const datasheetDetail of product.datasheet.datasheetDetails) {
+            const supply = supplie.find((s) => s.id === datasheetDetail.idSupplie);
+            if (supply) {
+              const requiredAmount = datasheetDetail.amount * productAmount;
+  
+              // Verificar si el stock es suficiente
+              if (supply.stock - requiredAmount < 0) {
+                Swal.fire({
+                  title: "Error de Stock",
+                  text: `No hay suficiente stock de ${supply.name} para la cantidad seleccionada.`,
+                  icon: "error",
+                  confirmButtonText: "Ok",
+                });
+                return; // Detener el proceso si no hay suficiente stock
+              }
+            }
+          }
+        }
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: `Error al obtener el producto con ID ${detail.idProduct}`,
+          icon: "error",
+          confirmButtonText: "Ok",
+        });
+        return;
+      }
+    }
+  
+    // Si pasa la validación, actualizamos los detalles y el estado del formulario
     setDetails(updatedDetails);
     setFormData((prev) => ({ ...prev, details: updatedDetails }));
     setErrors((prev) => ({ ...prev, details: null })); // Limpiar errores en detalles
   };
+  
 
   const handleAddDetail = () => {
     const newDetail = { idProduct: "", amount: "", state: 1 };
@@ -276,7 +317,7 @@ function ProductionOrderUpdate() {
 
   return (
     <div className="container-fluid border-type-mid rounded-4 content py-3 px-2 bg-light shadow">
-      <div className="form-container border rounded-4 mx-auto my-3 p-3">
+      <div className="mass-form-container border rounded-4 mx-auto my-3 p-3">
         <h2>Editar Orden de Producción</h2>
         <form onSubmit={handleSubmit} className="mt-3">
           <div className="row mb-3">
