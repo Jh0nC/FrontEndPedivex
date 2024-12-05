@@ -16,9 +16,19 @@ function Products() {
     //   .then(response => response.json())
     //   .then(data => setSates(data))
     //   .catch(error => console.error("Error fetching products:", error));
+
   }, []);
 
+  const images = [
+    "../../uploads/arequipe_1.jpg",
+    "../../uploads/arequipe_2.jpg",
+    "../../uploads/panzerroti_1.jpg",
+    "../../uploads/pandequeso.jpg",
+    "../../uploads/palito_bocadillo_2.jpg",
+    "../../uploads/palito_bocadillo_1.jpg"
+  ];
 
+  let imageIndex = 0;
 
   return (
     <>
@@ -37,13 +47,14 @@ function Products() {
         <div className="row row-cols-4">
           {cardsData.map(product => (
             <div className="col py-2 px-3" key={product.id} >
-              <Card data={product} />
+              <Card data={product} imagen={images[product.id]}/>
             </div>
           ))}
         </div>
       </div>
     </>
   )
+  
 };
 
 export default Products;

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import dummyImg from "../../public/assets/1140x696.jpg";
 import { useNavigate } from "react-router-dom";
 
-function Card({ data }) {
+function Card({ data, imagen }) {
   const [datasheetDetails, setDatasheetDetails] = useState(data.datasheet.datasheetDetails || []);
 
   const {
@@ -22,13 +22,13 @@ function Card({ data }) {
   return (
     <>
       <div className="card rounded-4 overflow-hidden admin-card border">
-        <div className="card-head rounded-top-3">
-          <img src={dummyImg} alt="" className="img-fluid border-bottom" />
-          <h5 className="text-center mt-2 d-flex flex-column justify-content-between">
-            <span className="fs-6 fw-lighter">{productCategory.name}</span>
-            {name}
-          </h5>
+        <div className="card-head rounded-top-3 img-container-card d-flex align-items-center shadow-sm">
+          <img src={imagen || dummyImg} alt="" style={{ width: '100%', height: 'auto' }} className="border-bottom" />
         </div>
+        <h5 className="text-center mt-2 d-flex flex-column justify-content-between">
+          <span className="fs-6 fw-lighter">{productCategory.name}</span>
+          {name}
+        </h5>
         <div className="card-body d-flex justify-content-between">
           <p>
             <b>Stock: </b>
@@ -38,7 +38,7 @@ function Card({ data }) {
               <span className="badge opacity-50 text-bg-danger">{stock}</span>
             ) : stock < 30 ? (
               <span className="badge opacity-50 text-bg-danger">{stock}</span>
-            ): ""}
+            ) : ""}
           </p>
           <p>
             <b>Estado: </b>
