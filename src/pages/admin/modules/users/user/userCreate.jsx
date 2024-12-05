@@ -117,10 +117,16 @@ function UserCreate() {
                 id="firstName"
                 className='form-control'
                 type="text"
-                {...register('firstName', { required: true })}
+                {...register('firstName', { required: true, minLength:2, maxLength:30 })}
               />
               {errors.firstName?.type==='required' && (
                 <div className="alert alert-danger p-1 col mt-2">Este campo es obligatorio</div>
+              )}
+              {errors.firstName?.type==='minLength' && (
+                <div className="alert alert-danger p-1 col mt-2">El nombre debe ser minimo 2 caracteres</div>
+              )}
+              {errors.firstName?.type==='maxLength' && (
+                <div className="alert alert-danger p-1 col mt-2">El nombre debe ser maximo 30 caracteres</div>
               )}
             </div>
             <div className='col-sm'>
@@ -129,10 +135,16 @@ function UserCreate() {
                 id="lastName"
                 className='form-control'
                 type="text"
-                {...register('lastName', { required: true })}
+                {...register('lastName', { required: true, minLength:2, maxLength:30 })}
               />
               {errors.lastName?.type==='required' && (
                 <div className="alert alert-danger p-1 col mt-2">Este campo es obligatorio</div>
+              )}
+              {errors.lastName?.type==='minLength' && (
+                <div className="alert alert-danger p-1 col mt-2">El apellido debe ser minimo 2 caracteres</div>
+              )}
+              {errors.lastName?.type==='maxLength' && (
+                <div className="alert alert-danger p-1 col mt-2">El apellido debe ser maximo 30 caracteres</div>
               )}
             </div>
           </div>
@@ -143,7 +155,7 @@ function UserCreate() {
                 id="document"
                 className='form-control'
                 type="text"
-                {...register('document', { required: true, minLength:8, maxLength:10 })}
+                {...register('document', { required: true, minLength:8, maxLength:10, pattern:/^\d+$/ })}
               />
               {errors.document?.type==='required' && (
                 <div className="alert alert-danger p-1 col mt-2">Este campo es obligatorio</div>
@@ -154,6 +166,9 @@ function UserCreate() {
               {errors.document?.type==='maxLength' && (
                 <div className="alert alert-danger p-1 col mt-2">El documento debe tener máximo 10 números</div>
               )}
+              {errors.document?.type==='pattern' && (
+                <div className="alert alert-danger p-1 col mt-2">El documento solo puede ser numeros y no puede tener decimales</div>
+              )}
             </div>
             <div className='col-sm'>
               <label htmlFor="address" className="form-label">Dirección <span style={{ color: 'red' }}>*</span></label>
@@ -161,10 +176,13 @@ function UserCreate() {
                 id="address"
                 className='form-control'
                 type="text"
-                {...register('address', { required: true })}
+                {...register('address', { required: true, minLength:2 })}
               />
               {errors.address?.type==='required' && (
                 <div className="alert alert-danger p-1 col mt-2">Este campo es obligatorio</div>
+              )}
+              {errors.address?.type==='minLength' && (
+                <div className="alert alert-danger p-1 col mt-2">La dirección debe tener minimo 1 caracter</div>
               )}
             </div>
           </div>
@@ -175,7 +193,7 @@ function UserCreate() {
                 id="phoneNumber"
                 className='form-control'
                 type="text"
-                {...register('phoneNumber', { required: true, minLength:7, maxLength:10 })}
+                {...register('phoneNumber', { required: true, minLength:7, maxLength:10, pattern:/^\d+$/ })}
               />
               {errors.phoneNumber?.type==='required' && (
                 <div className="alert alert-danger p-1 col mt-2">Este campo es obligatorio</div>
@@ -185,6 +203,9 @@ function UserCreate() {
               )}
               {errors.phoneNumber?.type==='maxLength' && (
                 <div className="alert alert-danger p-1 col mt-2">El teléfono debe tener máximo 10 números</div>
+              )}
+              {errors.phoneNumber?.type==='pattern' && (
+                <div className="alert alert-danger p-1 col mt-2">El teléfono solo puede ser numeros y no puede tener decimales</div>
               )}
             </div>
             <div className='col-sm'>
