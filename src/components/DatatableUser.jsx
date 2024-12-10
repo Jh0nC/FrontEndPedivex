@@ -141,10 +141,15 @@ function Datatables({ data }) {
                   Editar
                 </button>
                 {item.state === 1 ? (
-                  <button
+                  item.role.id === 1 ? (
+                    <></>
+                  ) : (
+                    <button
                     className='btn btn-success rounded-5 h-50'
                     onClick={() => handleChangeStateClick(item.id, item.state, item.firstName, item.role.role)}
-                  >Activado</button>) : (
+                    >Activado</button>
+                  )
+                  ) : (
                   <button
                     className='btn btn-danger rounded-5 h-50'
                     onClick={() => handleChangeStateClick(item.id, item.state, item.firstName, item.role.role)}

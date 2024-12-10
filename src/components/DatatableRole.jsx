@@ -129,7 +129,7 @@ function Datatables({ data }) {
             <tr key={index}>
               <td>{item.id}</td>
               <td>{item.role}</td>
-              <td className='d-flex align-items-center gap-2'>
+              <td className='d-flex align-items-center gap-2 border-0'>
                 {/* <button
                   className='btn btn-warning rounded-5'
                   onClick={() => handleEditClick(item.id)}
@@ -137,10 +137,15 @@ function Datatables({ data }) {
                   Editar
                 </button> */}
                 {item.state === 1 ? (
-                  <button
-                    className='btn btn-success rounded-5 h-50'
-                    onClick={() => handleChangeStateClick(item.id, item.state, item.role)}
-                  >Activado</button>) : (
+                  item.id===1 ? (
+                    <></>
+                    ) : (
+                      <button
+                      className='btn btn-success rounded-5 h-50'
+                      onClick={() => handleChangeStateClick(item.id, item.state, item.role)}
+                    >Activado</button>
+                    )
+                    ) : (
                   <button
                     className='btn btn-danger rounded-5 h-50'
                     onClick={() => handleChangeStateClick(item.id, item.state, item.role)}
