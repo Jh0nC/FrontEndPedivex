@@ -213,7 +213,6 @@ function CreateProducts() {
                   type="file"
                   id="formFile"
                   accept="image/*"
-                  disabled
                   onChange={(e) => setImage(e.target.files[0])}>
                 </input>
               </div>
